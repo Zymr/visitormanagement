@@ -90,7 +90,7 @@ public class ChannelService {
 			throw new InvalidDataException(Constants.INVALID_PARAM);
 		}
 		uploadFile(icon);	
-		channel.setImageSmall(imageService.getImageUrl(ImageType.department, icon.getOriginalFilename()));
+		channel.setImageSmall(imageService.getImageUrl(ImageType.DEPARTMENT, icon.getOriginalFilename()));
 		channelRepository.save(channel);
 	}
 
@@ -115,7 +115,7 @@ public class ChannelService {
 		}
 		if (Objects.nonNull(icon)) {
 			uploadFile(icon);	
-			String channelIconPath = imageService.getImageUrl(ImageType.department, icon.getOriginalFilename());
+			String channelIconPath = imageService.getImageUrl(ImageType.DEPARTMENT, icon.getOriginalFilename());
 			dbChannel.setImageSmall(channelIconPath);
 		}
 		this.channelRepository.save(dbChannel);
@@ -176,7 +176,7 @@ public class ChannelService {
 	 */ 
 	private void uploadFile(MultipartFile icon) throws IOException {
 		if (Objects.nonNull(icon)) {
-			icon.transferTo(new File(imageService.createFileUploadPath(ImageType.department, icon.getOriginalFilename())));
+			icon.transferTo(new File(imageService.createFileUploadPath(ImageType.DEPARTMENT, icon.getOriginalFilename())));
 		}
 	}
 
@@ -185,6 +185,6 @@ public class ChannelService {
 	 * @return SlackChannel
 	 */
 	private SlackChannel convertToDTO(Channels c) {
-		return channelConverter.convertToDTO(c, imageService.getImageUrl(ImageType.department, c.getName())+Constants.IMAGE_EXT);
+		return channelConverter.convertToDTO(c, imageService.getImageUrl(ImageType.DEPARTMENT, c.getName())+Constants.IMAGE_EXT);
 	}
 }

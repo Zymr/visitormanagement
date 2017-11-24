@@ -67,7 +67,7 @@ public class VisitorResource extends BaseResource {
 			List<Origin> visitorOrigin = visitorService.getVisitorOriginCategories();
 			Collection<VisitorOriginDTO> visitorOriginDTO = originConverter.convertToDTO(visitorOrigin);
 			if (CollectionUtils.isNotEmpty(visitorOriginDTO)) {
-				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.origin.toString(), visitorOriginDTO);
+				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.ORIGIN.toString(), visitorOriginDTO);
 				result = ResponseEntity.ok(responseDTO.getResponse());
 			}
 		} catch(Exception e) {

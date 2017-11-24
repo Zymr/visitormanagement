@@ -65,7 +65,7 @@ public class ChannelResource extends BaseResource {
 			List<SlackChannel> channel = channelService.get();
 			Collection<SlackChannelDTO> channelsDTO = slackChannelConverter.convertToDTO(channel);
 			if (CollectionUtils.isNotEmpty(channelsDTO)) {
-				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.Channels.toString(), channelsDTO);
+				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.CHANNELS.toString(), channelsDTO);
 				result = ResponseEntity.ok(responseDTO.getResponse());
 			} 
 		} catch(Exception e) {
