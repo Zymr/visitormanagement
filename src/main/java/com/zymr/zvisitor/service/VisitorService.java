@@ -77,7 +77,7 @@ public class VisitorService {
 			Map<String, String> visitorOrigins = configurationService.getVisitorOrigins();
 			for (Map.Entry<String, String> value : visitorOrigins.entrySet()) {
 				listOrigin.add(new Origin(index, value.getKey(),
-						imageService.getImageUrl(ImageType.categories, value.getValue())+Constants.IMAGE_EXT));
+						imageService.getImageUrl(ImageType.CATEGORIES, value.getValue())+Constants.IMAGE_EXT));
 				index++;
 			}
 			visitorOriginRepository.save(listOrigin);

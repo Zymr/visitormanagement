@@ -67,7 +67,7 @@ public class SlackService {
 	 */
 	public boolean isTokenValid(String token) throws ClientProtocolException, IOException {
 		Map<String, String> map = new HashMap<>();
-		map.put(NotificationKey.token.name(), token);
+		map.put(NotificationKey.TOKEN.name(), token);
 		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map), Constants.SLACK_AUTH_TEST);
 		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(httpResponse)), Response.class);
 		return responseMembers.isOk();
@@ -80,7 +80,7 @@ public class SlackService {
 	 */
 	public List<SlackEmployee> getEmployeeList() throws IOException {
 		Map<String, String> map = new HashMap<>();
-		map.put(NotificationKey.token.name(), configurationService.getUpdatedToken());
+		map.put(NotificationKey.TOKEN.name(), configurationService.getUpdatedToken());
 		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map), Constants.USER_LIST_API);
 		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(httpResponse)), Response.class);
 		if (Objects.nonNull(responseMembers.getMembers())) {
@@ -154,8 +154,8 @@ public class SlackService {
 	 */
 	public Map<String, String> buildRequestForChannelInfo(String channelId, String token) {
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put(NotificationKey.token.name(), token);
-		parameters.put(NotificationKey.channel.name(), channelId);
+		parameters.put(NotificationKey.TOKEN.name(), token);
+		parameters.put(NotificationKey.CHANNEL.name(), channelId);
 		return parameters;
 	}
 

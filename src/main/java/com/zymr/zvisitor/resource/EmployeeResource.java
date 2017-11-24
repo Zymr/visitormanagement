@@ -57,7 +57,7 @@ public class EmployeeResource extends BaseResource {
 				List<Employee> employees = employeeService.getByLocation(locId);
 				if (CollectionUtils.isNotEmpty(employees)) {
 					Collection<EmployeeDTO> employeesDTO = employeeConverter.convertToDTO(employees);
-					ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.employees.name(), employeesDTO);
+					ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.EMPLOYEES.name(), employeesDTO);
 					result = ResponseEntity.ok().body(responseDTO.getResponse());
 				}
 			}

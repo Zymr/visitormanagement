@@ -58,7 +58,7 @@ public class LocationResource extends BaseResource {
 		try {
 			Collection<LocationDTO> locationDTO = locationConverter.convertToDTO(locationService.get());
 			if (CollectionUtils.isNotEmpty(locationDTO)) {
-				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.location.toString(), locationDTO);
+				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.LOCATION.toString(), locationDTO);
 				result = ResponseEntity.ok(responseDTO.getResponse());
 			}
 		} catch(Exception e) {

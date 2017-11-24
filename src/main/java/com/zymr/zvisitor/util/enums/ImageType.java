@@ -12,6 +12,6 @@ package com.zymr.zvisitor.util.enums;
 
 /** Static images. */
 public enum ImageType  {
-	department,
-	categories
+	DEPARTMENT,
+	CATEGORIES
 }

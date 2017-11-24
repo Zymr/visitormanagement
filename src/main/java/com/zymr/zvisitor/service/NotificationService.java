@@ -239,10 +239,10 @@ public class NotificationService {
 	 */
 	private Map<String, String> buildSlackRequestParam(String empId, String message, String token) {
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put(NotificationKey.token.name(), token);
-		parameters.put(NotificationKey.initial_comment.name(), message);
-		parameters.put(NotificationKey.channels.name(), empId);
-		parameters.put(NotificationKey.title.name(), Constants.NOTIFICATION_IMAGE_NAME);
+		parameters.put(NotificationKey.TOKEN.name(), token);
+		parameters.put(NotificationKey.INITIAL_COMMENT.name(), message);
+		parameters.put(NotificationKey.CHANNELs.name(), empId);
+		parameters.put(NotificationKey.TITLE.name(), Constants.NOTIFICATION_IMAGE_NAME);
 		return parameters;
 	}
 
@@ -256,9 +256,9 @@ public class NotificationService {
 	public  Map<String, ContentBody> createAttachment(String dirPath, String imageDbpath, File defaultImageFile) throws IOException {
 		Map<String, ContentBody> parameters = new HashMap<>();
 		if (StringUtils.isNotBlank(imageDbpath)) {
-			parameters.put(NotificationKey.file.name(), new FileBody(new File(Util.getImageFullPath(dirPath, imageDbpath))));
+			parameters.put(NotificationKey.FILE.name(), new FileBody(new File(Util.getImageFullPath(dirPath, imageDbpath))));
 		} else {
-			parameters.put(NotificationKey.file.name(), new FileBody(defaultImageFile));
+			parameters.put(NotificationKey.FILE.name(), new FileBody(defaultImageFile));
 		} 
 		return parameters;
 	}

@@ -62,7 +62,7 @@ public class ConfigurationResource extends BaseResource {
 	public ResponseEntity<Map<String, Object>> getSlackToken() {
 		ResponseEntity<Map<String, Object>>  result = ResponseEntity.notFound().build();
 		try {
-			ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.token.toString(), configurationService.getUpdatedToken());
+			ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.TOKEN.toString(), configurationService.getUpdatedToken());
 			result = ResponseEntity.ok(responseDTO.getResponse());
 		} catch(Exception e) {
 			logger.error("Exception while fetching slack token", e);
@@ -95,7 +95,7 @@ public class ConfigurationResource extends BaseResource {
 	public ResponseEntity<Map<String, Object>> getMailConfiguration() {
 		ResponseEntity<Map<String, Object>> result = null;
 		try {
-			ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.email.toString(), eMailConfigConverter.convertToDTO(configurationService.getMailConfiguration()));
+			ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.EMAIL.toString(), eMailConfigConverter.convertToDTO(configurationService.getMailConfiguration()));
 			result = ResponseEntity.ok(responseDTO.getResponse());
 		} catch(Exception e) {
 			logger.error("Exception while fetching mail configuration.", e);
