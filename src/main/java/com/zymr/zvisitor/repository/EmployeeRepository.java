@@ -17,18 +17,23 @@ import org.springframework.data.mongodb.repository.Query;
 
 import com.zymr.zvisitor.dbo.Employee;
 import com.zymr.zvisitor.dbo.Employee.EMPLOYEE_FIELDS;
+import com.zymr.zvisitor.dbo.projection.EmployeeSlackId;
 
-public interface EmployeeRepository extends MongoRepository<Employee, Integer>, EmployeeRepositoryCustom {
+public interface EmployeeRepository extends MongoRepository<Employee, String>, EmployeeRepositoryCustom {
 
-	Employee findByslackId(String salckId);
+	Employee findByslackId(String slackId);
 	
 	@Query("{ '"+EMPLOYEE_FIELDS.ID+"': ?0}")
 	Employee findById(String id);
 		
 	@Query(value = "{}", fields = "{ '"+EMPLOYEE_FIELDS.SLACK_ID+"' : 1 }")
-    List<Employee> findAll(Sort sort);
+    List<EmployeeSlackId> findEmployeeSlackIdsAll(Sort sort);
 	
 	@Query(value = "{}", fields = "{ '"+EMPLOYEE_FIELDS.SLACK_UPDATEDTIME+"' : 1}")
 	Employee findOne(Sort sort);
+	
+	long countById(String id);
+	
+	long countBySlackId(String slackId);
 	
 }

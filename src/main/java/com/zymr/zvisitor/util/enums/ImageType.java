@@ -11,7 +11,11 @@
 package com.zymr.zvisitor.util.enums;
 
 /** Static images. */
-public enum ImageType  {
-	department,
-	categories
+public enum ImageType{
+	DEPARTMENT,
+	CATEGORIES;
+	
+	public String toLowerCase() {
+		return name().toLowerCase();
+	}
 }

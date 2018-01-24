@@ -28,7 +28,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.zymr.zvisitor.dto.EmailConfigurationDTO;
+import com.zymr.zvisitor.dbo.config.Email;
 import com.zymr.zvisitor.dto.EmailDTO;
 import com.zymr.zvisitor.util.Constants;
 
@@ -46,7 +46,8 @@ public class EmailService {
 	@PostConstruct
 	public void init() {
 		updateMailSenderDefaultProps();
-		updateMailSenderConfig();
+		Email mail = configurationService.getMailConfiguration();
+		updateMailSenderConfig(mail);
 		logger.info("Email Service {} ", toString());
 	}
 
@@ -76,30 +77,31 @@ public class EmailService {
 
 	/** Test smtp authentication configuration.
 	 * 
-	 * @param smtpConfiguration
+	 * @param emailDTO
 	 * @throws MessagingException
 	 * @throws ConfigurationException
 	 */
-	public void authenticateAndLoadConfiguration(EmailConfigurationDTO smtpConfiguration) throws MessagingException, ConfigurationException {
+	public void authenticateAndLoadConfiguration(Email emailDTO) throws MessagingException, ConfigurationException {
 		Transport transport = getSession().getTransport(SMTP_PROTOCOL);
 		try {
-			transport.connect(smtpConfiguration.getHost(), smtpConfiguration.getPort(),	smtpConfiguration.getUserName(), 
-					smtpConfiguration.getPassword());
+			transport.connect(emailDTO.getHost(), emailDTO.getPort(),	emailDTO.getUsername(), 
+					emailDTO.getPassword());
 		} finally {
 			transport.close();
 		}
-		updateMailSenderConfig();
+		updateMailSenderConfig(emailDTO);
+		logger.debug("Updated JavaMailSenderImplementation  {}",javaMailSenderImpl);
 	}
 
 	private Session getSession() {
 		return Session.getInstance(javaMailSenderImpl.getJavaMailProperties());
 	}
-
-	private void updateMailSenderConfig() {
-		javaMailSenderImpl.setHost(configurationService.getMailConfiguration().getHost());
-		javaMailSenderImpl.setPort(configurationService.getMailConfiguration().getPort());
-		javaMailSenderImpl.setUsername(configurationService.getMailConfiguration().getUsername());
-		javaMailSenderImpl.setPassword(configurationService.getMailConfiguration().getPassword());
+	
+	private void updateMailSenderConfig(Email emailDTO) {
+		javaMailSenderImpl.setHost(emailDTO.getHost());
+		javaMailSenderImpl.setPort(emailDTO.getPort());
+		javaMailSenderImpl.setUsername(emailDTO.getUsername());
+		javaMailSenderImpl.setPassword(emailDTO.getPassword());
 	}
 
 	private void updateMailSenderDefaultProps() {

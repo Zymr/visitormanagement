@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import com.zymr.zvisitor.service.ChannelService;
 import com.zymr.zvisitor.service.EmployeeService;
 import com.zymr.zvisitor.service.LocationService;
+import com.zymr.zvisitor.service.UserService;
 import com.zymr.zvisitor.service.VisitorService;
 
 /**
@@ -40,9 +41,13 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	@Autowired
 	private LocationService locationService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		try {
+			userService.addDefaultUser();
 			locationService.syncLocation();
 			channelService.syncChannelsFromSlack();
 			employeeService.syncEmployeeFromSlack();

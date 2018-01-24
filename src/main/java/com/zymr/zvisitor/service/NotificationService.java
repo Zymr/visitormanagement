@@ -69,11 +69,12 @@ public class NotificationService {
 
 	@PostConstruct
 	public void init() throws IOException {
-		logger.info("Notification Service {} ", toString());
 		emailTemplate = IOUtils.toString(EmailService.class.getClassLoader()
 				.getResourceAsStream(Constants.EMAIL_TEMPLATE), Charset.defaultCharset());
 		ndaEmailTemplate = IOUtils.toString(EmailService.class.getClassLoader()
 				.getResourceAsStream(Constants.NDA_EMAIL_TEMPLATE), Charset.defaultCharset());
+		logger.info("Email Template -> [{}]  ,    NDA Email Template -> [{}]  ", emailTemplate , ndaEmailTemplate);
+		logger.info("Service  {}  ", toString());
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class NotificationService {
 	 * @throws AddressException 
 	 */  
 	public boolean notify(String empSlackId, String channelId, Visitor visitor, String ndaFilePath) throws AddressException, IOException  {
-		logger.info("Started sending slack/email notification.");
+		logger.info("Request received for notification Employee SlackId [{}] , ChannelId [{}] , visitor [{}] ." , empSlackId , channelId , visitor);
 		Employee employee  = null;
 		SlackChannel channel = null;
 		String locationName = locationService.getLocationName(visitor.getLocation()).getLocationName();
@@ -116,6 +117,7 @@ public class NotificationService {
 	 */  
 	private void notifyOnEmail(Employee employee, Visitor visitor, SlackChannel channel, String ndaFilePath, String locationName) throws AddressException, IOException {
 		EmailDTO emailDTO = createMail(employee, visitor,channel, locationName);
+		logger.info("Emai notification template -> [{}]" ,emailDTO);
 		List<EmailDTO> emailList = new ArrayList<EmailDTO>();
 		emailList.add(emailDTO);
 		if (Objects.nonNull(visitor)) {
@@ -133,18 +135,18 @@ public class NotificationService {
 	 * @throws IOException 
 	 */  
 	private void notifyOnSlack(Employee employee, Visitor visitor, SlackChannel channel, String locationName) throws IOException {
+		logger.info("Employee {} , Visitor {} , Channel {} , Location {}" , employee , visitor , channel , locationName);
 		Map<String,ContentBody> attachment = createAttachment(imageService.getBaseDirPathAsStr(), visitor.getVisitorPic(), imageService.getDefaultImageFile());
 		Map<String, String> param = null;
 		if (Objects.nonNull(employee)) {
 			String	slackMessage = createMessage(configurationService.getSlackConfiguration().getMessage(),
 					visitor, employee, locationName);
-
+			logger.info("Slack Message send to employee -> [{}]" ,slackMessage);
 			param = buildSlackRequestParam(employee.getSlackId(), slackMessage, configurationService.getSlackConfiguration().getToken());			
 		}
 		else  {	
 			String	channelMessage = messageForChannel(configurationService.getSlackConfiguration().
 					getChannelMessage(), visitor, channel, locationName);
-
 			param = buildSlackRequestParam(channel.getChannelId(), channelMessage, configurationService.getSlackConfiguration().getToken());	
 		}
 		slackService.sendMessage(param, attachment);
@@ -239,10 +241,10 @@ public class NotificationService {
 	 */
 	private Map<String, String> buildSlackRequestParam(String empId, String message, String token) {
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put(NotificationKey.token.name(), token);
-		parameters.put(NotificationKey.initial_comment.name(), message);
-		parameters.put(NotificationKey.channels.name(), empId);
-		parameters.put(NotificationKey.title.name(), Constants.NOTIFICATION_IMAGE_NAME);
+		parameters.put(NotificationKey.TOKEN.toLowerCase(), token);
+		parameters.put(NotificationKey.INITIAL_COMMENT.toLowerCase(), message);
+		parameters.put(NotificationKey.CHANNELS.toLowerCase(), empId);
+		parameters.put(NotificationKey.TITLE.toLowerCase(), Constants.NOTIFICATION_IMAGE_NAME);
 		return parameters;
 	}
 
@@ -256,9 +258,9 @@ public class NotificationService {
 	public  Map<String, ContentBody> createAttachment(String dirPath, String imageDbpath, File defaultImageFile) throws IOException {
 		Map<String, ContentBody> parameters = new HashMap<>();
 		if (StringUtils.isNotBlank(imageDbpath)) {
-			parameters.put(NotificationKey.file.name(), new FileBody(new File(Util.getImageFullPath(dirPath, imageDbpath))));
+			parameters.put(NotificationKey.FILE.toLowerCase(), new FileBody(new File(Util.getImageFullPath(dirPath, imageDbpath))));
 		} else {
-			parameters.put(NotificationKey.file.name(), new FileBody(defaultImageFile));
+			parameters.put(NotificationKey.FILE.toLowerCase(), new FileBody(defaultImageFile));
 		} 
 		return parameters;
 	}

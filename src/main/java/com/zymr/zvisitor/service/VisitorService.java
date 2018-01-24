@@ -37,6 +37,7 @@ import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
 import com.zymr.zvisitor.repository.VisitorOriginRepository;
 import com.zymr.zvisitor.repository.VisitorRepository;
+import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.NdaBuilder;
 import com.zymr.zvisitor.util.Util;
@@ -59,7 +60,7 @@ public class VisitorService {
 	private ImageService imageService;
 	
 	@Autowired
-	private ConfigurationService configurationService;
+	private AppProperties appProperties;
 
 	private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.ZVISITOR_IMAGEDIRNAME_FORMAT);
 
@@ -74,10 +75,9 @@ public class VisitorService {
 		if (visitorOriginRepository.count() == 0) {
 			List<Origin> listOrigin = new ArrayList<>();
 			int index = 0;
-			Map<String, String> visitorOrigins = configurationService.getVisitorOrigins();
+			Map<String, String> visitorOrigins = appProperties.getVisitorCategory();
 			for (Map.Entry<String, String> value : visitorOrigins.entrySet()) {
-				listOrigin.add(new Origin(index, value.getKey(),
-						imageService.getImageUrl(ImageType.categories, value.getValue())+Constants.IMAGE_EXT));
+				listOrigin.add(new Origin(index, value.getKey(), imageService.getImageUrl(ImageType.CATEGORIES, value.getValue())+Constants.IMAGE_EXT));
 				index++;
 			}
 			visitorOriginRepository.save(listOrigin);
@@ -158,6 +158,7 @@ public class VisitorService {
 		if (StringUtils.isNotBlank(signaturePicPath)) {
 			visitorSignature.transferTo(new File(signaturePicPath));
 		}
+		logger.info("Images uploaded.");
 	}
 
 

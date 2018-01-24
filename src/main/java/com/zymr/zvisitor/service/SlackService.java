@@ -34,6 +34,7 @@ import com.zymr.zvisitor.connectors.HttpConnectorHelper;
 import com.zymr.zvisitor.dto.slack.Channels;
 import com.zymr.zvisitor.dto.slack.Response;
 import com.zymr.zvisitor.dto.slack.SlackEmployee;
+import com.zymr.zvisitor.service.config.SlackChannelConfig;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.JsonUtils;
 import com.zymr.zvisitor.util.enums.NotificationKey;
@@ -67,7 +68,7 @@ public class SlackService {
 	 */
 	public boolean isTokenValid(String token) throws ClientProtocolException, IOException {
 		Map<String, String> map = new HashMap<>();
-		map.put(NotificationKey.token.name(), token);
+		map.put(NotificationKey.TOKEN.toLowerCase(), token);
 		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map), Constants.SLACK_AUTH_TEST);
 		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(httpResponse)), Response.class);
 		return responseMembers.isOk();
@@ -80,7 +81,7 @@ public class SlackService {
 	 */
 	public List<SlackEmployee> getEmployeeList() throws IOException {
 		Map<String, String> map = new HashMap<>();
-		map.put(NotificationKey.token.name(), configurationService.getUpdatedToken());
+		map.put(NotificationKey.TOKEN.toLowerCase(), configurationService.getUpdatedToken());
 		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map), Constants.USER_LIST_API);
 		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(httpResponse)), Response.class);
 		if (Objects.nonNull(responseMembers.getMembers())) {
@@ -98,15 +99,17 @@ public class SlackService {
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 */
-	public List<Channels> getChannelList(Map<String,String> channelIds) throws ClientProtocolException, IOException {
+	public List<Channels> getChannelList(List<SlackChannelConfig> department) throws ClientProtocolException, IOException {
+		
 		List<Channels> slackChannels = new ArrayList<>();
-		for (Map.Entry<String, String> channelId : channelIds.entrySet()) {
-			Map<String, String> param = buildRequestForChannelInfo(channelId.getKey(), configurationService.getUpdatedToken());
+		
+		for (SlackChannelConfig slackChannelConfig : department) {
+			Map<String, String> param = buildRequestForChannelInfo(slackChannelConfig.getSlackid(), configurationService.getUpdatedToken());
 			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param), Constants.GROUP_INFO_API);
 			Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Response.class);
 			if (Objects.nonNull(responseMembers.getGroup())) {
 				Channels slackChannel = responseMembers.getGroup();
-				slackChannel.setEmail(channelId.getValue());
+				slackChannel.setEmail(slackChannelConfig.getEmail());
 				slackChannels.add(slackChannel);
 			}
 		}
@@ -154,8 +157,8 @@ public class SlackService {
 	 */
 	public Map<String, String> buildRequestForChannelInfo(String channelId, String token) {
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put(NotificationKey.token.name(), token);
-		parameters.put(NotificationKey.channel.name(), channelId);
+		parameters.put(NotificationKey.TOKEN.toLowerCase(), token);
+		parameters.put(NotificationKey.CHANNEL.toLowerCase(), channelId);
 		return parameters;
 	}
 

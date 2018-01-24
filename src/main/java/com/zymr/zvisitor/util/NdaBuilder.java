@@ -50,7 +50,7 @@ public class NdaBuilder {
 	
 	@PostConstruct
 	public void init() throws MalformedURLException {
-		ndaUrl = imageService.buildUrl("//NDA.pdf");
+		ndaUrl = imageService.buildUrl("//files//NDA.pdf");
 		logger.info("NDA Generator {} ", toString());
 	}
 

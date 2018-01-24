@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 /** Simple JavaBean domain object representing a Visitor. */
 @Document(collection = Visitor.VISITOR_DOCUMENT)
 public class Visitor implements Serializable {
+	
 	private static final long serialVersionUID = -5656619435435258543L;
 
 	public static final String VISITOR_DOCUMENT = "visitors";

@@ -30,8 +30,13 @@ import com.zymr.zvisitor.converter.SlackEmployeeConverter;
 import com.zymr.zvisitor.dbo.Employee;
 import com.zymr.zvisitor.dbo.Employee.EMPLOYEE_FIELDS;
 import com.zymr.zvisitor.dbo.Location;
+import com.zymr.zvisitor.dbo.projection.EmployeeSlackId;
 import com.zymr.zvisitor.dto.slack.SlackEmployee;
+import com.zymr.zvisitor.exception.InvalidDataException;
+import com.zymr.zvisitor.exception.NoDataFoundException;
 import com.zymr.zvisitor.repository.EmployeeRepository;
+import com.zymr.zvisitor.service.config.AppProperties;
+import com.zymr.zvisitor.util.Constants;
 
 @Service
 public class EmployeeService {
@@ -45,13 +50,13 @@ public class EmployeeService {
 
 	@Autowired
 	private LocationService locationService;
-	
+
 	@Autowired
 	private SlackEmployeeConverter slackEmployeeConverter;
-	
+
 	@Autowired
-	private ConfigurationService configurationService;
-	
+	private AppProperties appProperties;
+
 	/**
 	 * Sync employees from slack and save to our database.
 	 * 
@@ -59,9 +64,7 @@ public class EmployeeService {
 	 * @throws Exception
 	 */  
 	public void syncEmployeeFromSlack() throws Exception {
-		if (employeeRepository.count() == 0) {
-			upsertEmployeeFromSlack();
-		}		
+		upsertEmployeeFromSlack();
 	}
 
 	/**
@@ -75,16 +78,14 @@ public class EmployeeService {
 		List<String> dbSlackId = getDbEmployee();
 		long latestUpdatedTime = getLatestSlackUpdatedTime();
 		Map<Set, String> employeesWithLocation = getSlackEmployeesWithLocation();
-		
 		List<Employee> employees = slackEmployees.stream()
-				.filter(emp -> emp.isUpdated(latestUpdatedTime) || emp.isNewEmployee(dbSlackId))
-				.filter(emp -> emp.isCompanyEmployee(configurationService.getValidEmailList()))
+				.filter(emp -> emp.isNewEmployee(latestUpdatedTime, dbSlackId, appProperties.getOrg().getValidEmailDomains()))
 				.map(emp -> updateLocation(emp, employeesWithLocation))
 				.filter(emp -> Objects.nonNull(emp))
 				.collect(Collectors.toList());
 		update(employees);
 	}
-	
+
 	/**
 	 * @return List<Employee>
 	 */
@@ -100,40 +101,44 @@ public class EmployeeService {
 	public void update(List<Employee> employees) {
 		employees.forEach (employee -> employeeRepository.upsert(employee, EMPLOYEE_FIELDS.SLACK_ID));
 	}
-	
+
 	/**
 	 * @param id
+	 * @throws NoDataFoundException 
+	 * @throws InvalidDataException 
 	 */
-	public void delete(String id) {
-		Employee employee = getById(id);
-		if (Objects.nonNull(employee)) {
-			employeeRepository.delete(employee);
+	public void delete(String id) throws InvalidDataException {
+		if (StringUtils.isBlank(id)) {
+			throw new InvalidDataException(Constants.INVALID_PARAM);
 		}
+		employeeRepository.delete(id);
 	}
-	
+
 	/**
 	 * To delete employee with their slack id from database.
 	 * 
 	 * @param slackId 
+	 * @throws NoDataFoundException 
+	 * @throws InvalidDataException 
 	 */  
-	public void deleteBySlackId(String slackId) {
-		Employee employee = getBySlackId(slackId);
-		if (Objects.nonNull(employee)) {
-			employeeRepository.delete(employee);
+	public void deleteBySlackId(String slackId) throws InvalidDataException {
+		if (StringUtils.isBlank(slackId)) {
+			throw new InvalidDataException(Constants.INVALID_PARAM);
 		}
+		employeeRepository.delete(slackId);
 	}
-	
+
 	/**
 	 * @param id
 	 * @return Employee
 	 */
 	public Employee getById(String id) {
-		if (StringUtils.isBlank(id.trim())) {
+		if (StringUtils.isBlank(id)) {
 			return null;
 		}
 		return employeeRepository.findById(id);
 	}
-	
+
 	/**
 	 * @param location
 	 * @return List<Employee>
@@ -155,7 +160,7 @@ public class EmployeeService {
 		}
 		return employeeRepository.findByslackId(slackId);
 	}
-	
+
 	/**
 	 * To get employees of all location.
 	 * 
@@ -182,28 +187,28 @@ public class EmployeeService {
 	 */ 
 	private Employee updateLocation(SlackEmployee slackEmployee, Map<Set, String> location) {
 		Employee employee = slackEmployeeConverter.convert(slackEmployee);
- 		Optional<String> value = location.entrySet().stream()
- 				.filter(entry -> entry.getKey()
- 				.contains(slackEmployee.getSlackId()))
- 				.map(Map.Entry::getValue)
- 				.findFirst();
-	
- 		employee.setLocation(value.map(String::toString).orElse(null));
- 		return employee;
+		Optional<String> value = location.entrySet().stream()
+				.filter(entry -> entry.getKey()
+						.contains(slackEmployee.getSlackId()))
+				.map(Map.Entry::getValue)
+				.findFirst();
+
+		employee.setLocation(value.map(String::toString).orElse(null));
+		return employee;
 	}
 
-	
+
 	/** 
 	 * To get list of employee slack id from database.
 	 * 
 	 * @return 
 	 */
 	private List<String> getDbEmployee() {
-		List<Employee> dbEmployees = findAllWithSlackId();
+		List<EmployeeSlackId> dbEmployees = findAllWithSlackId();
 		return dbEmployees.stream()
-			   .filter(Objects::nonNull)
-			   .map(employee -> employee.getSlackId())
-			   .collect(Collectors.toList());
+				.filter(Objects::nonNull)
+				.map(employee -> employee.getSlackId())
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -211,8 +216,8 @@ public class EmployeeService {
 	 * 
 	 * @return List of employees.
 	 */  
-	private List<Employee> findAllWithSlackId() {
-		return employeeRepository.findAll(new Sort(Sort.Direction.ASC, EMPLOYEE_FIELDS.ID));
+	private List<EmployeeSlackId> findAllWithSlackId() {
+		return employeeRepository.findEmployeeSlackIdsAll(new Sort(Sort.Direction.ASC, EMPLOYEE_FIELDS.ID));
 	}
 
 	private long getLatestSlackUpdatedTime() {
