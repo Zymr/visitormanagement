@@ -20,14 +20,14 @@ import org.springframework.stereotype.Service;
 
 import com.zymr.zvisitor.dbo.SlackChannel;
 import com.zymr.zvisitor.dto.SlackChannelDTO;
-import com.zymr.zvisitor.service.ConfigurationService;
+import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Util;
 
 @Service
 public class SlackChannelConverter implements Converter<SlackChannel, SlackChannelDTO> {
 	
 	@Autowired
-	private ConfigurationService configurationService;
+	private AppProperties appProperties;
 
 	@Override
 	public SlackChannelDTO convertToDTO(SlackChannel channel) {
@@ -35,7 +35,7 @@ public class SlackChannelConverter implements Converter<SlackChannel, SlackChann
 			return null;
 		}
 		return new SlackChannelDTO(channel.getId(), channel.getChannelId(), 
-				channel.getName(), channel.getEmail(), Util.buildURL(configurationService.getBaseUrl(), channel.getImageSmall()));
+				channel.getName(), channel.getEmail(), Util.buildURL(appProperties.getBaseUrl(), channel.getImageSmall()));
 	}
 
 	@Override

@@ -40,6 +40,13 @@
 		<appender-ref ref="APP_FILE" />
 	</appender>
 	
+	 <!-- Send debug messages to System.out -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+        </encoder>
+    </appender>
 	<!-- ===================================== loggers ====================================================== -->
 	<logger name="com.zymr.zvisitor" level="DEBUG"  additivity="false"> 
 		<appender-ref ref="APP_ASYNC" /> 

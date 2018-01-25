@@ -11,20 +11,20 @@ package com.zymr.zvisitor.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.zymr.zvisitor.dbo.Location;
+import com.zymr.zvisitor.exception.InvalidDataException;
 import com.zymr.zvisitor.exception.NoDataFoundException;
 import com.zymr.zvisitor.repository.LocationRepository;
+import com.zymr.zvisitor.service.config.AppProperties;
+import com.zymr.zvisitor.service.config.SlackChannelConfig;
 import com.zymr.zvisitor.util.Constants;
 
 @Service
@@ -35,16 +35,17 @@ public class LocationService {
 	protected LocationRepository locationRepository;
 
 	@Autowired
-	protected ConfigurationService configurationService;
+	protected AppProperties appProperties;
+	
+	@Autowired
+	protected EmployeeService employeeService;
 
 	public void syncLocation() {
 		if (locationRepository.count() == 0) {
 			List<Location> location = new ArrayList<>();
-			Map<String, Map<String, String>> locations = configurationService.getLocations();
-			for (Entry<String, Map<String, String>> entry : locations.entrySet()) {
-				for (Entry<String, String> value : entry.getValue().entrySet()) {
-					location.add(new Location(entry.getKey(), value.getKey(), value.getValue()));
-				}
+			List<SlackChannelConfig> orgConfigs = appProperties.getOrg().getLocations();
+			for (SlackChannelConfig slackConfig : orgConfigs) {
+				location.add(new Location(slackConfig.getAbbr(), slackConfig.getSlackid(), slackConfig.getName()));
 			}
 			locationRepository.insert(location);
 			logger.info("Syncing of location is done.");
@@ -84,10 +85,15 @@ public class LocationService {
 
 	/**
 	 * @param location
-	 * @throws DuplicateKeyException
+	 * @throws Exception 
 	 */
-	public void save(Location location) throws DuplicateKeyException {
+	public void save(Location location) {
 		locationRepository.save(location);		
+		try {
+			employeeService.upsertEmployeeFromSlack();
+		} catch (Exception e) {
+			logger.error("Exception while saving location",e);
+		}
 	}
 
 	/**
@@ -103,11 +109,13 @@ public class LocationService {
 
 	/**
 	 * @param id
+	 * @throws NoDataFoundException 
+	 * @throws InvalidDataException 
 	 */
-	public void delete(String id) {
-		Location location = getById(id);
-		if (Objects.nonNull(location)) {
-			locationRepository.delete(location);
+	public void delete(String id) throws InvalidDataException {
+		if (StringUtils.isBlank(id)) {
+			throw new InvalidDataException(Constants.INVALID_PARAM);
 		}
+		locationRepository.delete(id);
 	}
 }

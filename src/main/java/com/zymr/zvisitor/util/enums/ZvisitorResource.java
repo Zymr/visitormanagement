@@ -10,11 +10,15 @@
 package com.zymr.zvisitor.util.enums;
 
 public enum ZvisitorResource {
-	visitor,
-	location,
-	origin,
-	token,
-	email,
-	Channels,
-	employees
+	VISITOR,
+	LOCATION,
+	ORIGIN,
+	TOKEN,
+	EMAIL,
+	CHANNELS,
+	EMPLOYEES;
+	
+	public String toLowerCase() {
+		return name().toLowerCase();
+	}
 }

@@ -13,22 +13,26 @@ import java.util.Collection;
 import java.util.Objects;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zymr.zvisitor.dbo.SlackChannel;
 import com.zymr.zvisitor.dto.slack.Channels;
+import com.zymr.zvisitor.service.config.AppProperties;
 
 @Service
 public class ChannelConverter implements Converter<Channels, SlackChannel> {
 
+	@Autowired
+	private AppProperties appProperties;
+	
 	@Override
 	public SlackChannel convertToDTO(Channels slackChannel) {
 		if (Objects.isNull(slackChannel)) {
 			return null;
 		}
-		String baseUrl = null;
 		return new SlackChannel(slackChannel.getChannelId(), slackChannel.getName(),
-				slackChannel.getEmail(), baseUrl );
+				slackChannel.getEmail(), appProperties.getBaseUrl());
 	}
 
 	public SlackChannel convertToDTO(Channels slackChannel, String baseUrl) {

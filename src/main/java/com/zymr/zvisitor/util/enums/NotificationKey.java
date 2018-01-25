@@ -10,14 +10,18 @@
 package com.zymr.zvisitor.util.enums;
 
 public enum NotificationKey  {
-	token,
-	channel,
-	text,
-	username,
-	as_user,
-	attachments,
-	channels,
-	initial_comment,
-	file,
-	title
+	TOKEN,
+	CHANNEL,
+	TEXT,
+	USERNAME,
+	AS_USER,
+	ATTACHMENTS,
+	CHANNELS,
+	INITIAL_COMMENT,
+	FILE,
+	TITLE;
+	
+	public String toLowerCase() {
+		return name().toLowerCase();
+	}
 }

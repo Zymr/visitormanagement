@@ -1,0 +1,64 @@
+app:
+    mail-personal: ZYMR INC
+    emp-sync-job: 0 0 10 * * *
+    admin-email: admin
+    admin-password: admin
+    secretKey: 69107228d26c2a64e4bdcdab87c19f7f
+    slack:
+      token: xoxp-2916887900-246433532887-246074269587-53dbc23b456228639f03a9aaaebcb229
+      user-name: Virtual Receptionist
+    config:
+      file-uploads-path: /home/zymr/ZVisitor/
+    visitor-category:
+        Bank Finance Support: bank-finance
+        Client Visit : client-visit
+        Interview : interview
+        Personal Meet : personal-meet    
+        Technical Support : technical-support
+        Other : other
+    org:
+        valid-email-domains:
+          - zymrinc.com
+          - zymr.com
+        department:
+        -
+          slackid: G5FPCCQR5
+          email: hr@zymr.com
+        -
+          slackid: G5AFJL8JX
+          email: it@zymr.com
+        -
+          slackid: G0GP7NS6B
+          email: accounts@zymr.com    
+        locations:
+        -
+          abbr: z2
+          slackid: C1LFAPHB9
+          name: Ahmedabad
+        -
+          abbr: z3
+          slackid: C1LEZP1V2
+          name: Pune
+spring:
+  data:
+    mongodb:
+      database: zv_auth2
+      host: localhost
+      port: 27017
+      username: superAdmin 
+      password: admin123
+      authentication-database: admin
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB      
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: zymr.visitor@gmail.com
+    password: zymr@123
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+server:
+  address: localhost

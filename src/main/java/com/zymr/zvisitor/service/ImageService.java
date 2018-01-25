@@ -21,40 +21,38 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import com.zymr.zvisitor.service.config.AppConfig;
+import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.Util;
 import com.zymr.zvisitor.util.enums.ImageType;
 
 @Service
-@ConfigurationProperties(prefix = "config")
 public class ImageService {
 	private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
 
 	@Autowired
 	private ResourceLoader resourceLoader;
-	
+
 	@Autowired
-	private ConfigurationService configurationService;
-	
+	private AppProperties appProperties;
+
 	private File defaultImageFile;
 	private Path baseDirPath;
-	
-	@Value("#{${baseUrl}}")
-	private String baseUrl;
 
 	@PostConstruct
 	public void init() throws IOException {
-		configurationService.setBaseUrl(baseUrl);
 		logger.info("Image Service", toString());
-		baseDirPath = Util.createFileDirectory(configurationService.getFileUploadsPath(), configurationService.getFileBaseDir());
-		Resource resource = resourceLoader.getResource("classpath:static/" + configurationService.getDefaultImagePath());
-		defaultImageFile = Util.createDefaultImageFile(resource, configurationService.getDefaultImagePath());
+
+		AppConfig configProps = appProperties.getConfig();
+
+		baseDirPath = Util.createFileDirectory(configProps.getFileUploadsPath());
+		Resource resource = resourceLoader.getResource("classpath:static/images/" + configProps.getDefaultImagePath());
+		defaultImageFile = Util.createDefaultImageFile(resource, configProps.getDefaultImagePath());
 		if (!Files.exists(baseDirPath))  {
 			Files.createDirectory(baseDirPath).toString();
 		}
@@ -62,45 +60,39 @@ public class ImageService {
 
 	public String getImageUrl(ImageType imagetype, String name) {
 		String imageUrl = null;
+		AppConfig configProps = appProperties.getConfig();
 		switch  (imagetype) {
-			case department: {
-				imageUrl =  configurationService.getDepartmentImagesPath() + Constants.FORWARD_SLASH + name;
-				break;
-			}
-			case categories: {
-				imageUrl =  configurationService.getCategoryImagesPath() + Constants.FORWARD_SLASH + name;
-				break;
-			}
-			default : {
-				logger.error("type not found. Type: [{}]", imagetype);
-				break;
-			}
+		case DEPARTMENT: {
+			imageUrl =  configProps.getDepartmentImagesPath() + Constants.FORWARD_SLASH + name;
+			break;
+		}
+		case CATEGORIES: {
+			imageUrl =  configProps.getCategoryImagesPath() + Constants.FORWARD_SLASH + name;
+			break;
+		}
 		}
 		return imageUrl;
 	}
 
 	public URL buildUrl(String fileName) throws MalformedURLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append(baseUrl);
+		sb.append(appProperties.getBaseUrl());
 		sb.append(fileName);
 		return new URL(sb.toString());
 	}
 
 	public String createFileUploadPath(ImageType imagetype, String name) throws IOException {
 		String filePath = null;
+		AppConfig configProps = appProperties.getConfig();
 		switch (imagetype) {
-			case department: {
-				filePath =  Util.getImagePath(name, baseDirPath.toString(), configurationService.getDepartmentImagesPath()).toString();
-				break;
-			}
-			case categories: {
-				filePath =  Util.getImagePath(name, baseDirPath.toString(), configurationService.getCategoryImagesPath()).toString();
-				break;
-			}
-			default : {
-				logger.error("type not found. Type: [{}]", imagetype);
-				break;
-			}
+		case DEPARTMENT: {
+			filePath =  Util.getImagePath(name, baseDirPath.toString(), configProps.getDepartmentImagesPath()).toString();
+			break;
+		}
+		case CATEGORIES: {
+			filePath =  Util.getImagePath(name, baseDirPath.toString(), configProps.getCategoryImagesPath()).toString();
+			break;
+		}
 		}
 		return filePath;
 	}
@@ -108,18 +100,18 @@ public class ImageService {
 	public Path getBaseDirPath() {
 		return baseDirPath;
 	}
-	
+
 	public String getBaseDirPathAsStr() {
 		return String.valueOf(baseDirPath);
 	}
-	
+
 	public File getDefaultImageFile() {
 		return defaultImageFile;
 	}
 
 	@Override
 	public String toString() {
-		return "ImageService [resourceLoader=" + resourceLoader + ", configurationService=" + configurationService
+		return "ImageService [resourceLoader=" + resourceLoader + ", appProperties=" + appProperties
 				+ ", defaultImageFile=" + defaultImageFile + ", baseDirPath=" + baseDirPath + "]";
 	}
 }

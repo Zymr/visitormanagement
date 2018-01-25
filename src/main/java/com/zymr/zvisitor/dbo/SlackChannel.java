@@ -20,7 +20,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * Simple JavaBean domain object representing a Channel.
  */
 @Document(collection = SlackChannel.CHANNEL_DOCUMENT)
-public class SlackChannel  implements  Serializable 	{
+public class SlackChannel  implements  Serializable {
+	
 	private static final long serialVersionUID = 6259042069557987159L;
 
 	public static final String CHANNEL_DOCUMENT = "channels";

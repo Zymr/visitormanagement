@@ -1,0 +1,2 @@
+Hello *<!$employeename$>* ,
+*_$visitor$_* is waiting at *$location$* office near reception area for $from$.

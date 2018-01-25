@@ -1,3 +1,12 @@
+/******************************************************* * Copyright (C) 2017 ZVisitor
+ *
+ * This file is part of ZVisitor.
+ *
+ * ZVisitor can not be copied and/or distributed without the express
+ * permission of ZYMR Inc.
+ *
+ *  * 
+ *******************************************************/
 package com.zymr.zvisitor.converter;
 
 import java.util.Collection;
@@ -13,12 +22,12 @@ import com.zymr.zvisitor.dto.EmailConfigurationDTO;
 public class EmailConfigConverter implements Converter<Email, EmailConfigurationDTO> {
 
 	@Override
-	public EmailConfigurationDTO convertToDTO(Email s) {
-		if (Objects.isNull(s)) {
+	public EmailConfigurationDTO convertToDTO(Email email) {
+		if (Objects.isNull(email)) {
 			return null;
 		} 
-		return new EmailConfigurationDTO(s.getHost(), s.getPort(), 
-				s.getPassword(), s.getPassword(), s.getFrom());
+		return new EmailConfigurationDTO(email.getHost(), email.getPort(), 
+				email.getUsername(), email.getPassword(), email.getFrom());
 	}
 
 	@Override

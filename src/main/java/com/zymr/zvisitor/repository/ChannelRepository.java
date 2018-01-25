@@ -21,4 +21,7 @@ public interface ChannelRepository extends MongoRepository<SlackChannel, String>
 
 	@Query("{ '"+SLACKCHANNEL_FIELDS.ID+"': ?0}")
 	SlackChannel findById(String id);
+	
+	long countById(String id);
+	
 }
