@@ -69,12 +69,11 @@ public class NotificationService {
 
 	@PostConstruct
 	public void init() throws IOException {
+		logger.info("Notification Service {} ", toString());
 		emailTemplate = IOUtils.toString(EmailService.class.getClassLoader()
 				.getResourceAsStream(Constants.EMAIL_TEMPLATE), Charset.defaultCharset());
 		ndaEmailTemplate = IOUtils.toString(EmailService.class.getClassLoader()
 				.getResourceAsStream(Constants.NDA_EMAIL_TEMPLATE), Charset.defaultCharset());
-		logger.info("Email Template -> [{}]  ,    NDA Email Template -> [{}]  ", emailTemplate , ndaEmailTemplate);
-		logger.info("Service  {}  ", toString());
 	}
 
 	/**
@@ -117,7 +116,6 @@ public class NotificationService {
 	 */  
 	private void notifyOnEmail(Employee employee, Visitor visitor, SlackChannel channel, String ndaFilePath, String locationName) throws AddressException, IOException {
 		EmailDTO emailDTO = createMail(employee, visitor,channel, locationName);
-		logger.info("Emai notification template -> [{}]" ,emailDTO);
 		List<EmailDTO> emailList = new ArrayList<EmailDTO>();
 		emailList.add(emailDTO);
 		if (Objects.nonNull(visitor)) {
@@ -135,13 +133,11 @@ public class NotificationService {
 	 * @throws IOException 
 	 */  
 	private void notifyOnSlack(Employee employee, Visitor visitor, SlackChannel channel, String locationName) throws IOException {
-		logger.info("Employee {} , Visitor {} , Channel {} , Location {}" , employee , visitor , channel , locationName);
 		Map<String,ContentBody> attachment = createAttachment(imageService.getBaseDirPathAsStr(), visitor.getVisitorPic(), imageService.getDefaultImageFile());
 		Map<String, String> param = null;
 		if (Objects.nonNull(employee)) {
 			String	slackMessage = createMessage(configurationService.getSlackConfiguration().getMessage(),
 					visitor, employee, locationName);
-			logger.info("Slack Message send to employee -> [{}]" ,slackMessage);
 			param = buildSlackRequestParam(employee.getSlackId(), slackMessage, configurationService.getSlackConfiguration().getToken());			
 		}
 		else  {	

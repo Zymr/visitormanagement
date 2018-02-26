@@ -54,6 +54,9 @@ public class VisitorDTO {
 	@JsonProperty("location")
 	private String location;
 	
+	@JsonProperty("date")
+	private long date;
+	
 	public VisitorDTO(String id, String name) {
 		this.id = id;
 		this.name = name;
@@ -156,6 +159,14 @@ public class VisitorDTO {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public long getDate() {
+		return date;
+	}
+
+	public void setDate(long date) {
+		this.date = date;
 	}
 
 	@Override

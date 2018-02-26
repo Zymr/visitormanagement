@@ -11,8 +11,11 @@ package com.zymr.zvisitor.converter;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NotImplementedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zymr.zvisitor.dbo.Visitor;
@@ -20,6 +23,12 @@ import com.zymr.zvisitor.dto.VisitorDTO;
 
 @Service
 public class VisitorConverter implements Converter<Visitor, VisitorDTO> {
+	
+	@Autowired
+	EmployeeConverter employeeConverter;
+	
+	@Autowired
+	ChannelConverter channelConverter;
 
 	@Override
 	public VisitorDTO convertToDTO(Visitor visitor) {
@@ -36,13 +45,18 @@ public class VisitorConverter implements Converter<Visitor, VisitorDTO> {
 		visitorDTO.setVisitorPic(visitor.getVisitorPic());
 		visitorDTO.setVisitorSignature(visitor.getVisitorSignature());
 		visitorDTO.setLocation(visitor.getLocation());
+		visitorDTO.setDate(visitor.getCreatedTime().getTime());
 		return visitorDTO;
 	}
 
 	@Override
-	public Collection<VisitorDTO> convertToDTO(Collection<Visitor> s) {
-	  throw new NotImplementedException(VisitorConverter.class);
-	}
+	public Collection<VisitorDTO> convertToDTO(Collection<Visitor> visitors) {
+		if (CollectionUtils.isEmpty(visitors)) {
+			return null;
+		}
+		return visitors.stream().filter(Objects::nonNull)
+				.map(visitor -> convertToDTO(visitor))
+				.collect(Collectors.toList());	}
 
 	@Override
 	public Visitor convert(VisitorDTO visitorDTO) {

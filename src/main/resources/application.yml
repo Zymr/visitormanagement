@@ -1,14 +1,19 @@
 app:
-    mail-personal: ZYMR INC
+    mail-personal: <mail-from-personal>
+    #employee sync cron job expression
+    #It will sync employee detatils from slack channel over the configured period.
     emp-sync-job: 0 0 10 * * *
-    admin-email: admin
-    admin-password: admin
-    secretKey: 69107228d26c2a64e4bdcdab87c19f7f
+    admin-email: <default-administrator>
+    admin-password: <default-password>
+    secretKey: <secret-key>
     slack:
-      token: xoxp-2916887900-246433532887-246074269587-53dbc23b456228639f03a9aaaebcb229
-      user-name: Virtual Receptionist
+      #This slack token will be used for send slack notification.
+      token: <slack-user-account-token>
+      # username should start with @ EX: @Virtual Receptionist
+      user-name: <slack-user-account-username>
     config:
-      file-uploads-path: /home/zymr/ZVisitor/
+      file-uploads-path: <file-base-dir-name>
+    #visitor origin categories
     visitor-category:
         Bank Finance Support: bank-finance
         Client Visit : client-visit
@@ -16,38 +21,51 @@ app:
         Personal Meet : personal-meet    
         Technical Support : technical-support
         Other : other
-    org:
-        valid-email-domains:
-          - zymrinc.com
-          - zymr.com
+    org:  
+        #app employees validity  EX: 
+        #EX:   
+        #- zymrinc.com
+        #- zymr.com
+        valid-email-domains: <valid-email-domains>
+        #app departments/slack group. Sholud be in below format.
         department:
-        -
-          slackid: G5FPCCQR5
-          email: hr@zymr.com
-        -
-          slackid: G5AFJL8JX
-          email: it@zymr.com
-        -
-          slackid: G0GP7NS6B
-          email: accounts@zymr.com    
+        - 
+           slackid: <slack-group1-slackid>
+           email: <slack-group1-email>
+        #EX:   
+        #-
+          #slackid: G5FPQRSR5
+          #email: test@gmail.com
+        #-
+          #slackid: G5JL8AWJX
+          #email: test2@gmail.com
+        #-
+          #slackid: G06ADQESB
+          #email: test3@gmail.com   
         locations:
-        -
-          abbr: z2
-          slackid: C1LFAPHB9
-          name: Ahmedabad
-        -
-          abbr: z3
-          slackid: C1LEZP1V2
-          name: Pune
+        - 
+           abbr: <location-abbreviation>
+           slackid: <slack-channel-id>
+           name: <location-name>
+        #EX:   
+        #-
+          #abbr: z2
+          #slackid: CDKRHYRHB9
+          #name: Ahmedabad
+        #-
+          #abbr: z3
+          #slackid: C1LAWEMDKR
+          #name: Pune
 spring:
   data:
     mongodb:
-      database: zv_auth2
-      host: localhost
+      database: <database-name>
+      host: <database-server-host>
+      #<database-server-port> EX: 27017
       port: 27017
-      username: superAdmin 
-      password: admin123
-      authentication-database: admin
+      username: <database-username>
+      password: <database-password>
+      authentication-database: <authentication-database-name>
   http:
     multipart:
       max-file-size: 10MB
@@ -55,10 +73,12 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: zymr.visitor@gmail.com
-    password: zymr@123
+    #This email id will be used to send application emails.
+    username: <email-id>
+    password: <email-password>
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+#server configuration
 server:
-  address: localhost
+  address: <server-host>

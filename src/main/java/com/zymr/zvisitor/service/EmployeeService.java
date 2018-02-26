@@ -107,9 +107,13 @@ public class EmployeeService {
 	 * @throws NoDataFoundException 
 	 * @throws InvalidDataException 
 	 */
-	public void delete(String id) throws InvalidDataException {
+	public void delete(String id) throws NoDataFoundException, InvalidDataException {
 		if (StringUtils.isBlank(id)) {
 			throw new InvalidDataException(Constants.INVALID_PARAM);
+		}
+		long count = employeeRepository.countById(id);
+		if (count <= 0) {
+			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
 		employeeRepository.delete(id);
 	}
@@ -121,9 +125,13 @@ public class EmployeeService {
 	 * @throws NoDataFoundException 
 	 * @throws InvalidDataException 
 	 */  
-	public void deleteBySlackId(String slackId) throws InvalidDataException {
+	public void deleteBySlackId(String slackId) throws NoDataFoundException, InvalidDataException {
 		if (StringUtils.isBlank(slackId)) {
 			throw new InvalidDataException(Constants.INVALID_PARAM);
+		}
+		long count = employeeRepository.countBySlackId(slackId);
+		if (count <= 0) {
+			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
 		employeeRepository.delete(slackId);
 	}

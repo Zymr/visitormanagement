@@ -112,9 +112,13 @@ public class LocationService {
 	 * @throws NoDataFoundException 
 	 * @throws InvalidDataException 
 	 */
-	public void delete(String id) throws InvalidDataException {
+	public void delete(String id) throws NoDataFoundException, InvalidDataException {
 		if (StringUtils.isBlank(id)) {
 			throw new InvalidDataException(Constants.INVALID_PARAM);
+		}
+		long count = locationRepository.countById(id);
+		if (count <= 0) {
+			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
 		locationRepository.delete(id);
 	}

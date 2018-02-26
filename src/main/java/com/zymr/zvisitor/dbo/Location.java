@@ -43,6 +43,15 @@ public class Location implements  Serializable {
 	@Field(LOCATION_FIELDS.LOCATION_NAME)
 	private String locationName;
 	
+	public Location() {
+	}
+
+	public Location(String location, String groupId, String locationName) {
+		this.location = location;
+		this.groupId = groupId;
+		this.locationName = locationName;
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -72,15 +81,6 @@ public class Location implements  Serializable {
 	}
 
 	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
-
-	public Location() {
-	}
-
-	public Location(String location, String groupId, String locationName) {
-		this.location = location;
-		this.groupId = groupId;
 		this.locationName = locationName;
 	}
 
