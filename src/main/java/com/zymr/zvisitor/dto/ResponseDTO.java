@@ -14,10 +14,20 @@ import java.util.Map;
 
 public class ResponseDTO {
 	private Map<String, Object> responseMap;
+	
+	private PageDetails page;
 
 	public ResponseDTO(String key, Object object) {
 		this.responseMap = new HashMap<>();
 		this.responseMap.put(key, object);
+	}
+	
+	public PageDetails getPageDetails() {
+		return page;
+	}
+
+	public void setPageDetails(PageDetails pageDetails) {
+		this.page = pageDetails;
 	}
 	
 	public Map<String, Object> getResponse() {

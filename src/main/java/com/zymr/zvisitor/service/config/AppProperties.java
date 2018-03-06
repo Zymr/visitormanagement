@@ -49,7 +49,7 @@ public class AppProperties {
 	@Autowired
 	private MongoProperties mongoProperties;
 
-	@Value("${server.address:127.0.0.1}")
+	@Value("${server.address:localhost}")
 	private String serverAddress;
 
 	@Value("${server.port:8080}")

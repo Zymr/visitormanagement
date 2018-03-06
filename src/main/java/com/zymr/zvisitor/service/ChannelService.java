@@ -70,7 +70,7 @@ public class ChannelService {
 			logger.info("Syncing of channels from slack started. channels {}", department);
 			List<Channels> slackChannels = slackService.getChannelList(department); 
 			List<SlackChannel> channel =  slackChannels.stream().map(c -> convertToDTO(c))
-					.collect(Collectors.toList());
+																.collect(Collectors.toList());
 			if (CollectionUtils.isNotEmpty(channel)) {
 				channelRepository.save(channel);
 			}
@@ -135,9 +135,10 @@ public class ChannelService {
 	 * @param id
 	 * @throws NoDataFoundException 
 	 */
-	public void delete(String id) throws InvalidDataException {
-		if(StringUtils.isBlank(id)) {
-			throw new InvalidDataException(Constants.INVALID_PARAM);
+	public void delete(String id) throws NoDataFoundException {
+		long count = countById(id);
+		if (count <= 0) {
+			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
 		channelRepository.delete(id);
 	}
@@ -192,7 +193,7 @@ public class ChannelService {
 	} 
 
 	/**
-	 * @param c
+	 * @param channel
 	 * @return SlackChannel
 	 */
 	private SlackChannel convertToDTO(Channels channel) {

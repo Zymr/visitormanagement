@@ -16,9 +16,12 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.PostConstruct;
@@ -28,13 +31,18 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zymr.zvisitor.dbo.Origin;
 import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
+import com.zymr.zvisitor.dto.PageDetails;
+import com.zymr.zvisitor.dto.VisitorQueryDTO;
 import com.zymr.zvisitor.repository.VisitorOriginRepository;
 import com.zymr.zvisitor.repository.VisitorRepository;
 import com.zymr.zvisitor.service.config.AppProperties;
@@ -61,6 +69,9 @@ public class VisitorService {
 	
 	@Autowired
 	private AppProperties appProperties;
+	
+	@Autowired
+	private PageService pageService;
 
 	private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.ZVISITOR_IMAGEDIRNAME_FORMAT);
 
@@ -179,6 +190,27 @@ public class VisitorService {
 		String visitorNDAFilePath = new File(visitorStoredFilesPath).getParent();
 		Path visitorNDAFileName = Paths.get(visitorNDAFilePath, Constants.NDA_FILENAME);	
 		return NdaBuilder.build(visitorNDAFileName, new File(visitorStoredFilesPath), visitor.getName());
+	}
+
+	public PageDetails getWithFilter(Optional<List<String>> locations, Optional<List<String>> categories, Optional<Long> from, Optional<Long> to, 
+			int page, int size) {
+		Map<String, List<String>> queryParam = new HashMap<String, List<String>>();
+		if (locations.isPresent()) {
+			queryParam.put(VISITOR_FIELDS.LOCATION, locations.get());
+		} 
+		if (categories.isPresent()) {
+			queryParam.put(VISITOR_FIELDS.CATEGORY_NAME, categories.get());
+		}
+		VisitorQueryDTO visitorQueryDTO = new VisitorQueryDTO(queryParam);
+		if (from.isPresent()) {
+			visitorQueryDTO.setFindByGte(new Date(from.get()));
+		}
+		if (to.isPresent()) {
+			visitorQueryDTO.setFindByLte(new Date(to.get()));
+		}
+		PageRequest pageRequest = new PageRequest(page-1, size, Direction.DESC, VISITOR_FIELDS.CREATED_TIME);
+		Page<Visitor> ticketPage = visitorRepository.get(visitorQueryDTO, pageRequest);
+		return pageService.fillPageDetails(ticketPage);
 	}
 
 	public List<Origin> getVisitorOriginCategories() {

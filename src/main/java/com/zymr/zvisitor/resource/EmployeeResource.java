@@ -38,8 +38,7 @@ import com.zymr.zvisitor.util.enums.ZvisitorResource;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(Constants.EMPLOYEE_URL)
-public class EmployeeResource extends BaseResource {
+public class EmployeeResource {
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeResource.class);
 
 	@Autowired
@@ -48,7 +47,7 @@ public class EmployeeResource extends BaseResource {
 	@Autowired
 	private EmployeeConverter employeeConverter;
 
-	@RequestMapping(value = "/{locId}", method = RequestMethod.GET)
+	@RequestMapping(value = Constants.GET_EMPLOYEE, method = RequestMethod.GET)
 	@ApiOperation(value = "Fetch employees of specific location.", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> get(@PathVariable @NotBlank String locId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.ok().body(new ResponseDTO(ZvisitorResource.EMPLOYEES.toLowerCase(), Collections.EMPTY_LIST).getResponse());
@@ -66,20 +65,22 @@ public class EmployeeResource extends BaseResource {
 		return result;
 	}
 
-	@RequestMapping(value ="{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = Constants.DELETE_EMPLOYEE, method = RequestMethod.DELETE)
 	public ResponseEntity<Map<String, Object>> delete(@PathVariable("id") @NotBlank String slackId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
 			employeeService.deleteBySlackId(slackId);
 			result = ResponseEntity.ok().build();
-		} catch (Exception e) {
+		} catch(NoDataFoundException e) {
+			logger.error("Exception while deleting employee.", e);			
+		}  catch (Exception e) {
 			logger.error("Exception while deleting employee.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
 	}
 
-	@RequestMapping(value="/syncEmployee", method = RequestMethod.GET) 
+	@RequestMapping(value = Constants.SYNC_EMPLOYEE, method = RequestMethod.GET) 
 	public ResponseEntity<Map<String, Object>> syncEmployee() throws Exception {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
