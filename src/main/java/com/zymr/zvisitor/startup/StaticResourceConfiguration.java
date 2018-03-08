@@ -28,7 +28,6 @@ public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 
     private String[] CLASSPATH_RESOURCE_LOCATIONS = null;
             
-    
     List<String> classpathResourceLocations= null;
     
     @Autowired

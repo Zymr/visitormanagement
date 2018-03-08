@@ -74,7 +74,7 @@ public class ChannelResource {
 
 	@RequestMapping(value=Constants.SYNC_CHANNEL, method=RequestMethod.GET) 
 	public ResponseEntity<Map<String, Object>> syncChannels() {
-	  ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
+		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
 			channelService.syncChannelsFromSlack();
 			result = ResponseEntity.ok().build(); 
@@ -84,7 +84,7 @@ public class ChannelResource {
 		}
 		return result; 
 	}
-	
+
 	@RequestMapping(value = Constants.AUTH_CHANNEL_URL, method=RequestMethod.POST)
 	@ApiOperation(value = "add channel", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> addChannel(@RequestPart("icon") MultipartFile file, @RequestParam(value="channel", required=true) String channelJson)  {
@@ -136,7 +136,7 @@ public class ChannelResource {
 
 	@RequestMapping(value =Constants.CHANNEL_UPDATE_DELETE_URL, method=RequestMethod.DELETE)
 	@ApiOperation(value = "delete channel", response = ResponseDTO.class)
-	public ResponseEntity<Map<String, Object>> deleteChannel(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, Object>> deleteChannel(@PathVariable("chId") String id) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
 			channelService.delete(id);
@@ -150,5 +150,5 @@ public class ChannelResource {
 		}
 		return result;
 	}
-	
+
 }

@@ -14,13 +14,14 @@ import java.util.Date;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /** Simple JavaBean domain object representing a Visitor. */
 @Document(collection = Visitor.VISITOR_DOCUMENT)
 public class Visitor implements Serializable {
-	
+
 	private static final long serialVersionUID = -5656619435435258543L;
 
 	public static final String VISITOR_DOCUMENT = "visitors";
@@ -36,6 +37,8 @@ public class Visitor implements Serializable {
 		public static final String PURPOSE = "pur";
 		public static final String CATEGORY_NAME = "cat";
 		public static final String EMPLOYEE_ID = "eId";
+		public static final String EMPLOYEE = "emp";
+		public static final String CHANNEL = "ch";
 		public static final String CHANNEL_ID = "cId";
 		public static final String LOCATION = "loc";
 	}
@@ -59,8 +62,14 @@ public class Visitor implements Serializable {
 	private String purpose;
 	@Field(VISITOR_FIELDS.CATEGORY_NAME)
 	private String categoryName;
+	@DBRef
+	@Field(VISITOR_FIELDS.EMPLOYEE)
+	private Employee employee;
 	@Field(VISITOR_FIELDS.EMPLOYEE_ID)
 	private String employeeId;
+	@DBRef
+	@Field(VISITOR_FIELDS.CHANNEL)
+	private SlackChannel channel;
 	@Field(VISITOR_FIELDS.CHANNEL_ID)
 	private String channelId;
 	@Field(VISITOR_FIELDS.LOCATION)
@@ -68,6 +77,14 @@ public class Visitor implements Serializable {
 
 	public Visitor(String name) {
 		this.name = name;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 	public String getVisitorPic() {
@@ -158,6 +175,14 @@ public class Visitor implements Serializable {
 		this.channelId = channelId;
 	}
 
+	public SlackChannel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(SlackChannel channel) {
+		this.channel = channel;
+	}
+
 	public String getLocation() {
 		return location;
 	}
@@ -165,12 +190,12 @@ public class Visitor implements Serializable {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Visitor [id=" + id + ", name=" + name + ", email=" + email + ", visitorPic=" + visitorPic
 				+ ", visitorSignature=" + visitorSignature + ", mobile=" + mobile + ", createdTime=" + createdTime
-				+ ", purpose=" + purpose + ", categoryName=" + categoryName + ", employeeId=" + employeeId
-				+ ", channelId=" + channelId + ", location=" + location + "]";
+				+ ", purpose=" + purpose + ", categoryName=" + categoryName + ", employee=" + employee + ", employeeId="
+				+ employeeId + ", channel=" + channel + ", channelId=" + channelId + ", location=" + location + "]";
 	}
 }

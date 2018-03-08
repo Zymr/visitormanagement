@@ -197,7 +197,7 @@ public class EmployeeService {
 		Employee employee = slackEmployeeConverter.convert(slackEmployee);
 		Optional<String> value = location.entrySet().stream()
 				.filter(entry -> entry.getKey()
-						.contains(slackEmployee.getSlackId()))
+				.contains(slackEmployee.getSlackId()))
 				.map(Map.Entry::getValue)
 				.findFirst();
 

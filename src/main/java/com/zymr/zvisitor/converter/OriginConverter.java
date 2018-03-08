@@ -28,7 +28,7 @@ public class OriginConverter implements Converter<Origin, VisitorOriginDTO> {
 
 	@Autowired
 	private AppProperties appProperties;
-	
+
 	@Override
 	public VisitorOriginDTO convertToDTO(Origin origin) {
 		if (Objects.isNull(origin)) {
@@ -58,6 +58,6 @@ public class OriginConverter implements Converter<Origin, VisitorOriginDTO> {
 
 	@Override
 	public Collection<Origin> convert(Collection<VisitorOriginDTO> d) {
-	  throw new NotImplementedException(OriginConverter.class);
+		throw new NotImplementedException(OriginConverter.class);
 	}
 }

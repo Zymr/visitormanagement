@@ -38,7 +38,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.zymr.zvisitor.dbo.Employee;
 import com.zymr.zvisitor.dbo.Origin;
+import com.zymr.zvisitor.dbo.SlackChannel;
 import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
 import com.zymr.zvisitor.dto.PageDetails;
@@ -66,9 +68,15 @@ public class VisitorService {
 
 	@Autowired
 	private ImageService imageService;
-	
+
 	@Autowired
 	private AppProperties appProperties;
+
+	@Autowired
+	private EmployeeService employeeService;
+
+	@Autowired
+	private ChannelService channelService;
 	
 	@Autowired
 	private PageService pageService;
@@ -119,6 +127,14 @@ public class VisitorService {
 	public void add(MultipartFile visitorImage, MultipartFile visitorSignature, Visitor visitor, String slackId, String channelId) {
 		logger.info("Started adding visitor with image.");
 		try {
+			Employee employee = employeeService.getBySlackId(slackId);
+			if (Objects.nonNull(employee)) {
+				visitor.setEmployee(employee);
+			}
+			SlackChannel channel = channelService.findByChannelId(channelId);
+			if (Objects.nonNull(channel)) {
+				visitor.setChannel(channel);
+			}
 			Visitor dbVisitor = save(visitor);
 			String dateDir = LocalDate.now().format(formatter);
 			Path dirPath = Util.createFileDirectory(dateDir, dbVisitor.getId());
@@ -126,15 +142,13 @@ public class VisitorService {
 				dbVisitor.setVisitorPic(Paths.get(dirPath.toString(), visitorImage.getOriginalFilename()).toString());
 			} 
 			dbVisitor.setVisitorSignature(Paths.get(dirPath.toString(),	visitorSignature.getOriginalFilename()).toString());
-
 			saveVisitorImages(visitorImage, visitorSignature, dirPath);
 			save(dbVisitor);
 			File ndaFile = generateNDAFile(dbVisitor);
-
 			if	(Objects.nonNull(dbVisitor) && Objects.nonNull(ndaFile)) {
 				CompletableFuture.supplyAsync(()->{
 					try {
-						return notificationService.notify(slackId, channelId, 
+						return notificationService.notify(employee, channel, 
 								dbVisitor, ndaFile.getAbsolutePath());
 					} catch (AddressException | IOException e) {
 						logger.error("Exception while sending notification", e);					
@@ -142,7 +156,6 @@ public class VisitorService {
 					return null;
 				}).exceptionally(e -> { logger.error("Exception while sending notification", e); return null; }); 
 			}
-
 		} catch(Exception e) {
 			logger.error("Exception while adding visitor. {}", visitor, e);
 		}

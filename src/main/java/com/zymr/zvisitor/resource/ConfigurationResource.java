@@ -51,7 +51,7 @@ public class ConfigurationResource {
 
 	@Autowired
 	private EmailService emailService;
-		
+
 	@Autowired
 	private EmailConfigConverter eMailConfigConverter;
 
@@ -73,7 +73,7 @@ public class ConfigurationResource {
 	@ApiOperation(value = "Update slack auth token")
 	public ResponseEntity<Map<String, Object>> updateSlackToken(@RequestBody @Valid SlackTokenDTO slackToken) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.status(HttpStatus.BAD_REQUEST).
-				body(new ResponseDTO(ZvisitorResource.TOKEN.toLowerCase(), Constants.SLACK_TOKEN_INVALID).getResponse());
+				body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_TOKEN_INVALID).getResponse());
 		try {
 			boolean isValid = slackService.isTokenValid(slackToken.getToken());
 			if (isValid) {
@@ -90,7 +90,7 @@ public class ConfigurationResource {
 	@RequestMapping(value = Constants.EMAIL_CONFIG_URL, method = RequestMethod.GET)
 	@ApiOperation(value = "Fetch mail configuration", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> getMailConfiguration() {
-		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();;
+		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
 			ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.EMAIL.toLowerCase(), eMailConfigConverter.convertToDTO(configurationService.getMailConfiguration()));
 			result = ResponseEntity.ok(responseDTO.getResponse());
@@ -109,9 +109,12 @@ public class ConfigurationResource {
 			Email mailConfiguration = eMailConfigConverter.convert(mailConfigurationDTO);
 			emailService.authenticateAndLoadConfiguration(mailConfiguration);
 			configurationService.updateMailConfig(mailConfiguration);
-			result = ResponseEntity.ok().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_TOKEN_CONFIGURATION_UPDATED).getResponse());
+			result = ResponseEntity.ok().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.EMAIL_CONFIGURATION_CONFIGURATION_UPDATED).getResponse());
 		} catch(AuthenticationFailedException | MailConnectException e) {
-			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(ZvisitorResource.EMAIL.toLowerCase(), Constants.EMAIl_CONFIG_INVALID).getResponse());
+			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.EMAIl_CONFIG_INVALID).getResponse());
+			logger.error("Exception while updating email configuration.", e);
+		} catch(IllegalArgumentException e) {
+			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.EMAIl_CONFIG_INVALID).getResponse());
 			logger.error("Exception while updating email configuration.", e);
 		} catch(Exception e) {
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -119,5 +122,5 @@ public class ConfigurationResource {
 		}
 		return result;
 	}
-	
+
 }

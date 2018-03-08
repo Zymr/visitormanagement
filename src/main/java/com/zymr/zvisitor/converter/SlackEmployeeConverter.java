@@ -23,12 +23,12 @@ public class SlackEmployeeConverter implements Converter<Employee, SlackEmployee
 
 	@Override
 	public SlackEmployee convertToDTO(Employee s) {
-	  throw new NotImplementedException(SlackEmployeeConverter.class);
+		throw new NotImplementedException(SlackEmployeeConverter.class);
 	}
 
 	@Override
 	public Collection<SlackEmployee> convertToDTO(Collection<Employee> s) {
-	  throw new NotImplementedException(SlackEmployeeConverter.class);
+		throw new NotImplementedException(SlackEmployeeConverter.class);
 	}
 
 	@Override
@@ -42,7 +42,6 @@ public class SlackEmployeeConverter implements Converter<Employee, SlackEmployee
 		employee.setSlackId(slackEmployee.getSlackId());
 		employee.setteamId(slackEmployee.getTeamId());
 		employee.setSlackUt(slackEmployee.getUpdatedTime());
-		
 		if (Objects.nonNull(slackEmployee.getProfile())) {
 			employee.setEmail(slackEmployee.getProfile().getEmail());
 			employee.setFullName(slackEmployee.getProfile().getFullName());
@@ -56,6 +55,6 @@ public class SlackEmployeeConverter implements Converter<Employee, SlackEmployee
 
 	@Override
 	public Collection<Employee> convert(Collection<SlackEmployee> d) {
-	  throw new NotImplementedException(SlackEmployeeConverter.class);
+		throw new NotImplementedException(SlackEmployeeConverter.class);
 	}
 }

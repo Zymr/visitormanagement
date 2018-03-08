@@ -84,7 +84,7 @@ public class EmailService {
 	public void authenticateAndLoadConfiguration(Email emailDTO) throws MessagingException, ConfigurationException {
 		Transport transport = getSession().getTransport(SMTP_PROTOCOL);
 		try {
-			transport.connect(emailDTO.getHost(), emailDTO.getPort(),	emailDTO.getUsername(), 
+			transport.connect(emailDTO.getHost(), emailDTO.getPort(), emailDTO.getUsername(), 
 					emailDTO.getPassword());
 		} finally {
 			transport.close();

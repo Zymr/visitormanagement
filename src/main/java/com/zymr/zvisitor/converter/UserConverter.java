@@ -35,7 +35,8 @@ public class UserConverter implements Converter<Users, UsersDTO> {
 		if (CollectionUtils.isEmpty(users)) {
 			return null;
 		}
-		return users.stream().filter(Objects::nonNull)
+		return users.stream()
+				.filter(Objects::nonNull)
 				.map(user -> convertToDTO(user))
 				.collect(Collectors.toList());
 	}
@@ -53,7 +54,8 @@ public class UserConverter implements Converter<Users, UsersDTO> {
 		if (CollectionUtils.isEmpty(usersDTO)) {
 			return null;
 		}
-		return usersDTO.stream().filter(Objects::nonNull)
+		return usersDTO.stream()
+				.filter(Objects::nonNull)
 				.map(userDTO -> convert(userDTO))
 				.collect(Collectors.toList());
 	}

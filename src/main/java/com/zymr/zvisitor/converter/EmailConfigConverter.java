@@ -32,7 +32,7 @@ public class EmailConfigConverter implements Converter<Email, EmailConfiguration
 
 	@Override
 	public Collection<EmailConfigurationDTO> convertToDTO(Collection<Email> s) {
-	  throw new NotImplementedException(EmailConfigConverter.class);
+		throw new NotImplementedException(EmailConfigConverter.class);
 	}
 
 	@Override
@@ -47,6 +47,6 @@ public class EmailConfigConverter implements Converter<Email, EmailConfiguration
 
 	@Override
 	public Collection<Email> convert(Collection<EmailConfigurationDTO> d) {
-	  throw new NotImplementedException(EmailConfigConverter.class);
+		throw new NotImplementedException(EmailConfigConverter.class);
 	}
 }

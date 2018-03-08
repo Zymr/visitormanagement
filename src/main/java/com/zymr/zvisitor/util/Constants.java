@@ -102,14 +102,12 @@ public class Constants {
 	public static final String SWAGGER_SECURITY = "/configuration/security";
 	public static final String SWAGGER_SECURITY_URL = "/webjars/**";
 
-	public static final String LOCATION_EXISTS = "Duplicate slack channel ID or Abbreviation provided!";
 	public static final String RESPONSE_MESSAGE_KEY = "message";
 	public static final String FILTER_LOCATION_KEY = "location";
 	public static final String FILTER_CATEGORY_KEY = "category";
 	public static final String FILTER_FROMDATE_KEY = "from";
 	public static final String FILTER_TODATE_KEY = "to";
 	
-
 	/** Stored file location. */
 	public static final String ZVISITOR_BASEIMAGEDIR = "images";
 	public static final String ZVISITOR_IMAGEDIRNAME_FORMAT = "ddMMYYYY";
@@ -128,11 +126,8 @@ public class Constants {
 	public static final String INVALID_LOGIN = "Invalid username or password!";
 	public static final String USER_AUTHENTICATON_ERROR_MSG = "Error while authenticate user token";
 	
-	public static final String SLACK_TOKEN_INVALID = "Slack token is invalid.";
-	public static final String EMAIl_CONFIG_INVALID = "Email Configuration is invalid.";
 	public static final String TOKEN = "token";
 	public static final String FORWARD_SLASH_AND_ANY = "/**";
-	
 	
 	/** encryption */
 	public static final String ALGORITHM = "PBKDF2WithHmacSHA512";
@@ -153,16 +148,22 @@ public class Constants {
 	public static final String DEFAULT_PAGENUMBER = "1";
 	
 	//Response messages
-	public static final String  SLACK_DUPLICATE_ID_RESPONSE = "Duplicate slack channel ID provided!";
-	public static final String  LOCATION_DELETED_SUCCESSFULLY = "Location Deleted Successfully";
-	public static final String  LOCATION_NOT_FOUND = "Location Not Found";
-	public static final String  SLACK_TOKEN_CONFIGURATION_UPDATED = "Slack Token Updated Successfully";
-	public static final String  EMAIL_CONFIGURATION_CONFIGURATION_UPDATED = "Email Configuration Updated Successfully";
-	public static final String  LOCATION_CONFIGURATION_CONFIGURATION_UPDATED = "Location Configuration Updated Successfully";
-	
-	public static final String  SLACK_CHANNEL_CONFIGURATION_CONFIGURATION_UPDATED = "Slack Channel Configuration Updated Successfully";
-	public static final String  SLACK_CHANNEL_CONFIGURATION_CONFIGURATION_DELETED = "Slack Channel Configuration Deleted Successfully";
-	public static final Object SLACK_CHANNEL_ADDED_SUCCESSFLLY = "Slack Channel Added Successfully";
-	public static final Object LOCATION_ADDED_SUCCESSFLLY = "Location Added Successfully";
+	public static final String  LOCATION_DELETED_SUCCESSFULLY = "Location deleted successfully";
+	public static final String  LOCATION_NOT_FOUND = "Location not found";
+	public static final Object LOCATION_ADDED_SUCCESSFLLY = "Location added successfully";
+	public static final String  LOCATION_CONFIGURATION_CONFIGURATION_UPDATED = "Location updated successfully";
+	public static final String LOCATION_EXISTS = "Duplicate slack channel ID or Abbreviation provided!";
 
+	public static final String  SLACK_TOKEN_CONFIGURATION_UPDATED = "Slack token updated successfully";
+	public static final String SLACK_TOKEN_INVALID = "Slack token update failed";
+
+	public static final String  SLACK_CHANNEL_CONFIGURATION_CONFIGURATION_UPDATED = "Slack channel updated successfully";
+	public static final String  SLACK_CHANNEL_CONFIGURATION_CONFIGURATION_DELETED = "Slack channel deleted successfully";
+	public static final Object SLACK_CHANNEL_ADDED_SUCCESSFLLY = "Slack channel added successfully";
+	public static final String  SLACK_DUPLICATE_ID_RESPONSE = "Duplicate slack channel ID provided!";
+	
+	public static final String  EMAIL_CONFIGURATION_CONFIGURATION_UPDATED = "SMTP configuration updated successfully";
+	public static final String EMAIl_CONFIG_INVALID = "SMTP configuration update failed";
+	
+	public static final String INVALID_CONFIGURATION = "Data is not valid";
 }
