@@ -24,7 +24,7 @@ public class VisitorRepositoryImpl implements VisitorRepositoryCustom {
 		visitorQueryDTO.getFindByInParams()
 					   .entrySet()
 					   .stream()
-					   .forEach(e-> query.addCriteria(Criteria.where(e.getKey()).in(e.getValue())));
+					   .forEach(field-> query.addCriteria(Criteria.where(field.getKey()).in(field.getValue())));
 		query.addCriteria(Criteria.where(VISITOR_FIELDS.CREATED_TIME).gte(visitorQueryDTO.getFindByGte()).lte(visitorQueryDTO.getFindByLte()));
 		List<Visitor> tickets =  mongoTemplate.find(query, Visitor.class);
 		return PageableExecutionUtils.getPage(
