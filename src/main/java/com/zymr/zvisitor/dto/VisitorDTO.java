@@ -54,6 +54,9 @@ public class VisitorDTO {
 	@JsonProperty("location")
 	private String location;
 	
+	@JsonProperty("emp_dept_name")
+	private String empDeptName;
+	
 	@JsonProperty("date")
 	private long date;
 	
@@ -169,11 +172,19 @@ public class VisitorDTO {
 		this.date = date;
 	}
 
+	public String getEmpDeptName() {
+		return empDeptName;
+	}
+
+	public void setEmpDeptName(String empDeptName) {
+		this.empDeptName = empDeptName;
+	}
+
 	@Override
 	public String toString() {
 		return "VisitorDTO [id=" + id + ", name=" + name + ", email=" + email + ", visitorPic=" + visitorPic
 				+ ", visitorSignature=" + visitorSignature + ", purpose=" + purpose + ", mobile=" + mobile
 				+ ", categoryName=" + categoryName + ", empId=" + empId + ", slackId=" + slackId + ", channelId="
-				+ channelId + ", location=" + location + "]";
+				+ channelId + ", location=" + location + ", empDeptName=" + empDeptName + ", date=" + date + "]";
 	}
 }

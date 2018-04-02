@@ -58,7 +58,7 @@ public class EmployeeResource {
 				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.EMPLOYEES.toLowerCase(), employeesDTO);
 				result = ResponseEntity.ok().body(responseDTO.getResponse());
 			} 
-		}  catch(Exception e) {
+		}  catch (Exception e) {
 			logger.error("Exception while fetching employees.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
@@ -71,7 +71,7 @@ public class EmployeeResource {
 		try {
 			employeeService.deleteBySlackId(slackId);
 			result = ResponseEntity.ok().build();
-		} catch(NoDataFoundException e) {
+		} catch (NoDataFoundException e) {
 			logger.error("Exception while deleting employee.", e);			
 		}  catch (Exception e) {
 			logger.error("Exception while deleting employee.", e);

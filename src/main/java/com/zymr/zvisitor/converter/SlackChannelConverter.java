@@ -25,7 +25,7 @@ import com.zymr.zvisitor.util.Util;
 
 @Service
 public class SlackChannelConverter implements Converter<SlackChannel, SlackChannelDTO> {
-	
+
 	@Autowired
 	private AppProperties appProperties;
 

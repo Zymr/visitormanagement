@@ -68,9 +68,9 @@ public class NdaBuilder {
 			PdfStamper pdfStamper = new PdfStamper(pdfReader,
 					new FileOutputStream(destFile.toString()));
 			Image image = createNDAImage(signatureImage, 0, 0);
-			PdfContentByte over = pdfStamper.getOverContent(5);
-			over.addImage(image);
-			PdfContentByte pdfContentByte = pdfStamper.getOverContent(5);
+			PdfContentByte pdfContentByte = pdfStamper.getOverContent(2);
+			PdfContentByte signature = pdfStamper.getOverContent(3);
+			pdfContentByte.addImage(image);
 			pdfContentByte.beginText();
 			pdfContentByte.setFontAndSize(BaseFont.createFont
 					(BaseFont.HELVETICA, 
@@ -78,11 +78,22 @@ public class NdaBuilder {
 							BaseFont.EMBEDDED
 							)
 					, 10); 
-			pdfContentByte.setTextMatrix(112, 428); 
-			pdfContentByte.showText(visitorName);
-			pdfContentByte.setTextMatrix(89, 406);
-			pdfContentByte.showText(new SimpleDateFormat("E, dd MMM yyyy").format(new Date()));
+			signature.setFontAndSize(BaseFont.createFont
+					(BaseFont.HELVETICA, 
+							BaseFont.CP1257, 
+							BaseFont.EMBEDDED
+							)
+					, 10); 
+			pdfContentByte.setTextMatrix(85, 165);
+			String visitorTruncatedName = visitorName.length() > 25 ?  visitorName.substring(0, 25).concat("...") : visitorName; 
+			pdfContentByte.showText(visitorTruncatedName);
 			pdfContentByte.endText();
+			signature.beginText();
+			signature.setTextMatrix(89, 612);
+			signature.showText(new SimpleDateFormat("E, dd MMM yyyy").format(new Date()));
+			signature.setTextMatrix(340, 612);
+			signature.showText(new SimpleDateFormat("E, dd MMM yyyy").format(new Date()));
+			signature.endText();
 			pdfStamper.close();
 			return destFile.toFile();
 		} catch (IOException | DocumentException | NumberFormatException e) {
@@ -90,6 +101,7 @@ public class NdaBuilder {
 			return null;
 		}
 	}
+
 
 	/**
 	 * Create itextPdf image object with visitor signature.
@@ -105,15 +117,14 @@ public class NdaBuilder {
 			if (imgHeight!=0 && imgWidth!=0) {
 				image.scaleAbsolute(imgWidth, imgHeight);
 			} else {
-				image.scaleAbsolute(230, 140);
-			} image.setAbsolutePosition(70, 450);
+				image.scaleAbsolute(100, 16);
+			} image.setAbsolutePosition(100, 183);
 			return image;
 		} catch (BadElementException | IOException e) {
 			logger.error("Exception while creating image for NDA file. ",e);
 			return null;
 		}
 	}
-
 	public static File getDefaultNDAFile() {
 		return defaultNDAFile;
 	}

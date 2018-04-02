@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import com.zymr.zvisitor.converter.OriginConverter;
 import com.zymr.zvisitor.converter.VisitorConverter;
 import com.zymr.zvisitor.dbo.Origin;
@@ -72,7 +71,7 @@ public class VisitorResource {
 				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.ORIGIN.toLowerCase(), visitorOriginDTO);
 				result = ResponseEntity.ok(responseDTO.getResponse());
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			logger.error("Exception while fetching all categories.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
@@ -89,7 +88,7 @@ public class VisitorResource {
 			if (Objects.nonNull(dbVisitorOrigin)) {
 				result = ResponseEntity.status(HttpStatus.CREATED).build();
 			} 
-		} catch(Exception e) {
+		} catch (Exception e) {
 			logger.error("Exception while adding new category.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
@@ -108,9 +107,9 @@ public class VisitorResource {
 				visitorService.add(profile, signature, dbVisitor, visitorDTO.getSlackId(), visitorDTO.getChannelId());
 				result = ResponseEntity.status(HttpStatus.CREATED).build();
 			}
-		}  catch(JsonProcessingException e) {
+		} catch (JsonProcessingException e) {
 			logger.error("Json Parsing exception.", e);
-		}  catch(Exception e) {
+		}  catch (Exception e) {
 			logger.error("Exception while adding visitor.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}

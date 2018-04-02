@@ -15,20 +15,15 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NotImplementedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zymr.zvisitor.dbo.Employee;
+import com.zymr.zvisitor.dbo.SlackChannel;
 import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dto.VisitorDTO;
 
 @Service
 public class VisitorConverter implements Converter<Visitor, VisitorDTO> {
-	
-	@Autowired
-	EmployeeConverter employeeConverter;
-	
-	@Autowired
-	ChannelConverter channelConverter;
 
 	@Override
 	public VisitorDTO convertToDTO(Visitor visitor) {
@@ -46,6 +41,14 @@ public class VisitorConverter implements Converter<Visitor, VisitorDTO> {
 		visitorDTO.setVisitorSignature(visitor.getVisitorSignature());
 		visitorDTO.setLocation(visitor.getLocation());
 		visitorDTO.setDate(visitor.getCreatedTime().getTime());
+		Employee employee = visitor.getEmployee();
+		SlackChannel channel =	visitor.getChannel();		
+		if (Objects.nonNull(employee)) {
+			visitorDTO.setEmpDeptName(employee.getFullName());
+		}
+		if (Objects.nonNull(channel)) {
+			visitorDTO.setEmpDeptName(channel.getName());
+		}
 		return visitorDTO;
 	}
 
@@ -54,9 +57,11 @@ public class VisitorConverter implements Converter<Visitor, VisitorDTO> {
 		if (CollectionUtils.isEmpty(visitors)) {
 			return null;
 		}
-		return visitors.stream().filter(Objects::nonNull)
+		return visitors.stream()
+				.filter(Objects::nonNull)
 				.map(visitor -> convertToDTO(visitor))
-				.collect(Collectors.toList());	}
+				.collect(Collectors.toList());	
+	}
 
 	@Override
 	public Visitor convert(VisitorDTO visitorDTO) {
@@ -68,7 +73,6 @@ public class VisitorConverter implements Converter<Visitor, VisitorDTO> {
 		visitor.setMobile(visitorDTO.getMobile());
 		visitor.setPurpose(visitorDTO.getPurpose());
 		visitor.setCategoryName(visitorDTO.getCategoryName());
-		visitor.setEmployeeId(visitorDTO.getEmpId());
 		visitor.setChannelId(visitorDTO.getChannelId());
 		visitor.setLocation(visitorDTO.getLocation());
 		return visitor;
@@ -76,6 +80,6 @@ public class VisitorConverter implements Converter<Visitor, VisitorDTO> {
 
 	@Override
 	public Collection<Visitor> convert(Collection<VisitorDTO> d) {
-	  throw new NotImplementedException(VisitorConverter.class);
+		throw new NotImplementedException(VisitorConverter.class);
 	}
 }

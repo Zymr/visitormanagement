@@ -88,16 +88,8 @@ public class NotificationService {
 	 * @throws IOException 
 	 * @throws AddressException 
 	 */  
-	public boolean notify(String empSlackId, String channelId, Visitor visitor, String ndaFilePath) throws AddressException, IOException  {
-		logger.info("Request received for notification Employee SlackId [{}] , ChannelId [{}] , visitor [{}] ." , empSlackId , channelId , visitor);
-		Employee employee  = null;
-		SlackChannel channel = null;
+	public boolean notify(Employee employee, SlackChannel channel, Visitor visitor, String ndaFilePath) throws AddressException, IOException  {
 		String locationName = locationService.getLocationName(visitor.getLocation()).getLocationName();
-		if (StringUtils.isNotBlank(empSlackId) && StringUtils.isBlank(channelId)) {
-			employee = employeeService.getBySlackId(empSlackId);                          
-		} else {
-			channel = channelService.findByChannelId(channelId);
-		}
 		if (Objects.nonNull(visitor)) {
 				notifyOnSlack(employee, visitor, channel, locationName);
 				notifyOnEmail(employee, visitor, channel, ndaFilePath, locationName);

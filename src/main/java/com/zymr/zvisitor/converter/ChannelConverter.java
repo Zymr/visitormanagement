@@ -25,7 +25,7 @@ public class ChannelConverter implements Converter<Channels, SlackChannel> {
 
 	@Autowired
 	private AppProperties appProperties;
-	
+
 	@Override
 	public SlackChannel convertToDTO(Channels slackChannel) {
 		if (Objects.isNull(slackChannel)) {
@@ -50,11 +50,11 @@ public class ChannelConverter implements Converter<Channels, SlackChannel> {
 
 	@Override
 	public Channels convert(SlackChannel d) {
-	  throw new NotImplementedException(ChannelConverter.class);
+		throw new NotImplementedException(ChannelConverter.class);
 	}
 
 	@Override
 	public Collection<Channels> convert(Collection<SlackChannel> d) {
-	  throw new NotImplementedException(ChannelConverter.class);
+		throw new NotImplementedException(ChannelConverter.class);
 	}
 }

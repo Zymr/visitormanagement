@@ -76,10 +76,10 @@ public class LocationResource {
 			Location location = locationConverter.convert(locationDTO);
 			locationService.save(location);
 			result = ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.LOCATION_ADDED_SUCCESSFLLY).getResponse());
-		} catch(DuplicateKeyException e) {
+		} catch (DuplicateKeyException e) {
 			logger.error("Location already exists.", e);
 			result = ResponseEntity.badRequest().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.LOCATION_EXISTS).getResponse());
-		} catch(Exception e) {
+		} catch (Exception e) {
 			logger.error("Exception while updating location.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
@@ -94,12 +94,12 @@ public class LocationResource {
 			Location location = locationConverter.convert(locationDTO);
 			locationService.update(locId, location);
 			result = ResponseEntity.ok().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.LOCATION_CONFIGURATION_CONFIGURATION_UPDATED).getResponse());
-		} catch(DuplicateKeyException e) {
+		} catch (DuplicateKeyException e) {
 			logger.error("Location already exists.", e);
 			result = ResponseEntity.badRequest().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.LOCATION_EXISTS).getResponse());
-		} catch(NoDataFoundException e) {
+		} catch (NoDataFoundException e) {
 			logger.error("Exception while updating location.", e);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			logger.error("Exception while updating location.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}

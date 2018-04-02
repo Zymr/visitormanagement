@@ -35,7 +35,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 public class JWTAuthorizationFilter  extends BasicAuthenticationFilter {
 
-	private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 	
 	private UserRepository userRepository;
 
