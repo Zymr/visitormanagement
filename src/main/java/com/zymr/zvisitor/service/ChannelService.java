@@ -12,7 +12,6 @@ package com.zymr.zvisitor.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,8 @@ import com.zymr.zvisitor.dto.slack.Channels;
 import com.zymr.zvisitor.exception.InvalidDataException;
 import com.zymr.zvisitor.exception.NoDataFoundException;
 import com.zymr.zvisitor.repository.ChannelRepository;
+import com.zymr.zvisitor.service.config.AppProperties;
+import com.zymr.zvisitor.service.config.SlackChannelConfig;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ImageType;
 
@@ -50,9 +51,9 @@ public class ChannelService {
 
 	@Autowired
 	private ChannelConverter channelConverter;
-	
+
 	@Autowired
-	private ConfigurationService configurationService;
+	private AppProperties appProperties;
 
 	/**
 	 * To sync channels with slack and insert channels into database.
@@ -64,10 +65,10 @@ public class ChannelService {
 	 */
 	public void syncChannelsFromSlack() throws ClientProtocolException, IOException {
 		long channelCount = channelRepository.count();
-	 	 Map<String, String> channels = configurationService.getChannels();
-		if (channelCount == 0  && channels != null && channelCount != channels.size()) {
-			logger.info("Syncing of channels from slack started. channels {}", channels);
-			List<Channels> slackChannels = slackService.getChannelList(channels); 
+		List<SlackChannelConfig> department = appProperties.getOrg().getDepartment();
+		if (channelCount == 0  && channelCount != department.size() && CollectionUtils.isNotEmpty(department)) {
+			logger.info("Syncing of channels from slack started. channels {}", department);
+			List<Channels> slackChannels = slackService.getChannelList(department); 
 			List<SlackChannel> channel =  slackChannels.stream().map(c -> convertToDTO(c))
 																.collect(Collectors.toList());
 			if (CollectionUtils.isNotEmpty(channel)) {
@@ -90,7 +91,7 @@ public class ChannelService {
 			throw new InvalidDataException(Constants.INVALID_PARAM);
 		}
 		uploadFile(icon);	
-		channel.setImageSmall(imageService.getImageUrl(ImageType.department, icon.getOriginalFilename()));
+		channel.setImageSmall(imageService.getImageUrl(ImageType.DEPARTMENT, icon.getOriginalFilename()));
 		channelRepository.save(channel);
 	}
 
@@ -115,7 +116,7 @@ public class ChannelService {
 		}
 		if (Objects.nonNull(icon)) {
 			uploadFile(icon);	
-			String channelIconPath = imageService.getImageUrl(ImageType.department, icon.getOriginalFilename());
+			String channelIconPath = imageService.getImageUrl(ImageType.DEPARTMENT, icon.getOriginalFilename());
 			dbChannel.setImageSmall(channelIconPath);
 		}
 		this.channelRepository.save(dbChannel);
@@ -135,11 +136,11 @@ public class ChannelService {
 	 * @throws NoDataFoundException 
 	 */
 	public void delete(String id) throws NoDataFoundException {
-		SlackChannel slackChannel = getById(id);
-		if (Objects.isNull(slackChannel)) {
+		long count = countById(id);
+		if (count <= 0) {
 			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
-		channelRepository.delete(slackChannel);
+		channelRepository.delete(id);
 	}
 
 	/**
@@ -147,10 +148,21 @@ public class ChannelService {
 	 * @return Channel
 	 */
 	public SlackChannel getById(String id) {
-		if (StringUtils.isBlank(id.trim())) {
+		if (StringUtils.isBlank(id)) {
 			return null;
 		}
 		return channelRepository.findById(id);
+	}
+
+	/**
+	 * @param id
+	 * @return Channel
+	 */
+	public long countById(String id) {
+		if (StringUtils.isBlank(id)) {
+			return 0;
+		}
+		return channelRepository.countById(id);
 	}
 
 	/**
@@ -176,15 +188,15 @@ public class ChannelService {
 	 */ 
 	private void uploadFile(MultipartFile icon) throws IOException {
 		if (Objects.nonNull(icon)) {
-			icon.transferTo(new File(imageService.createFileUploadPath(ImageType.department, icon.getOriginalFilename())));
+			icon.transferTo(new File(imageService.createFileUploadPath(ImageType.DEPARTMENT, icon.getOriginalFilename())));
 		}
-	}
+	} 
 
 	/**
-	 * @param c
+	 * @param channel
 	 * @return SlackChannel
 	 */
-	private SlackChannel convertToDTO(Channels c) {
-		return channelConverter.convertToDTO(c, imageService.getImageUrl(ImageType.department, c.getName())+Constants.IMAGE_EXT);
+	private SlackChannel convertToDTO(Channels channel) {
+		return channelConverter.convertToDTO(channel, imageService.getImageUrl(ImageType.DEPARTMENT, channel.getName())+Constants.IMAGE_EXT);
 	}
 }

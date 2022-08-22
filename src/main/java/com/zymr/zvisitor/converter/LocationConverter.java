@@ -52,6 +52,6 @@ public class LocationConverter implements Converter<Location, LocationDTO> {
 
 	@Override
 	public Collection<Location> convert(Collection<LocationDTO> d) {
-	  throw new NotImplementedException(LocationConverter.class);
+		throw new NotImplementedException(LocationConverter.class);
 	}
 }

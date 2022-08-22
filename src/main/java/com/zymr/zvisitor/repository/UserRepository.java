@@ -7,14 +7,17 @@
  *
  *  * 
  *******************************************************/
-package com.zymr.zvisitor.resource;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+package com.zymr.zvisitor.repository;
 
-import com.zymr.zvisitor.util.Constants;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-@RequestMapping(Constants.BASE_URL)
-@RestController
-public class BaseResource {
+import com.zymr.zvisitor.dbo.Users;
+
+
+public interface UserRepository extends MongoRepository<Users,String>{
+
+	public Users findByEmail(String email);
+	
+	Long countByEmail(String email);
 }

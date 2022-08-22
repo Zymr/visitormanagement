@@ -13,5 +13,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.zymr.zvisitor.dbo.Origin;
 
-public interface VisitorOriginRepository extends MongoRepository<Origin, Integer>  {
+public interface VisitorOriginRepository extends MongoRepository<Origin, String>  {
 }

@@ -18,7 +18,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 /** Simple JavaBean domain object representing a Location. */
 @Document(collection = Location.LOCATION_DOCUMENT)
-public class Location implements  Serializable{
+public class Location implements  Serializable {
+	
 	private static final long serialVersionUID = -4703465935759103119L;
 	
 	public static final String LOCATION_DOCUMENT = "locations";
@@ -41,6 +42,15 @@ public class Location implements  Serializable{
 	private String groupId;	
 	@Field(LOCATION_FIELDS.LOCATION_NAME)
 	private String locationName;
+	
+	public Location() {
+	}
+
+	public Location(String location, String groupId, String locationName) {
+		this.location = location;
+		this.groupId = groupId;
+		this.locationName = locationName;
+	}
 	
 	public String getId() {
 		return id;
@@ -71,15 +81,6 @@ public class Location implements  Serializable{
 	}
 
 	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
-
-	public Location() {
-	}
-
-	public Location(String location, String groupId, String locationName) {
-		this.location = location;
-		this.groupId = groupId;
 		this.locationName = locationName;
 	}
 

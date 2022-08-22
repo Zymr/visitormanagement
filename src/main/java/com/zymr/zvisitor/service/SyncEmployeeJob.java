@@ -15,16 +15,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.zymr.zvisitor.service.config.AppProperties;
+
 @Component
-public class SyncJob {
-	protected static final Logger logger = LoggerFactory.getLogger(SyncJob.class);
+public class SyncEmployeeJob {
+
+	protected static final Logger logger = LoggerFactory.getLogger(SyncEmployeeJob.class);
 
 	@Autowired
 	protected EmployeeService employeeService;
 
+	@Autowired
+	protected AppProperties appProperties;
+
 	/** This method is used to sync employees with slack. */
 
-	@Scheduled(cron = "${job.cronexp}")
+	@Scheduled(cron = "${app.emp-sync-job}")
 	public void syncEmployees() {
 		try {
 			employeeService.upsertEmployeeFromSlack();

@@ -50,18 +50,18 @@ public class EmployeeConverter implements Converter<Employee, EmployeeDTO> {
 		if (CollectionUtils.isEmpty(employees)) {
 			return null;
 		}
-		return employees.stream().
-				filter(Objects::nonNull).map(employee -> convertToDTO(employee))
+		return employees.stream()
+				.filter(Objects::nonNull).map(employee -> convertToDTO(employee))
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public Employee convert(EmployeeDTO d) {
-	  throw new NotImplementedException(EmployeeConverter.class);
+		throw new NotImplementedException(EmployeeConverter.class);
 	}
 
 	@Override
 	public Collection<Employee> convert(Collection<EmployeeDTO> d) {
-	  throw new NotImplementedException(EmployeeConverter.class);
+		throw new NotImplementedException(EmployeeConverter.class);
 	}
 }

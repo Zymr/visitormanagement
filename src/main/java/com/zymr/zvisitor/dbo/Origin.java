@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 /** Simple JavaBean domain object representing a Visitor Origin. */
 @Document(collection = Origin.ORIGIN_DOCUMENT)
 public class Origin implements Serializable {
+	
 	private static final long serialVersionUID = 7439787015116303220L;
 
 	public static final String ORIGIN_DOCUMENT = "origins";
@@ -40,7 +41,7 @@ public class Origin implements Serializable {
 	private String category;
 	@Field(ORIGIN_FIELDS.IMAGEPATH)
 	private String imagePath;
-
+	
 	public Origin() {
 	}
 
@@ -56,36 +57,20 @@ public class Origin implements Serializable {
 		this.imagePath = imagePath;
 	}
 
-	public String getIndex() {
-		return index;
-	}
-
-	public void setIndex(String index) {
-		this.index = index;
-	}
-
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public String getIndex() {
+		return index;
 	}
 
 	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
 	public String getImagePath() {
 		return imagePath;
-	}
-
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
 	}
 
 	@Override

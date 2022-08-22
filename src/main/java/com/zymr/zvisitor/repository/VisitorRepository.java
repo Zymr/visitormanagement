@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.repository.Query;
 import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
 
-public interface VisitorRepository extends MongoRepository<Visitor, Integer> {
+public interface VisitorRepository extends MongoRepository<Visitor, String>, VisitorRepositoryCustom {
 
 	@Query(value = "{}", fields = "{ '"+VISITOR_FIELDS.EMPLOYEE_ID+"' : 1 }")
     List<Visitor> findAll(Sort sort);

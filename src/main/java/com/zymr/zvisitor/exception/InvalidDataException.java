@@ -22,4 +22,8 @@ public class InvalidDataException extends ZException
 	public InvalidDataException(Throwable t) {
 		super(t);
 	}
+	
+	public InvalidDataException(String msg, Throwable t) {
+		super(t);
+	}
 }

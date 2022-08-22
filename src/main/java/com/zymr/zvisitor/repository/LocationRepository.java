@@ -15,11 +15,12 @@ import org.springframework.data.mongodb.repository.Query;
 import com.zymr.zvisitor.dbo.Location;
 import com.zymr.zvisitor.dbo.Location.LOCATION_FIELDS;
 
-public interface LocationRepository extends MongoRepository<Location, Integer> {
+public interface LocationRepository extends MongoRepository<Location, String> {
 
 	@Query("{ '"+LOCATION_FIELDS.ID+"': ?0}")
 	Location findById(String id);
 	
-	@Query(value = "{}", fields = "{ '"+LOCATION_FIELDS.LOCATION_NAME+"' : 1 }")
 	Location findByLocation(String locationId);
+	
+	long countById(String id);
 }

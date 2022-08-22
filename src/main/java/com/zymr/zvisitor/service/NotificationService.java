@@ -88,16 +88,8 @@ public class NotificationService {
 	 * @throws IOException 
 	 * @throws AddressException 
 	 */  
-	public boolean notify(String empSlackId, String channelId, Visitor visitor, String ndaFilePath) throws AddressException, IOException  {
-		logger.info("Started sending slack/email notification.");
-		Employee employee  = null;
-		SlackChannel channel = null;
+	public boolean notify(Employee employee, SlackChannel channel, Visitor visitor, String ndaFilePath) throws AddressException, IOException  {
 		String locationName = locationService.getLocationName(visitor.getLocation()).getLocationName();
-		if (StringUtils.isNotBlank(empSlackId) && StringUtils.isBlank(channelId)) {
-			employee = employeeService.getBySlackId(empSlackId);                          
-		} else {
-			channel = channelService.findByChannelId(channelId);
-		}
 		if (Objects.nonNull(visitor)) {
 				notifyOnSlack(employee, visitor, channel, locationName);
 				notifyOnEmail(employee, visitor, channel, ndaFilePath, locationName);
@@ -138,13 +130,11 @@ public class NotificationService {
 		if (Objects.nonNull(employee)) {
 			String	slackMessage = createMessage(configurationService.getSlackConfiguration().getMessage(),
 					visitor, employee, locationName);
-
 			param = buildSlackRequestParam(employee.getSlackId(), slackMessage, configurationService.getSlackConfiguration().getToken());			
 		}
 		else  {	
 			String	channelMessage = messageForChannel(configurationService.getSlackConfiguration().
 					getChannelMessage(), visitor, channel, locationName);
-
 			param = buildSlackRequestParam(channel.getChannelId(), channelMessage, configurationService.getSlackConfiguration().getToken());	
 		}
 		slackService.sendMessage(param, attachment);
@@ -239,10 +229,10 @@ public class NotificationService {
 	 */
 	private Map<String, String> buildSlackRequestParam(String empId, String message, String token) {
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put(NotificationKey.token.name(), token);
-		parameters.put(NotificationKey.initial_comment.name(), message);
-		parameters.put(NotificationKey.channels.name(), empId);
-		parameters.put(NotificationKey.title.name(), Constants.NOTIFICATION_IMAGE_NAME);
+		parameters.put(NotificationKey.TOKEN.toLowerCase(), token);
+		parameters.put(NotificationKey.INITIAL_COMMENT.toLowerCase(), message);
+		parameters.put(NotificationKey.CHANNELS.toLowerCase(), empId);
+		parameters.put(NotificationKey.TITLE.toLowerCase(), Constants.NOTIFICATION_IMAGE_NAME);
 		return parameters;
 	}
 
@@ -256,9 +246,9 @@ public class NotificationService {
 	public  Map<String, ContentBody> createAttachment(String dirPath, String imageDbpath, File defaultImageFile) throws IOException {
 		Map<String, ContentBody> parameters = new HashMap<>();
 		if (StringUtils.isNotBlank(imageDbpath)) {
-			parameters.put(NotificationKey.file.name(), new FileBody(new File(Util.getImageFullPath(dirPath, imageDbpath))));
+			parameters.put(NotificationKey.FILE.toLowerCase(), new FileBody(new File(Util.getImageFullPath(dirPath, imageDbpath))));
 		} else {
-			parameters.put(NotificationKey.file.name(), new FileBody(defaultImageFile));
+			parameters.put(NotificationKey.FILE.toLowerCase(), new FileBody(defaultImageFile));
 		} 
 		return parameters;
 	}

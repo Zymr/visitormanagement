@@ -135,20 +135,27 @@ public class SlackEmployee {
 		this.phone = phone;
 	}
 
-	public boolean isCompanyEmployee(List<String> validEmailList) {
+	public boolean hasValidDomain(List<String> validEmailList) {
 		if (isDeleted() || this.profile == null || StringUtils.isEmpty(this.profile.getEmail()) || CollectionUtils.isEmpty(validEmailList)) {
 			return false;
 		} 
 		return validEmailList.stream().anyMatch(s -> this.profile.getEmail().toLowerCase().contains(s));
 	}
 
-	public boolean isNewEmployee(List<String> dbEmployeeList) {
+	public boolean isDBEmployee(List<String> dbEmployeeList) {
 		return CollectionUtils.isEmpty(dbEmployeeList) && !dbEmployeeList.contains(this.slackId);
 	}
 	
-	public boolean isUpdated(long uT) {
+	public boolean hasUpdatedUt(long uT) {
 		return getUpdatedTime() > uT || getUpdatedTime()==0;
 	}
+	
+	public boolean isNewEmployee(long uT, List<String> dbEmployeeList, List<String> validEmailList) {
+ 		if ((hasUpdatedUt(uT) || isDBEmployee(dbEmployeeList)) && hasValidDomain(validEmailList)) {
+ 			return true;
+ 		}
+ 		return false;
+ 	}
 
 	public int getUpdatedTime() {
 		return updatedTime;

@@ -12,53 +12,126 @@
     Install MongoDB - 3.4.9
 
 
-### Configuration
-
-*	Configure database connection in `application.properties` file
-
-    You need to set the following connection configurations:
-    -   spring.data.mongodb.database=database_name
-    -   spring.data.mongodb.host=localhost
-    -   spring.data.mongodb.port=27017
+### Configuration:
 
 
-*	Mail configuration in `application.properties` file
+#### Database configuration
+Configure database connection in `application.yml` file.You need to set the following database connection configurations:
+ ```
+ spring:
+  data:
+    mongodb:
+      database: <database-name>
+      host: <database-server-host>
+      port: 27017
+      username: <database-user-username> 
+      password: <database-user-password>
+      authentication-database: <authentication-database>
+```
+#### Mail configuration
 
-    -   spring.mail.host=smtp.gmail.com
-    -   spring.mail.port=587
-    -   spring.mail.username=test@gmail.com
-    -   spring.mail.password=*****
+Mail configuration in `application.yml` file
+```
+    mail:
+    host: smtp.gmail.com
+    port: 587
+    username: <email-id>
+    password: <email-password>
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      
+app:
+    mail-personal: <mail-from-personal>
+```
 
+#### Slack configuration
 
-*	Slack account configuration in `application.properties` file
+Slack account configuration in `application.properties` file.
+This slack token and username will be used to send slack notification to other slack users to notify about visitor information.
 
-    You need to set Authentication token from configured slack account.
-    -   slack.token=xoxp-29****7900-**dfgdg***-*******-dgdhfg*******
+```
+slack:
+      token: <slack-user-account-token>
+      user-name: <slack-user-account-username>
+```
     
-*    Other Configuration :
-    -   job.cronexp = 0 0 10 * * *
-        - Employee sync job will be schedule based on cron expression. 
-        - Job is for syncing employee details from appropriate slack channels.
-    -   config.fileUploadsPath = file-upload-path
-        - File system base path where application all files will be store . EX: /home/root
-    -   config.fileBaseDir = file-base-dir-name
-        - Application specific file system directroy name where related files will be stored. 
-            EX: zvisitor. So, Final file system path will be /home/root/zvisitor.
-    -   config.ndaFile = NDA.pdf
-        - Recommended - Don't change anything apart from organization name.
-    -   baseUrl = 'server-host:server-port'
-        - Configure proper server host or server port EX : 'http://20.20.1.49:8080'. Don't remove single quotes.  
-    -   valid.email.domain = valid-email-domains (EX: @zymr.com, @zymrinc.com)
-        - It will used to validate employees of organization with their specific email id.
-    -   zymr.department = {'slack-group1-slackid':'slack-group1-email', 'slack-group2-slackid':'slack-group2-email'}
-        - Organization departments configured with slack group and thier email id.
-        - List will be displayed in App so visitor can choose concerned department and thier information will be notify according to slack      group and email.
-        - EX: {'G5FPBCQR5':'test@gmail.com', 'G5AFJQ8TX':'test2@gmail.com', 'GNGP7NS2B':'test3@gmail.com', 'G5FPCCQR6':'test5@gmail.com'}
-    -   location = {'location-abbreviation':{'slack-channel-id':'location-name'}, 'location-abbreviation':{'slack-channel-id':'location-name'}}
-        - App will have location settings to differentiate visitor location.
-        - Locations will be populated on App side with their name.
-        - Slack channel id used to get employees with their location.
-        - Ex: {'z2':{'A2LFBPHAQ9':'Ahmedabad'},'z3':{'I2LEWP1B2':'Pune'}}
+#### App configuration
+
+```
+    emp-sync-job: 0 0 10 * * *
+```
+* Employee sync job will be schedule based on cron expression. 
+* Job is for syncing employee details from appropriate slack channels.
+ 
+
+```
+    admin-email: admin
+    admin-password: admin
+```
+* Admin username password need to configure here.It will be used for login in admin panel.
+
+
+```
+    secretkey: <Secret Key>
+```
+* SecretKey will be used for encrypt/decrypt password.
+
+```
+    config:
+      file-uploads-path: <file-upload-path>
+```
+* File system base path where application all files will be store . EX: /home/root/zvisitor/
+
+```
+    org:
+        valid-email-domains:
+          - <valid-email-domains>
+```
+* It will used to validate employees of organization with their specific email id. EX: `- zymr.com -zymrinc.om`
+* This email domain will be used to filter out only employess while syncing from different slack channels (configured slack channels in below locations section). This employee list will be used to display on app side where visitor has to select whom to meet.
+
+```
+ department:
+        -
+          slackid: <slack-channel-id1>
+          email: <slack-group1-email1>
+        -
+          slackid: <slack-channel-id2>
+          email: <slack-group1-email2>
+        -
+          slackid: <slack-channel-id3>
+          email: <slack-group1-email3>
+```
+ - Organization departments need to configured with slack group and thier email id.
+    - List will be displayed in App so visitor can choose concerned department and thier information will be notify according to configured slackid and  email.
+    - EX: `slackid: G5FPBCQR5
+          email: test@gmail.com`
+
+```
+ locations:
+        -
+          abbr: <location-abbreviation1>
+          slackid: <slack-channel-id1>
+          name: <location-name1>
+        -
+          abbr: <location-abbreviation2>
+          slackid: <slack-channel-id2>
+          name: <location-name2>
+```
+ - App will have location settings to differentiate visitor location.
+    - Locations will be populated on App side with their name.
+    - Slack channel id used to get employees with their location.
+    - Ex: `abbr: z2
+          slackid: A2LFBPHAQ9
+          name: Ahmedabad`
+```
+server:
+  address: <server-host>
+  port: <server-port>
+```
+* Need to configure machine ip where server is running. Ex : 20.10.65.87.address default value will be 127.0.0.1 and port default will be 8080.
+
 *   Note : Update configuration file as follow before running the build
 
 
@@ -71,4 +144,4 @@
 
 ### Run
 
-    java -jar ZVisitor-0.0.1-SNAPSHOT.jar
+    java -jar <jar-file-name-with-extension>

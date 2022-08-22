@@ -10,7 +10,7 @@
 
 package com.zymr.zvisitor.exception;
 
-public abstract class ZException extends Exception {
+public class ZException extends Exception {
 
 	/**
 	 * 
@@ -30,6 +30,11 @@ public abstract class ZException extends Exception {
 
 	public ZException(Throwable cause) {
 		super(cause);
+	}
+	
+	public ZException(String message,Throwable cause) {
+		super(message,cause);
+		this.message = message;
 	}
 
 	@Override

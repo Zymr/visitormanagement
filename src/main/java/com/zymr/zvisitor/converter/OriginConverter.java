@@ -20,22 +20,22 @@ import org.springframework.stereotype.Service;
 
 import com.zymr.zvisitor.dbo.Origin;
 import com.zymr.zvisitor.dto.VisitorOriginDTO;
-import com.zymr.zvisitor.service.ConfigurationService;
+import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Util;
 
 @Service
 public class OriginConverter implements Converter<Origin, VisitorOriginDTO> {
 
 	@Autowired
-	private ConfigurationService configurationService;
-	
+	private AppProperties appProperties;
+
 	@Override
 	public VisitorOriginDTO convertToDTO(Origin origin) {
 		if (Objects.isNull(origin)) {
 			return null;
 		}
 		return new VisitorOriginDTO(origin.getId(), origin.getIndex(), 
-				origin.getCategory(), Util.buildURL(configurationService.getBaseUrl(), origin.getImagePath()));
+				origin.getCategory(), Util.buildURL(appProperties.getBaseUrl(), origin.getImagePath()));
 	}
 
 	@Override
@@ -58,6 +58,6 @@ public class OriginConverter implements Converter<Origin, VisitorOriginDTO> {
 
 	@Override
 	public Collection<Origin> convert(Collection<VisitorOriginDTO> d) {
-	  throw new NotImplementedException(OriginConverter.class);
+		throw new NotImplementedException(OriginConverter.class);
 	}
 }

@@ -16,9 +16,12 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.PostConstruct;
@@ -28,15 +31,23 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.zymr.zvisitor.dbo.Employee;
 import com.zymr.zvisitor.dbo.Origin;
+import com.zymr.zvisitor.dbo.SlackChannel;
 import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
+import com.zymr.zvisitor.dto.PageDetails;
+import com.zymr.zvisitor.dto.VisitorQueryDTO;
 import com.zymr.zvisitor.repository.VisitorOriginRepository;
 import com.zymr.zvisitor.repository.VisitorRepository;
+import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.NdaBuilder;
 import com.zymr.zvisitor.util.Util;
@@ -57,9 +68,18 @@ public class VisitorService {
 
 	@Autowired
 	private ImageService imageService;
+
+	@Autowired
+	private AppProperties appProperties;
+
+	@Autowired
+	private EmployeeService employeeService;
+
+	@Autowired
+	private ChannelService channelService;
 	
 	@Autowired
-	private ConfigurationService configurationService;
+	private PageService pageService;
 
 	private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.ZVISITOR_IMAGEDIRNAME_FORMAT);
 
@@ -74,10 +94,9 @@ public class VisitorService {
 		if (visitorOriginRepository.count() == 0) {
 			List<Origin> listOrigin = new ArrayList<>();
 			int index = 0;
-			Map<String, String> visitorOrigins = configurationService.getVisitorOrigins();
+			Map<String, String> visitorOrigins = appProperties.getVisitorCategory();
 			for (Map.Entry<String, String> value : visitorOrigins.entrySet()) {
-				listOrigin.add(new Origin(index, value.getKey(),
-						imageService.getImageUrl(ImageType.categories, value.getValue())+Constants.IMAGE_EXT));
+				listOrigin.add(new Origin(index, value.getKey(), imageService.getImageUrl(ImageType.CATEGORIES, value.getValue())+Constants.IMAGE_EXT));
 				index++;
 			}
 			visitorOriginRepository.save(listOrigin);
@@ -108,6 +127,14 @@ public class VisitorService {
 	public void add(MultipartFile visitorImage, MultipartFile visitorSignature, Visitor visitor, String slackId, String channelId) {
 		logger.info("Started adding visitor with image.");
 		try {
+			Employee employee = employeeService.getBySlackId(slackId);
+			if (Objects.nonNull(employee)) {
+				visitor.setEmployee(employee);
+			}
+			SlackChannel channel = channelService.findByChannelId(channelId);
+			if (Objects.nonNull(channel)) {
+				visitor.setChannel(channel);
+			}
 			Visitor dbVisitor = save(visitor);
 			String dateDir = LocalDate.now().format(formatter);
 			Path dirPath = Util.createFileDirectory(dateDir, dbVisitor.getId());
@@ -115,15 +142,13 @@ public class VisitorService {
 				dbVisitor.setVisitorPic(Paths.get(dirPath.toString(), visitorImage.getOriginalFilename()).toString());
 			} 
 			dbVisitor.setVisitorSignature(Paths.get(dirPath.toString(),	visitorSignature.getOriginalFilename()).toString());
-
 			saveVisitorImages(visitorImage, visitorSignature, dirPath);
 			save(dbVisitor);
 			File ndaFile = generateNDAFile(dbVisitor);
-
 			if	(Objects.nonNull(dbVisitor) && Objects.nonNull(ndaFile)) {
 				CompletableFuture.supplyAsync(()->{
 					try {
-						return notificationService.notify(slackId, channelId, 
+						return notificationService.notify(employee, channel, 
 								dbVisitor, ndaFile.getAbsolutePath());
 					} catch (AddressException | IOException e) {
 						logger.error("Exception while sending notification", e);					
@@ -131,7 +156,6 @@ public class VisitorService {
 					return null;
 				}).exceptionally(e -> { logger.error("Exception while sending notification", e); return null; }); 
 			}
-
 		} catch(Exception e) {
 			logger.error("Exception while adding visitor. {}", visitor, e);
 		}
@@ -158,6 +182,7 @@ public class VisitorService {
 		if (StringUtils.isNotBlank(signaturePicPath)) {
 			visitorSignature.transferTo(new File(signaturePicPath));
 		}
+		logger.info("Images uploaded.");
 	}
 
 
@@ -178,6 +203,27 @@ public class VisitorService {
 		String visitorNDAFilePath = new File(visitorStoredFilesPath).getParent();
 		Path visitorNDAFileName = Paths.get(visitorNDAFilePath, Constants.NDA_FILENAME);	
 		return NdaBuilder.build(visitorNDAFileName, new File(visitorStoredFilesPath), visitor.getName());
+	}
+
+	public PageDetails getWithFilter(Optional<List<String>> locations, Optional<List<String>> categories, Optional<Long> from, Optional<Long> to, 
+			int page, int size) {
+		Map<String, List<String>> queryParam = new HashMap<String, List<String>>();
+		if (locations.isPresent()) {
+			queryParam.put(VISITOR_FIELDS.LOCATION, locations.get());
+		} 
+		if (categories.isPresent()) {
+			queryParam.put(VISITOR_FIELDS.CATEGORY_NAME, categories.get());
+		}
+		VisitorQueryDTO visitorQueryDTO = new VisitorQueryDTO(queryParam);
+		if (from.isPresent()) {
+			visitorQueryDTO.setFindByGte(new Date(from.get()));
+		}
+		if (to.isPresent()) {
+			visitorQueryDTO.setFindByLte(new Date(to.get()));
+		}
+		PageRequest pageRequest = new PageRequest(page-1, size, Direction.DESC, VISITOR_FIELDS.CREATED_TIME);
+		Page<Visitor> ticketPage = visitorRepository.get(visitorQueryDTO, pageRequest);
+		return pageService.fillPageDetails(ticketPage);
 	}
 
 	public List<Origin> getVisitorOriginCategories() {
