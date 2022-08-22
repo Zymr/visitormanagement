@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+	<!-- JUL to slf4j -->
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" >
+		<resetJUL>true</resetJUL> 
+	</contextListener> 
+	<jmxConfigurator />
+	<property scope="context" name="logdir" value="logs/zv" />
+	<property scope="context" name="default-pattern" value="[%-5level] %d{yyyy-MM-dd_HH:mm:ss.SSS} [${HOSTNAME}][%thread] [%logger{0}] [%method] %msg%n" />
+	<property scope="context" name="default-min-index" value="1" />
+	<property scope="context" name="default-max-index" value="20" />
+	<property scope="context" name="default-max-file-size" value="5MB" />
+	<property scope="context" name="default-queue-size" value="50000" />
+	<property scope="context" name="default-pattern" value="[%-5level] %d{yyyy-MM-dd_HH:mm:ss.SSS} [${HOSTNAME}] %X{id} [%thread] [%logger{0}] [%method] %msg%n" />
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter" level="ERROR" />
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${default-pattern}</pattern>
+		</encoder>
+	</appender>
+	<!-- ===================================== file appenders ====================================================== -->
+	<appender name="APP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logdir}/app.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>${default-pattern}</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${logdir}/app.%i.log.zip</FileNamePattern>
+			<MinIndex>${default-min-index}</MinIndex>
+			<MaxIndex>${default-max-index}</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>${default-max-file-size}</MaxFileSize>
+		</triggeringPolicy>
+	</appender>
+	<appender name="APP_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>${default-queue-size}</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<includeCallerData>true</includeCallerData>
+		<appender-ref ref="APP_FILE" />
+	</appender>
+	
+	<!-- ===================================== loggers ====================================================== -->
+	<logger name="com.zymr.zvisitor" level="DEBUG"  additivity="false"> 
+		<appender-ref ref="APP_ASYNC" /> 
+	</logger>
+	<root level="INFO">
+		<appender-ref ref="APP_ASYNC" />
+	</root>
+</configuration>

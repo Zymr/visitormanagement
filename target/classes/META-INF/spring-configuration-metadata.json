@@ -1,0 +1,9 @@
+{
+  "groups": [{
+    "name": "config",
+    "type": "com.zymr.zvisitor.service.ImageService",
+    "sourceType": "com.zymr.zvisitor.service.ImageService"
+  }],
+  "properties": [],
+  "hints": []
+}
