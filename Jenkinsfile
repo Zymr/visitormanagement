@@ -2,13 +2,13 @@ pipeline {
   agent {
       label 'zvisitor-node'
   }
-  parameters {
-    choice choices: ['develop', 'master', 'devops'], name: 'Branch'
-}
+  parameters{
+    choice(name: 'BRANCH', choices: ['develop','master','devops'], description: "")
+  }
   stages {
         stage('Checkout'){
             steps {
-                git branch:'$BRANCH',
+                git branch:${params.BRANCH},
                 credentialsId:'zvisitor-github',
                 url:'https://github.com/Zymr/visitormanagement.git'
                 }
