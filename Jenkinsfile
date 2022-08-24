@@ -13,7 +13,7 @@ pipeline {
                 url:'https://github.com/Zymr/visitormanagement.git'
                 }
             }    
-        }
+        
     stage("verify tooling") {
       steps {
         sh '''
