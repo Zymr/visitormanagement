@@ -2,9 +2,9 @@ pipeline {
   agent {
       label 'zvisitor-node'
   }
-  parameters{
-    choice(name: 'Branch', choices: ['develop','master','devops'], description: "")
-  }
+  parameters {
+    choice choices: ['develop', 'master', 'devops'], name: 'Branch'
+}
   stages {
         stage('Checkout'){
             steps {
