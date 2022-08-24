@@ -8,7 +8,7 @@ pipeline {
   stages {
         stage('Checkout'){
             steps {
-                git branch:'echo ${params.BRANCH}',
+                git branch:echo "${params.BRANCH}",
                 credentialsId:'zvisitor-github',
                 url:'https://github.com/Zymr/visitormanagement.git'
                 }
