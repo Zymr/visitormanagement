@@ -6,6 +6,14 @@ pipeline {
     choice(name: 'Branch', choices: ['develop','master','devops'], description: "")
   }
   stages {
+        stage('Checkout'){
+            steps {
+                git branch:'$Branch',
+                credentialsId:'zvisitor-github',
+                url:'https://github.com/Zymr/visitormanagement.git'
+                }
+            }    
+        }
     stage("verify tooling") {
       steps {
         sh '''
