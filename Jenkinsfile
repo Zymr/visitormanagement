@@ -2,6 +2,9 @@ pipeline {
   agent {
       label 'zvisitor-node'
   }
+  parameters{
+    choice(name: 'Branch', choices: ['develop','master','devops'], description: "")
+  }
   stages {
     stage("verify tooling") {
       steps {
