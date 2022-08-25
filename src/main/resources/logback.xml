@@ -53,5 +53,6 @@
 	</logger>
 	<root level="INFO">
 		<appender-ref ref="APP_ASYNC" />
+		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

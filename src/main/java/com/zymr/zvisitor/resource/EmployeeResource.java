@@ -35,7 +35,7 @@ import com.zymr.zvisitor.service.EmployeeService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class EmployeeResource {
@@ -48,7 +48,7 @@ public class EmployeeResource {
 	private EmployeeConverter employeeConverter;
 
 	@RequestMapping(value = Constants.GET_EMPLOYEE, method = RequestMethod.GET)
-	@ApiOperation(value = "Fetch employees of specific location.", response = ResponseDTO.class)
+//	@ApiOperation(value = "Fetch employees of specific location.", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> get(@PathVariable @NotBlank String locId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.ok().body(new ResponseDTO(ZvisitorResource.EMPLOYEES.toLowerCase(), Collections.EMPTY_LIST).getResponse());
 		try {

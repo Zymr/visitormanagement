@@ -18,7 +18,9 @@ import org.springframework.data.mongodb.repository.Query;
 import com.zymr.zvisitor.dbo.Employee;
 import com.zymr.zvisitor.dbo.Employee.EMPLOYEE_FIELDS;
 import com.zymr.zvisitor.dbo.projection.EmployeeSlackId;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface EmployeeRepository extends MongoRepository<Employee, String>, EmployeeRepositoryCustom {
 
 	Employee findByslackId(String slackId);

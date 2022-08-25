@@ -84,6 +84,11 @@ public class CryptoManager {
 
 	private SecretKeySpec loadKey() throws ZException
 	{
+//		KeySpec spec = new PBEKeySpec("password".toCharArray(), salt, 65536, 256); // AES-256
+//		SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+//		byte[] key = f.generateSecret(spec).getEncoded();
+//		SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+
 		char[] hex = appProperties.getSecretKey().toCharArray();
 		byte[] encoded;
 		try {

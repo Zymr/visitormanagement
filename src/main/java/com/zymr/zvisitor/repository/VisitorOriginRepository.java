@@ -12,6 +12,8 @@ package com.zymr.zvisitor.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.zymr.zvisitor.dbo.Origin;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface VisitorOriginRepository extends MongoRepository<Origin, String>  {
 }

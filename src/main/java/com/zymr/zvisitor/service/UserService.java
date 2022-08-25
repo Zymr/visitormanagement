@@ -43,7 +43,7 @@ public class UserService {
 	}
 	
 	public String encryptPassword(String password) throws ZException {
-		return cryptoManager.encryptString(appProperties.getAdminPassword());
+		return appProperties.getAdminPassword();
 	}
 	
 	public String decryptPassword(String password) throws ZException {

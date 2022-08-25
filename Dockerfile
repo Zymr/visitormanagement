@@ -3,11 +3,10 @@ WORKDIR /app
 COPY pom.xml .
 COPY src src
 Run mvn clean package
-# Copy target/*.jar app.jar  
 EXPOSE 8080
 
 FROM openjdk:11
-WORKDIR /app
+# WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 # ENV MONGODB_USERNAME=root
 # ENV MONGODB_PASSWORD=secret

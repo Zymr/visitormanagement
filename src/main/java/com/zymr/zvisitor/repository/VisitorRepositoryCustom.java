@@ -5,7 +5,9 @@ import org.springframework.data.domain.Pageable;
 
 import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dto.VisitorQueryDTO;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface VisitorRepositoryCustom {
 
 	Page<Visitor> get(VisitorQueryDTO visitorQueryDTO, Pageable pageable);

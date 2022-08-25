@@ -14,7 +14,9 @@ import org.springframework.data.mongodb.repository.Query;
 
 import com.zymr.zvisitor.dbo.Location;
 import com.zymr.zvisitor.dbo.Location.LOCATION_FIELDS;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface LocationRepository extends MongoRepository<Location, String> {
 
 	@Query("{ '"+LOCATION_FIELDS.ID+"': ?0}")

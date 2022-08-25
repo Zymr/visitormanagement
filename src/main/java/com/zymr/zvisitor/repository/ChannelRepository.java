@@ -14,7 +14,9 @@ import org.springframework.data.mongodb.repository.Query;
 
 import com.zymr.zvisitor.dbo.SlackChannel;
 import com.zymr.zvisitor.dbo.SlackChannel.SLACKCHANNEL_FIELDS;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ChannelRepository extends MongoRepository<SlackChannel, String>{
 
 	SlackChannel findByChannelId(String channelId);

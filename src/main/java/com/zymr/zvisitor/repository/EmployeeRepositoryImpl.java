@@ -21,7 +21,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.zymr.zvisitor.dbo.Employee;
 import com.zymr.zvisitor.dbo.Employee.EMPLOYEE_FIELDS;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom {
 	@Autowired
 	MongoTemplate mongoTemplate;

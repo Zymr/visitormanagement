@@ -14,7 +14,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import com.zymr.zvisitor.dbo.config.PropertyConfiguration;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ConfigurationRepository  extends MongoRepository<PropertyConfiguration, String> {
 	
 	@Query(value = "{}")

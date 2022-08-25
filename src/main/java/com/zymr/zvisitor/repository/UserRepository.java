@@ -13,8 +13,9 @@ package com.zymr.zvisitor.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.zymr.zvisitor.dbo.Users;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public interface UserRepository extends MongoRepository<Users,String>{
 
 	public Users findByEmail(String email);

@@ -13,7 +13,9 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import com.zymr.zvisitor.dbo.Visitor;
 import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
 import com.zymr.zvisitor.dto.VisitorQueryDTO;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class VisitorRepositoryImpl implements VisitorRepositoryCustom {
 
 	@Autowired

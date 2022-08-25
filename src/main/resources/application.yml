@@ -1,18 +1,18 @@
 app:
-    mail-personal: <mail-from-personal>
+    mail-personal: prerana.dabhade@zymr.com
     #employee sync cron job expression
     #It will sync employee detatils from slack channel over the configured period.
     emp-sync-job: 0 0 10 * * *
-    admin-email: <default-administrator>
-    admin-password: <default-password>
-    secretKey: <secret-key>
+    admin-email: prerana.dabhade@zymr.com
+    admin-password: SouSweet
+    secretKey: 12345678
     slack:
       #This slack token will be used for send slack notification.
-      token: <slack-user-account-token>
+      token: abc
       # username should start with @ EX: @Virtual Receptionist
-      user-name: <slack-user-account-username>
+      user-name: preranadabhade
     config:
-      file-uploads-path: <file-base-dir-name>
+      file-uploads-path: C:\visitors-files
     #visitor origin categories
     visitor-category:
         Bank Finance Support: bank-finance
@@ -26,12 +26,12 @@ app:
         #EX:   
         #- zymrinc.com
         #- zymr.com
-        valid-email-domains: <valid-email-domains>
+        valid-email-domains: prerana.dabhade@zymr.com
         #app departments/slack group. Sholud be in below format.
         department:
         - 
            slackid: <slack-group1-slackid>
-           email: <slack-group1-email>
+           email: prerana.dabhade@zymr.com
         #EX:   
         #-
           #slackid: G5FPQRSR5
@@ -44,9 +44,9 @@ app:
           #email: test3@gmail.com   
         locations:
         - 
-           abbr: <location-abbreviation>
-           slackid: <slack-channel-id>
-           name: <location-name>
+           abbr: z2
+           slackid: CDKRHYRHB9
+           name: Ahmedabad
         #EX:   
         #-
           #abbr: z2
@@ -59,13 +59,15 @@ app:
 spring:
   data:
     mongodb:
-      database: <database-name>
-      host: <database-server-host>
+#      uri: mongodb://admin:password@mongodb:27017/VisitorManagement
+      database: VisitorManagement
+      host: mongodb
       #<database-server-port> EX: 27017
       port: 27017
-      username: <database-username>
-      password: <database-password>
-      authentication-database: <authentication-database-name>
+      username: admin
+      password: password
+#      uri:  mongodb://host:27017/VisitorManagement
+      authentication-database: admin
   http:
     multipart:
       max-file-size: 10MB
@@ -74,11 +76,12 @@ spring:
     host: smtp.gmail.com
     port: 587
     #This email id will be used to send application emails.
-    username: <email-id>
-    password: <email-password>
+    username: prerana.dabhade@gmail.com
+    password: SouSweet
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 #server configuration
 server:
-  address: <server-host>
+  # address: localhost
+  port: 8080
