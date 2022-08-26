@@ -81,4 +81,4 @@ spring:
       mail.smtp.starttls.enable: true
 #server configuration
 server:
-  address: <server-host>
+    port: ${USER_APP_PORT:9090}
