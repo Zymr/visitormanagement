@@ -30,17 +30,17 @@ pipeline {
         '''
       }
     }
-    // stage('Start container') {
-    //   steps {
-    //     sh 'docker-compose up --build -d'
-    //     sh 'docker-compose ps'
-    //   }
-    // }
-  }
-  post {
-    always {
-      sh 'docker-compose down'
-      sh 'docker-compose ps'
+    stage('Start container') {
+      steps {
+        sh 'docker-compose up --build -d'
+        sh 'docker-compose ps'
+      }
     }
   }
+  // post {
+  //   always {
+  //     sh 'docker-compose down'
+  //     sh 'docker-compose ps'
+  //   }
+  // }
 }
