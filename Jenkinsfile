@@ -13,29 +13,27 @@ pipeline {
                 url:'https://github.com/Zymr/visitormanagement.git'
                 }
             }
-    //   stage("stop container") {
+        stage("stop container") {
+           steps {
+                sh 'docker-compose down'
+                sh 'docker-compose ps'
+             }
+           }     
+    // stage("verify tooling") {
     //   steps {
     //     sh '''
-    //    sh 'docker-compose down'
-    //    sh 'docker-compose ps' 
+    //       docker version
+    //       docker info
+    //       docker-compose version 
     //     '''
     //   }
-    // }     
-    stage("verify tooling") {
-      steps {
-        sh '''
-          docker version
-          docker info
-          docker-compose version 
-        '''
-      }
-    }
-    stage('Start container') {
-      steps {
-        sh 'docker-compose up --build -d'
-        sh 'docker-compose ps'
-      }
-    }
+    // }
+        stage('Start container') {
+          steps {
+            sh 'docker-compose up --build -d'
+            sh 'docker-compose ps'
+          }
+        }
   }
   // post {
   //   always {
