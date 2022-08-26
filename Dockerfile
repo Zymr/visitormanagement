@@ -1,10 +1,10 @@
-FROM openjdk:11 as build
+FROM maven:3.8.5-openjdk-11 as build
 WORKDIR /app
 COPY pom.xml .
 COPY src src
-Run ./mvnw package
-Copy target/*.jar app.jar  
+Run mvn clean package
+EXPOSE 8080
 
 FROM openjdk:11
-COPY --from=build /app/app.jar .
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+COPY --from=build /app/target/*.jar app.jar
+CMD [ "java", "-jar", "app.jar" ]
