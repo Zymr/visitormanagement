@@ -13,12 +13,14 @@ pipeline {
                 url:'https://github.com/Zymr/visitormanagement.git'
                 }
             }
-    stage {
-    steps {
-      sh 'docker-compose down'
-      sh 'docker-compose ps'
-    }
-  }       
+      stage("stop container") {
+      steps {
+        sh '''
+       sh 'docker-compose down'
+       sh 'docker-compose ps' 
+        '''
+      }
+    }     
     stage("verify tooling") {
       steps {
         sh '''
