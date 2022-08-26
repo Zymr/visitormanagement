@@ -1,22 +1,26 @@
-version: "3.8"
+version: "3.6"
 services:
   mongodb:
-    image: 'mongo'
-    volumes: 
+    image: 'mongo:3.4.9'
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
       - data:/data/db
-    env_file: 
-      - ./env/mongo.env
+    environment:
+      MONGO_INITDB_DATABASE: VisitorManagement
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
   backend:
     build: .
+    container_name: backend
     ports:
-      - '80:80'
-    # volumes: 
-    #   - logs:/app/logs
-    env_file: 
-      - ./env/backend.env
+      - '8080:8080'
+    environment:
+      MONGODB_USERNAME: admin
+      MONGODB_PASSWORD: password
     depends_on:
       - mongodb
 
-volumes: 
+volumes:
   data:
-  # logs:

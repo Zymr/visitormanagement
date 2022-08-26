@@ -2,27 +2,28 @@ pipeline {
   agent {
       label 'zvisitor-node'
   }
-  stages {
-    stage("verify tooling") {
-      steps {
-        sh '''
-          docker version
-          docker info
-          docker-compose version 
-        '''
-      }
-    }
-    // stage('Start container') {
-    //   steps {
-    //     sh 'docker-compose up'
-    //     sh 'docker-compose ps'
-    //   }
-    // }
+  parameters{
+    choice(name: 'BRANCH', choices: ['develop','master','devops'], description: "")
   }
-//   post {
-//     always {
-//       sh 'docker-compose down --remove-orphans -v'
-//       sh 'docker-compose ps'
-//     }
-//   }
+  stages {
+        stage('Checkout'){
+            steps {
+                git branch: '${BRANCH}',
+                credentialsId:'zvisitor-github',
+                url:'https://github.com/Zymr/visitormanagement.git'
+                }
+            }
+        stage("stop container") {
+           steps {
+                sh 'docker-compose down'
+                sh 'docker-compose ps'
+             }
+           }     
+        stage('Start container') {
+          steps {
+            sh 'docker-compose up --build -d'
+            sh 'docker-compose ps'
+          }
+        }
+  }
 }
