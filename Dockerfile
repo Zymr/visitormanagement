@@ -6,8 +6,5 @@ Run mvn clean package
 EXPOSE 8080
 
 FROM openjdk:11
-# WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-# ENV MONGODB_USERNAME=root
-# ENV MONGODB_PASSWORD=secret
 CMD [ "java", "-jar", "app.jar" ]

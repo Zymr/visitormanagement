@@ -19,15 +19,6 @@ pipeline {
                 sh 'docker-compose ps'
              }
            }     
-    // stage("verify tooling") {
-    //   steps {
-    //     sh '''
-    //       docker version
-    //       docker info
-    //       docker-compose version 
-    //     '''
-    //   }
-    // }
         stage('Start container') {
           steps {
             sh 'docker-compose up --build -d'
@@ -35,10 +26,4 @@ pipeline {
           }
         }
   }
-  // post {
-  //   always {
-  //     sh 'docker-compose down'
-  //     sh 'docker-compose ps'
-  //   }
-  // }
 }
