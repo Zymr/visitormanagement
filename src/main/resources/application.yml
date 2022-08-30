@@ -1,84 +1,86 @@
 app:
-    mail-personal: <mail-from-personal>
-    #employee sync cron job expression
-    #It will sync employee detatils from slack channel over the configured period.
-    emp-sync-job: 0 0 10 * * *
-    admin-email: <default-administrator>
-    admin-password: <default-password>
-    secretKey: <secret-key>
-    slack:
-      #This slack token will be used for send slack notification.
-      token: <slack-user-account-token>
-      # username should start with @ EX: @Virtual Receptionist
-      user-name: <slack-user-account-username>
-    config:
-      file-uploads-path: <file-base-dir-name>
-    #visitor origin categories
-    visitor-category:
-        Bank Finance Support: bank-finance
-        Client Visit : client-visit
-        Interview : interview
-        Personal Meet : personal-meet    
-        Technical Support : technical-support
-        Other : other
-    org:  
-        #app employees validity  EX: 
-        #EX:   
-        #- zymrinc.com
-        #- zymr.com
-        valid-email-domains: <valid-email-domains>
-        #app departments/slack group. Sholud be in below format.
-        department:
-        - 
-           slackid: <slack-group1-slackid>
-           email: <slack-group1-email>
-        #EX:   
+  mail-personal: ${MAIL_PERSONAL:mail-from-personal}
+  #employee sync cron job expression
+  #It will sync employee detatils from slack channel over the configured period.
+  emp-sync-job: 0 0 10 * * *
+  admin-email: ${ADMIN_MAIL:default-administrator}
+  admin-passwdefault-administratorord: ${ADMIN_PASSWORD:default-password}
+  secretKey: ${SECRET_KEY:secretKey}
+  slack:
+    #This slack token will be used for send slack notification.
+    token: ${SLACK_TOKEN:slack-user-account-token}
+    # username should start with @ EX: @Virtual Receptionist
+    user-name: ${SLACK_USERNAME:slack-user-account-username}
+  config:
+    file-uploads-path: ${FILE_UPLOAD:file-base-dir-name}
+  #visitor origin categories
+  visitor-category:
+    Bank Finance Support: bank-finance
+    Client Visit : client-visit
+    Interview : interview
+    Personal Meet : personal-meet
+    Technical Support : technical-support
+    Other : other
+  org:
+    #app employees validity  EX:
+    #EX:
+    #- zymrinc.com
+    #- zymr.com
+    valid-email-domains: ${VALID_MAIL:valid-email-domains}
+    #app departments/slack group. Sholud be in below format.
+    department:
+      -
+        slackid: <slack-group1-slackid>
+        email: ${SLACK_EMAIL:slack-group1-email}
+        #EX:
         #-
-          #slackid: G5FPQRSR5
-          #email: test@gmail.com
+        #slackid: G5FPQRSR5
+        #email: test@gmail.com
         #-
-          #slackid: G5JL8AWJX
-          #email: test2@gmail.com
+        #slackid: G5JL8AWJX
+        #email: test2@gmail.com
         #-
-          #slackid: G06ADQESB
-          #email: test3@gmail.com   
-        locations:
-        - 
-           abbr: <location-abbreviation>
-           slackid: <slack-channel-id>
-           name: <location-name>
-        #EX:   
+        #slackid: G06ADQESB
+        #email: test3@gmail.com
+    locations:
+      -
+        abbr: z2
+        slackid: CDKRHYRHB9
+        name: Ahmedabad
+        #EX:
         #-
-          #abbr: z2
-          #slackid: CDKRHYRHB9
-          #name: Ahmedabad
+        #abbr: z2
+        #slackid: CDKRHYRHB9
+        #name: Ahmedabad
         #-
-          #abbr: z3
-          #slackid: C1LAWEMDKR
-          #name: Pune
+        #abbr: z3
+        #slackid: C1LAWEMDKR
+        #name: Pune
 spring:
   data:
     mongodb:
-      database: <database-name>
-      host: <database-server-host>
+      #      uri: mongodb://admin:password@mongodb:27017/VisitorManagement
+      database: ${MONGODB_DATABASE:VisitorManagement}
+      host: ${MONGODB_HOST:localhost}
       #<database-server-port> EX: 27017
-      port: 27017
-      username: <database-username>
-      password: <database-password>
-      authentication-database: <authentication-database-name>
+      port: ${MONGODB_PORT:27017}
+      username: ${MONGODB_USERNAME:admin}
+      password: ${MONGODB_PASSWORD:password}
+      #      uri:  mongodb://host:27017/VisitorManagement
+      authentication-database: ${AUTHENTICATION_DATABASE:admin}
   http:
     multipart:
       max-file-size: 10MB
-      max-request-size: 10MB      
+      max-request-size: 10MB
   mail:
     host: smtp.gmail.com
     port: 587
     #This email id will be used to send application emails.
-    username: <email-id>
-    password: <email-password>
+    username: ${MAIL_USERNAME:email-id}
+    password: ${MAIL_PASSWORD:email-password}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 #server configuration
 server:
-  address: <server-host>
+  port: ${USER_APP_PORT:8080}

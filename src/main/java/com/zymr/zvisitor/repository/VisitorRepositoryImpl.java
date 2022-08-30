@@ -16,22 +16,22 @@ import com.zymr.zvisitor.dto.VisitorQueryDTO;
 
 public class VisitorRepositoryImpl implements VisitorRepositoryCustom {
 
-	@Autowired
-	private MongoTemplate mongoTemplate;
-	
-	public Page<Visitor> get(VisitorQueryDTO visitorQueryDTO, Pageable pageable) {
-		Query query = new Query().with(pageable);
-		visitorQueryDTO.getFindByInParams()
-					   .entrySet()
-					   .stream()
-					   .forEach(field-> query.addCriteria(Criteria.where(field.getKey()).in(field.getValue())));
-		query.addCriteria(Criteria.where(VISITOR_FIELDS.CREATED_TIME).gte(visitorQueryDTO.getFindByGte()).lte(visitorQueryDTO.getFindByLte()));
-		List<Visitor> tickets =  mongoTemplate.find(query, Visitor.class);
-		return PageableExecutionUtils.getPage(
-				tickets, 
-				pageable, 
-				() -> mongoTemplate.count(query, Visitor.class));
-	}
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    public Page<Visitor> get(VisitorQueryDTO visitorQueryDTO, Pageable pageable) {
+        Query query = new Query().with(pageable);
+        visitorQueryDTO.getFindByInParams()
+                .entrySet()
+                .stream()
+                .forEach(field -> query.addCriteria(Criteria.where(field.getKey()).in(field.getValue())));
+        query.addCriteria(Criteria.where(VISITOR_FIELDS.CREATED_TIME).gte(visitorQueryDTO.getFindByGte()).lte(visitorQueryDTO.getFindByLte()));
+        List<Visitor> tickets = mongoTemplate.find(query, Visitor.class);
+        return PageableExecutionUtils.getPage(
+                tickets,
+                pageable,
+                () -> mongoTemplate.count(query, Visitor.class));
+    }
 
 
 }
