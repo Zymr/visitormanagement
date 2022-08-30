@@ -7,7 +7,4 @@ EXPOSE 8080
 
 FROM openjdk:11
 COPY --from=build /app/target/*.jar app.jar
-
-ENV MONGODB_USERNAME = admin
-ENV MONGODB_PASSWORD = password
 CMD [ "java", "-jar", "app.jar" ]
