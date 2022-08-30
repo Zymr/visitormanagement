@@ -65,7 +65,7 @@ public class ConfigurationService {
 		this.slackConfiguration = new Slack(slack.getToken(), slack.getUserName(), slack.getMessage(), slack.getChannelmessage());
 		
 		MailProperties mailProps = appProps.getMailProperties();
-		this.mailConfiguration = new Email(mailProps.getHost(), mailProps.getPort(), mailProps.getUsername(), cryptoManager.encryptString(mailProps.getPassword()), appProps.getMailPersonal());
+		this.mailConfiguration = new Email(mailProps.getHost(), mailProps.getPort(), mailProps.getUsername(),mailProps.getPassword(), appProps.getMailPersonal());
 		
 		PropertyConfiguration propertyConfiguration = new PropertyConfiguration(slackConfiguration, mailConfiguration);
 		configurationRepository.save(propertyConfiguration);
@@ -98,7 +98,7 @@ public class ConfigurationService {
 		
 		//For DB
 		String passwordString = emailConfig.getPassword();
-		emailConfig.setPassword(cryptoManager.encryptString(passwordString));
+		emailConfig.setPassword(passwordString);
 		
 		PropertyConfiguration propertyConfiguration = getConfigurationFromDB();
 		propertyConfiguration.setMailConfig(emailConfig);
@@ -118,7 +118,7 @@ public class ConfigurationService {
 		PropertyConfiguration propertyConfiguration = getConfigurationFromDB();
 		slackConfiguration = propertyConfiguration.getSlackConfig();
 		mailConfiguration =  propertyConfiguration.getMailConfig();
-		String password = cryptoManager.decrypt(propertyConfiguration.getMailConfig().getPassword());
+		String password = /*cryptoManager.decrypt(*/propertyConfiguration.getMailConfig().getPassword();
 		mailConfiguration.setPassword(password);
 	}
 

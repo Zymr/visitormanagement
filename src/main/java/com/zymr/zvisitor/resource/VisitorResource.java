@@ -45,7 +45,7 @@ import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.JsonUtils;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 
 @Controller
 public class VisitorResource {
@@ -61,7 +61,7 @@ public class VisitorResource {
 	private VisitorConverter visitorConverter;
 
 	@RequestMapping(value = Constants.CATEGORIES_URL, method = RequestMethod.GET)
-	@ApiOperation(value = "Fetch visitor categories", response = ResponseDTO.class)
+//	@ApiOperation(value = "Fetch visitor categories", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> getVisitorOrigin() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -79,7 +79,7 @@ public class VisitorResource {
 	}
 
 	@RequestMapping(value = Constants.CATEGORIES_ADD_URL, method = RequestMethod.POST)
-	@ApiOperation(value = "Add new origin")
+//	@ApiOperation(value = "Add new origin")
 	public ResponseEntity<Map<String, Object>> addVisitorOrigin(@RequestBody @Valid VisitorOriginDTO visitorOriginDTO) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {

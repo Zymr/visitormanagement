@@ -2,8 +2,8 @@
 <configuration scan="true" scanPeriod="60 seconds">
 	<!-- JUL to slf4j -->
 	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" >
-		<resetJUL>true</resetJUL> 
-	</contextListener> 
+		<resetJUL>true</resetJUL>
+	</contextListener>
 	<jmxConfigurator />
 	<property scope="context" name="logdir" value="logs/zv" />
 	<property scope="context" name="default-pattern" value="[%-5level] %d{yyyy-MM-dd_HH:mm:ss.SSS} [${HOSTNAME}][%thread] [%logger{0}] [%method] %msg%n" />
@@ -39,19 +39,20 @@
 		<includeCallerData>true</includeCallerData>
 		<appender-ref ref="APP_FILE" />
 	</appender>
-	
-	 <!-- Send debug messages to System.out -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
-        </encoder>
-    </appender>
+
+	<!-- Send debug messages to System.out -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+		</encoder>
+	</appender>
 	<!-- ===================================== loggers ====================================================== -->
-	<logger name="com.zymr.zvisitor" level="DEBUG"  additivity="false"> 
-		<appender-ref ref="APP_ASYNC" /> 
-	</logger>
-	<root level="INFO">
+	<logger name="com.zymr.zvisitor" level="DEBUG"  additivity="false">
 		<appender-ref ref="APP_ASYNC" />
+	</logger>
+	<root level="DEBUG">
+		<appender-ref ref="APP_ASYNC" />
+		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

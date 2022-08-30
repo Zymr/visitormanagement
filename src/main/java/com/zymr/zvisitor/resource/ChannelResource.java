@@ -5,7 +5,7 @@
  * ZVisitor can not be copied and/or distributed without the express
  * permission of ZYMR Inc.
  *
- *  * 
+ *  *
  *******************************************************/
 package com.zymr.zvisitor.resource;
 
@@ -42,7 +42,6 @@ import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.JsonUtils;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class ChannelResource {
@@ -55,7 +54,7 @@ public class ChannelResource {
 	private SlackChannelConverter slackChannelConverter;
 
 	@RequestMapping(value=Constants.CHANNEL_URL, method=RequestMethod.GET)
-	@ApiOperation(value = "Fetch all channels", response = ResponseDTO.class)
+//	@ApiOperation(value = "Fetch all channels", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> get() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -64,7 +63,7 @@ public class ChannelResource {
 			if (CollectionUtils.isNotEmpty(channelsDTO)) {
 				ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.CHANNELS.toLowerCase(), channelsDTO);
 				result = ResponseEntity.ok(responseDTO.getResponse());
-			} 
+			}
 		} catch(Exception e) {
 			logger.error("Exception while fetching all channels.", e);
 			result =  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -72,21 +71,21 @@ public class ChannelResource {
 		return result;
 	}
 
-	@RequestMapping(value=Constants.SYNC_CHANNEL, method=RequestMethod.GET) 
+	@RequestMapping(value=Constants.SYNC_CHANNEL, method=RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> syncChannels() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
 			channelService.syncChannelsFromSlack();
-			result = ResponseEntity.ok().build(); 
+			result = ResponseEntity.ok().build();
 		} catch (Exception e) {
 			logger.error("Exception while syncing channel.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-		return result; 
+		return result;
 	}
 
 	@RequestMapping(value = Constants.AUTH_CHANNEL_URL, method=RequestMethod.POST)
-	@ApiOperation(value = "add channel", response = ResponseDTO.class)
+//	@ApiOperation(value = "add channel", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> addChannel(@RequestPart("icon") MultipartFile file, @RequestParam(value="channel", required=true) String channelJson)  {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -109,7 +108,7 @@ public class ChannelResource {
 	}
 
 	@RequestMapping(value = Constants.CHANNEL_UPDATE_DELETE_URL, method=RequestMethod.PUT)
-	@ApiOperation(value = "update channel", response = ResponseDTO.class)
+//	@ApiOperation(value = "update channel", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> updateChannel(@RequestPart(value="icon",  required=false) MultipartFile file, @RequestParam(value="channel", required=true) String channelJson, @PathVariable String chId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -135,7 +134,7 @@ public class ChannelResource {
 	}
 
 	@RequestMapping(value =Constants.CHANNEL_UPDATE_DELETE_URL, method=RequestMethod.DELETE)
-	@ApiOperation(value = "delete channel", response = ResponseDTO.class)
+//	@ApiOperation(value = "delete channel", response = ResponseDTO.class)
 	public ResponseEntity<Map<String, Object>> deleteChannel(@PathVariable("chId") String id) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
