@@ -1,18 +1,18 @@
 app:
-    mail-personal: <mail-from-personal>
+    mail-personal: ${MAIL_PERSONAL:z-visitor}
     #employee sync cron job expression
     #It will sync employee detatils from slack channel over the configured period.
     emp-sync-job: 0 0 10 * * *
-    admin-email: <default-administrator>
-    admin-password: <default-password>
-    secretKey: <secret-key>
+    admin-email: ${ADMIN_MAIL:default-administrator}
+    admin-password: ${ADMIN_PASSWORD:default-password}
+    secretKey: ${SECRET_KEY:31323334353637383930313233343536}
     slack:
       #This slack token will be used for send slack notification.
-      token: <slack-user-account-token>
+      token: ${SLACK_TOKEN:slack-user-account-token}
       # username should start with @ EX: @Virtual Receptionist
-      user-name: <slack-user-account-username>
+      user-name: ${SLACK_USERNAME:slack-user-account-username}
     config:
-      file-uploads-path: <file-base-dir-name>
+      file-uploads-path: ${FILE_UPLOAD:files}
     #visitor origin categories
     visitor-category:
         Bank Finance Support: bank-finance
@@ -26,12 +26,12 @@ app:
         #EX:   
         #- zymrinc.com
         #- zymr.com
-        valid-email-domains: <valid-email-domains>
+        valid-email-domains: ${VALID_MAIL:zymr.com}
         #app departments/slack group. Sholud be in below format.
         department:
         - 
-           slackid: <slack-group1-slackid>
-           email: <slack-group1-email>
+           slackid: ${ORG_DEPARTMENT_SLACK_ID:slack-group1-email}
+           email: ${ORG_DEPARTMENT_EMAIL:org_department_email}
         #EX:   
         #-
           #slackid: G5FPQRSR5
@@ -44,9 +44,9 @@ app:
           #email: test3@gmail.com   
         locations:
         - 
-           abbr: <location-abbreviation>
-           slackid: <slack-channel-id>
-           name: <location-name>
+           abbr: ${ORG_LOCATION_ABBR:z2}
+           slackid: ${ORG_LOCATION_SLACK_ID:CDKRHYRHB9}
+           name: ${ORG_LOCATION_SLACK_NAME:Ahmedabad}
         #EX:   
         #-
           #abbr: z2
@@ -59,13 +59,12 @@ app:
 spring:
   data:
     mongodb:
-      database: <database-name>
-      host: <database-server-host>
-      #<database-server-port> EX: 27017
-      port: 27017
-      username: <database-username>
-      password: <database-password>
-      authentication-database: <authentication-database-name>
+      database: ${MONGODB_DATABASE:VisitorManagement}
+      host: ${MONGODB_HOST:localhost}
+      port: ${MONGODB_PORT:27017}
+      username: ${MONGODB_USERNAME:admin}
+      password: ${MONGODB_PASSWORD:password}
+      authentication-database: ${AUTHENTICATION_DATABASE:admin}
   http:
     multipart:
       max-file-size: 10MB
@@ -74,11 +73,11 @@ spring:
     host: smtp.gmail.com
     port: 587
     #This email id will be used to send application emails.
-    username: <email-id>
-    password: <email-password>
+    username: ${MAIL_USERNAME:email-id}
+    password: ${MAIL_PASSWORD:email-password}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 #server configuration
 server:
-  address: <server-host>
+  port: ${USER_APP_PORT:8080}

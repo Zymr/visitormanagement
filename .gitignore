@@ -1,0 +1,7 @@
+target
+.idea/*
+logs/*
+*/target/*
+*.jpeg
+*.png
+*.pdf
