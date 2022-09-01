@@ -5,3 +5,4 @@ logs/*
 *.jpeg
 *.png
 *.pdf
+*.env
