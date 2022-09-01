@@ -16,29 +16,21 @@ services:
     container_name: backend
     ports:
       - '8081:8080'
-    # volumes:
-    #   - logs:/app/logs/zv
+    volumes:
+      - logs:/app/logs/zv
     environment:
       MONGODB_USERNAME: admin
       MONGODB_PASSWORD: password
-      # MAIL_PERSONAL: $MAIL_PERSONAL
-      # ADMIN_MAIL: $ADMIN_MAIL
-      # ADMIN_PASSWORD: $ADMIN_PASSWORD
-      # SECRET_KEY: 12345678
-      # SLACK_TOKEN: $SLACK_TOKEN     
-      # SLACK_USERNAME: $SLACK_USERNAME 
       FILE_UPLOAD: /home/akshay.h@ah.zymrinc.com/Desktop/zvisitor_data
       VALID_MAIL: prerana.dabhade@zymr.com
       ORG_DEPARTMENT_EMAIL: prerana.dabhade@zymr.com
       MONGODB_DATABASE: VisitorManagement
       MONGODB_HOST: mongodb
       AUTHENTICATION_DATABASE: admin
-      # MAIL_USERNAME: $MAIL_USERNAME
-      # MAIL_PASSWORD: $MAIL_PASSWORD
       USER_APP_PORT: 8080
     depends_on:
       - mongodb
 
 volumes:
   data:
-  # logs:
+  logs:
