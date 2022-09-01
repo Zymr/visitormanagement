@@ -29,6 +29,10 @@ pipeline {
                 SLACK_USERNAME:'$SLACK_USERNAME'
                 MAIL_USERNAME:'$MAIL_USERNAME'
                 MAIL_PASSWORD:'$MAIL_PASSWORD'
+                MONGODB_USERNAME: '$MONGODB_USERNAME'
+                MONGODB_PASSWORD: '$MONGODB_PASSWORD'
+                VALID_MAIL: '$VALID_MAIL'
+                ORG_DEPARTMENT_EMAIL: '$ORG_DEPARTMENT_EMAIL'
                 '''              
             }
         }
