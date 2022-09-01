@@ -3,21 +3,25 @@ services:
   mongodb:
     image: 'mongo:3.4.9'
     container_name: mongodb
+    restart: always
     ports:
       - '27017:27017'
     volumes:
       - data:/data/db
+      - mongologs:/var/log/mongodb
     environment:
       MONGO_INITDB_DATABASE: VisitorManagement
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
+    command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
   backend:
     build: .
     container_name: backend
+    restart: always
     ports:
       - '8081:8080'
     volumes:
-      - logs:/app/logs/zv
+      - logs:/logs/zv
     environment:
       MONGODB_USERNAME: admin
       MONGODB_PASSWORD: password
@@ -34,3 +38,4 @@ services:
 volumes:
   data:
   logs:
+  mongologs:
