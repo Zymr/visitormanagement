@@ -19,7 +19,7 @@ services:
     container_name: backend
     restart: always
     ports:
-      - '8081:8090'
+      - '8081:8080'
     volumes:
       - logs:/logs/zv
     environment:
