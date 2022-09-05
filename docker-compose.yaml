@@ -19,15 +19,15 @@ services:
     container_name: backend
     restart: always
     ports:
-      - '8080:8080'
+      - '8080:8090'
     volumes:
       - logs:/logs/zv
     environment:
       FILE_UPLOAD: /home/akshay.h@ah.zymrinc.com/Desktop/zvisitor_data
-      MONGODB_DATABASE: $MONGODB_DATABASE
+      MONGODB_DATABASE: db_zvisitor
       MONGODB_HOST: mongodb
       AUTHENTICATION_DATABASE: admin
-      # USER_APP_PORT: 8080
+      USER_APP_PORT: $USER_APP_PORT
     depends_on:
       - mongodb
 
