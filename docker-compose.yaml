@@ -19,7 +19,7 @@ services:
     container_name: backend
     restart: always
     ports:
-      - '8081:8080'
+      - '8081:8090'
     volumes:
       - logs:/logs/zv
     environment:
@@ -27,7 +27,7 @@ services:
       MONGODB_DATABASE: db_zvisitor
       MONGODB_HOST: mongodb
       AUTHENTICATION_DATABASE: admin
-      USER_APP_PORT: 8080
+      # USER_APP_PORT: 8080
     depends_on:
       - mongodb
 
