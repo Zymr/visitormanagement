@@ -30,7 +30,6 @@ services:
       VALID_MAIL: '@zymr.com'
       ORG_DEPARTMENT_EMAIL: zymrtest@gmail.com
       USER_APP_PORT: $USER_APP_PORT
-      # USER_APP_PORT=8090
       MAIL_PERSONAL: $MAIL_PERSONAL
       ADMIN_MAIL: $ADMIN_MAIL
       ADMIN_PASSWORD: $ADMIN_PASSWORD
