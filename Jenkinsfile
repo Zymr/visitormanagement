@@ -27,7 +27,6 @@ pipeline {
         stage('GENERATING ENV FILES') {
             steps {
                 sh '''
-               ls -la
                rm -rf .env
                mv $SECRET_FILE_ID /home/zvisitor-build/workspace/Zvisitor_stagging/.env
                '''
@@ -48,7 +47,6 @@ pipeline {
                 sh 'sudo docker image prune -af --filter until=168h'
                 sh 'docker images'
                 echo 'Unused images are removed Successfully !!!'
-                sh 'docker-compose ps'
             }
         }
     }
