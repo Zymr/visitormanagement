@@ -13,7 +13,7 @@ pipeline {
             steps {
                 git branch: '${BRANCH}',
                 credentialsId:'zvisitor_stagging_git',
-                url:'https://github.com/Zymr/visitormanagement.git'
+                url:'git@github.com:Zymr/visitormanagement.git'
             }
         }
         stage('Docker Compose Down') {
