@@ -27,7 +27,7 @@ services:
       MONGODB_DATABASE: db_zvisitor
       MONGODB_HOST: mongodb
       AUTHENTICATION_DATABASE: admin
-      VALID_MAIL: '@zymr.com'
+      VALID_MAIL: zymr.com
       ORG_DEPARTMENT_EMAIL: zymrtest@gmail.com
       USER_APP_PORT: 8080
       MAIL_PERSONAL: z-visitor
