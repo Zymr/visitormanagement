@@ -28,7 +28,16 @@ Configure database connection in `application.yml` file.You need to set the foll
       password: <database-user-password>
       authentication-database: <authentication-database>
 ```
+
+#### Mounted Volume Path
+Path are as follows: 
+  - data: /var/lib/docker/volumes/zvisitor_stagging_data
+  - logs: /var/lib/docker/volumes/zvisitor_stagging_logs
+  - mongologs: /var/lib/docker/volumes/zvisitor_stagging_mongologs
+
 #### Mail configuration
+
+
 
 Mail configuration in `application.yml` file
 ```
