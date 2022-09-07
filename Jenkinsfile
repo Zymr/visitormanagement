@@ -1,12 +1,13 @@
 pipeline {
+    parameters {
+        choice(name: 'AGENT', choices: ['Zvisitor-stagging', 'zvisitor'], description: 'Select the agent')
+        choice(name: 'BRANCH', choices: ['develop', 'master', 'config_env_changes'], description: 'Select the branch')
+    }
     agent {
-        label 'Zvisitor-stagging'
+        label "'${AGENT}'"
     }
     environment {
         SECRET_FILE_ID = credentials('zvisitor_config_file')
-    }
-    parameters {
-        choice(name: 'BRANCH', choices: ['develop', 'master', 'devops-version-1.0', 'config_env_changes'], description: '')
     }
     stages {
         stage('Checkout') {
@@ -44,7 +45,7 @@ pipeline {
             steps {
                 echo 'Cleaning the images on regular interval to avoid the low storage space left .....'
                 sh 'docker images'
-                sh 'sudo docker image prune -af --filter until=168h'
+                sh 'docker image prune -af --filter until=168h'
                 sh 'docker images'
                 echo 'Unused images are removed Successfully !!!'
             }
