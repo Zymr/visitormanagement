@@ -33,14 +33,14 @@ pipeline {
                 rm -rf .env 
                 ls -la
                 cat >> .env <<EOL
-                ADMIN_MAIL: $ADMIN_MAIL
-                ADMIN_PASSWORD: $ADMIN_PASSWORD
-                SLACK_TOKEN: $SLACK_TOKEN
-                SLACK_USERNAME: $SLACK_USERNAME
-                MAIL_USERNAM: $MAIL_USERNAM
-                MAIL_PASSWORD: $MAIL_PASSWORD
-                MONGODB_USERNAME: $MONGODB_USERNAME
-                MONGODB_PASSWORD: $MONGODB_PASSWORD
+                ADMIN_MAIL:'$ADMIN_MAIL'
+                ADMIN_PASSWORD:'$ADMIN_PASSWORD'
+                SLACK_TOKEN:'$SLACK_TOKEN'
+                SLACK_USERNAME:'$SLACK_USERNAME'
+                MAIL_USERNAM:'$MAIL_USERNAM'
+                MAIL_PASSWORD:'$MAIL_PASSWORD'
+                MONGODB_USERNAME:'$MONGODB_USERNAME'
+                MONGODB_PASSWORD:'$MONGODB_PASSWORD'
                 '''              
             }
         }
