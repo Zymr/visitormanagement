@@ -17,14 +17,6 @@ pipeline {
                 url:'git@github.com:Zymr/visitormanagement.git'
             }
         }
-        stage('Docker Compose Down') {
-            steps {
-                echo 'Taking down the Application .....'
-                sh 'docker-compose down'
-                sh 'docker-compose ps'
-                echo 'Application down Successfully !!!'
-            }
-        }
         stage('GENERATING ENV FILES') {
             steps {
                 
@@ -42,6 +34,14 @@ pipeline {
                 MONGODB_USERNAME:'$MONGODB_USERNAME'
                 MONGODB_PASSWORD:'$MONGODB_PASSWORD'
                 '''              
+            }
+        }
+        stage('Docker Compose Down') {
+            steps {
+                echo 'Taking down the Application .....'
+                sh 'docker-compose down'
+                sh 'docker-compose ps'
+                echo 'Application down Successfully !!!'
             }
         }
         stage('DEPLOY') {
