@@ -27,21 +27,10 @@ pipeline {
         }
         stage('GENERATING ENV FILES') {
             steps {
-                
-              sh '''
-                'ls'
-                rm -rf .env 
-                ls -la
-                cat >> .env <<EOL
-                ADMIN_MAIL: $ADMIN_MAIL
-                ADMIN_PASSWORD: $ADMIN_PASSWORD
-                SLACK_TOKEN: $SLACK_TOKEN
-                SLACK_USERNAME: $SLACK_USERNAME
-                MAIL_USERNAM: $MAIL_USERNAM
-                MAIL_PASSWORD: $MAIL_PASSWORD
-                MONGODB_USERNAME: $MONGODB_USERNAME
-                MONGODB_PASSWORD: $MONGODB_PASSWORD
-                '''              
+                sh '''
+               rm -rf .env
+               mv $SECRET_FILE_ID /home/zvisitor-build/workspace/Zvisitor_stagging/.env
+               '''
             }
         }
         stage('DEPLOY') {
