@@ -23,7 +23,6 @@ pipeline {
               sh '''
                 'ls'
                 rm -rf .env
-                ls -la
                 cat >>.env <<EOL
                 ADMIN_MAIL:'$ADMIN_MAIL'
                 ADMIN_PASSWORD:'$ADMIN_PASSWORD'
