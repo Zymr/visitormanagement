@@ -1,6 +1,5 @@
 pipeline {
     parameters {
-        choice(name: 'AGENT', choices: ['Zvisitor-stagging', 'zvisitor'], description: 'Select the agent')
         choice(name: 'BRANCH', choices: ['develop', 'master', 'config_env_changes', 'devops'], description: 'Select the branch')
     }
     agent {
