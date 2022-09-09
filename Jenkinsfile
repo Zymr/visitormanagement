@@ -21,7 +21,6 @@ pipeline {
             steps {
                 
               sh '''
-                'ls'
                 rm -rf .env
                 cat >>.env <<EOL
                 ADMIN_MAIL:'$ADMIN_MAIL'
