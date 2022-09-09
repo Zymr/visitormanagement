@@ -6,9 +6,9 @@ pipeline {
     agent {
         label "'${AGENT}'"
     }
-    environment {
-        SECRET_FILE_ID = credentials('zvisitor_config_file')
-    }
+    // environment {
+    //     SECRET_FILE_ID = credentials('zvisitor_config_file')
+    // }
     stages {
         stage('Checkout') {
             steps {
