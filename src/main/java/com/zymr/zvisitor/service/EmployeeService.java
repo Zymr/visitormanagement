@@ -115,7 +115,7 @@ public class EmployeeService {
 		if (count <= 0) {
 			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
-		employeeRepository.delete(id);
+		employeeRepository.deleteById(id);
 	}
 
 	/**
@@ -133,14 +133,14 @@ public class EmployeeService {
 		if (count <= 0) {
 			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
-		employeeRepository.delete(slackId);
+		employeeRepository.deleteById(slackId);
 	}
 
 	/**
 	 * @param id
 	 * @return Employee
 	 */
-	public Employee getById(String id) {
+	public Optional<Employee> getById(String id) {
 		if (StringUtils.isBlank(id)) {
 			return null;
 		}
@@ -225,11 +225,11 @@ public class EmployeeService {
 	 * @return List of employees.
 	 */  
 	private List<EmployeeSlackId> findAllWithSlackId() {
-		return employeeRepository.findEmployeeSlackIdsAll(new Sort(Sort.Direction.ASC, EMPLOYEE_FIELDS.ID));
+		return employeeRepository.findEmployeeSlackIdsAll(Sort.by(Sort.Direction.ASC, EMPLOYEE_FIELDS.ID));
 	}
 
 	private long getLatestSlackUpdatedTime() {
-		Employee employee = employeeRepository.findOne(new Sort(Sort.Direction.DESC, EMPLOYEE_FIELDS.SLACK_UPDATEDTIME));
+		Employee employee = employeeRepository.findOne(Sort.by(Sort.Direction.DESC, EMPLOYEE_FIELDS.SLACK_UPDATEDTIME));
 		if (Objects.nonNull(employee)) {
 			return employee.getSlackUt();
 		}
