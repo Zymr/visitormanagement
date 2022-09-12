@@ -19,7 +19,7 @@ pipeline {
                 ADMIN_PASSWORD:'$ADMIN_PASSWORD'
                 SLACK_TOKEN:'$SLACK_TOKEN'
                 SLACK_USERNAME:'$SLACK_USERNAME'
-                MAIL_USERNAM:'$MAIL_USERNAM'
+                MAIL_USERNAME:'$MAIL_USERNAME'
                 MAIL_PASSWORD:'$MAIL_PASSWORD'
                 MONGODB_USERNAME:'$MONGODB_USERNAME'
                 MONGODB_PASSWORD:'$MONGODB_PASSWORD'
