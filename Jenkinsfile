@@ -9,13 +9,6 @@ pipeline {
     //     SECRET_FILE_ID = credentials('zvisitor_config_file')
     // }
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: '${BRANCH}',
-                credentialsId:'zvisitor_stagging_git',
-                url:'git@github.com:Zymr/visitormanagement.git'
-            }
-        }
         stage('GENERATING ENV FILES') {
             steps {
                 
