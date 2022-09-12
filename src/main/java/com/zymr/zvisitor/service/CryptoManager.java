@@ -47,39 +47,41 @@ public class CryptoManager {
 	 * Encrypt Password
 	 */
 	public String encryptString(String text) throws ZException {
-		if(StringUtils.isBlank(text))
-			return null;
-		try {
-			Cipher cipher = Cipher.getInstance(Constants.ENCRYPT_TRANSFORMATION);
-			byte[] iv = new byte[cipher.getBlockSize()];
-			IvParameterSpec ivParams = new IvParameterSpec(iv);
-			cipher.init(Cipher.ENCRYPT_MODE, key, ivParams);
-			byte[] cipherText = cipher.doFinal(text.getBytes(Constants.CHARSET));
-			return Base64.encodeBase64String(cipherText);
-		} catch(Exception e) {
-			logger.error("error while encrypting string, returning null",e);
-			throw new ZException(e);
-		}
+		return text;
+//		if(StringUtils.isBlank(text))
+//			return null;
+//		try {
+//			Cipher cipher = Cipher.getInstance(Constants.ENCRYPT_TRANSFORMATION);
+//			byte[] iv = new byte[cipher.getBlockSize()];
+//			IvParameterSpec ivParams = new IvParameterSpec(iv);
+//			cipher.init(Cipher.ENCRYPT_MODE, key, ivParams);
+//			byte[] cipherText = cipher.doFinal(text.getBytes(Constants.CHARSET));
+//			return Base64.encodeBase64String(cipherText);
+//		} catch(Exception e) {
+//			logger.error("error while encrypting string, returning null",e);
+//			throw new ZException(e);
+//		}
 	}
 
 	/*
 	 * Decrypt Password
 	 */
 	public  String decrypt(String encryptedText) throws ZException {
-		if (StringUtils.isBlank(encryptedText)) {
-			return null;
-		}
-		try {
-			Cipher cipher = Cipher.getInstance(Constants.ENCRYPT_TRANSFORMATION);
-			byte[] iv = new byte[cipher.getBlockSize()];
-			IvParameterSpec ivParams = new IvParameterSpec(iv);
-			cipher.init(Cipher.DECRYPT_MODE, key, ivParams);
-			byte[] cipherText = Base64.decodeBase64(encryptedText.trim());
-			return new String(cipher.doFinal(cipherText), Constants.CHARSET);
-		} catch(Exception e) {
-			logger.error("error while decrypting string, returning null",e);
-			throw new ZException(e);
-		}
+		return encryptedText;
+//		if (StringUtils.isBlank(encryptedText)) {
+//			return null;
+//		}
+//		try {
+//			Cipher cipher = Cipher.getInstance(Constants.ENCRYPT_TRANSFORMATION);
+//			byte[] iv = new byte[cipher.getBlockSize()];
+//			IvParameterSpec ivParams = new IvParameterSpec(iv);
+//			cipher.init(Cipher.DECRYPT_MODE, key, ivParams);
+//			byte[] cipherText = Base64.decodeBase64(encryptedText.trim());
+//			return new String(cipher.doFinal(cipherText), Constants.CHARSET);
+//		} catch(Exception e) {
+//			logger.error("error while decrypting string, returning null",e);
+//			throw new ZException(e);
+//		}
 	}
 
 	private SecretKeySpec loadKey() throws ZException
