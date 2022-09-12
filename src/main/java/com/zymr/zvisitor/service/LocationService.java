@@ -104,7 +104,7 @@ public class LocationService {
 		if (StringUtils.isBlank(id.trim())) {
 			return null;
 		}
-		return locationRepository.findById(id);
+		return locationRepository.findById(id).get();
 	}
 
 	/**
@@ -120,6 +120,6 @@ public class LocationService {
 		if (count <= 0) {
 			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
-		locationRepository.delete(id);
+		locationRepository.deleteById(id);
 	}
 }
