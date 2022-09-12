@@ -15,13 +15,16 @@ import org.springframework.data.mongodb.repository.Query;
 import com.zymr.zvisitor.dbo.SlackChannel;
 import com.zymr.zvisitor.dbo.SlackChannel.SLACKCHANNEL_FIELDS;
 
+import java.util.Optional;
+
 public interface ChannelRepository extends MongoRepository<SlackChannel, String>{
 
 	SlackChannel findByChannelId(String channelId);
 
 	@Query("{ '"+SLACKCHANNEL_FIELDS.ID+"': ?0}")
-	SlackChannel findById(String id);
+	Optional<SlackChannel> findById(String id);
 	
 	long countById(String id);
-	
+
+//	void delete(String id);
 }
