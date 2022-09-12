@@ -1,10 +1,12 @@
 package com.zymr.zvisitor.dto;
 
-import org.hibernate.validator.constraints.NotBlank;
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.constraints.NotBlank;
 
 @JsonInclude(Include.NON_EMPTY)
 public class SlackTokenDTO {
