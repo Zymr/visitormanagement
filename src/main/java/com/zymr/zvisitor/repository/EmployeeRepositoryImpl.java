@@ -9,8 +9,10 @@
  *******************************************************/
 package com.zymr.zvisitor.repository;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -34,9 +36,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom {
 	}
 
 	public Update update(Employee emlpoyee) {
-		DBObject empDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(emlpoyee);
-		empDBObject.removeField(EMPLOYEE_FIELDS.ID);
-		return Update.fromDBObject(new BasicDBObject(key, empDBObject)); 
+		org.bson.Document doc = new org.bson.Document();
+		mongoTemplate.getConverter().write(emlpoyee, doc);
+		return Update.fromDocument(new Document("$set", doc));
 	}
 
 	public void upsert(Employee employee, String columnName) {
