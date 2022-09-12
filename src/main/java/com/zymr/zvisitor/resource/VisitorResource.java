@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +46,6 @@ import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.JsonUtils;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-import io.swagger.annotations.ApiOperation;
-
 @Controller
 public class VisitorResource {
 	private static final Logger logger = LoggerFactory.getLogger(VisitorResource.class);
@@ -61,7 +60,7 @@ public class VisitorResource {
 	private VisitorConverter visitorConverter;
 
 	@RequestMapping(value = Constants.CATEGORIES_URL, method = RequestMethod.GET)
-	@ApiOperation(value = "Fetch visitor categories", response = ResponseDTO.class)
+	@Operation(summary = "Fetch visitor categories"/*, response = ResponseDTO.class*/)
 	public ResponseEntity<Map<String, Object>> getVisitorOrigin() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -79,7 +78,7 @@ public class VisitorResource {
 	}
 
 	@RequestMapping(value = Constants.CATEGORIES_ADD_URL, method = RequestMethod.POST)
-	@ApiOperation(value = "Add new origin")
+	@Operation(summary = "Add new origin")
 	public ResponseEntity<Map<String, Object>> addVisitorOrigin(@RequestBody @Valid VisitorOriginDTO visitorOriginDTO) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
