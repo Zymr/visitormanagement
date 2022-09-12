@@ -14,8 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.validator.constraints.NotBlank;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,9 @@ import com.zymr.zvisitor.service.EmployeeService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
+
+import javax.validation.constraints.NotBlank;
 
 @RestController
 public class EmployeeResource {
@@ -48,7 +51,7 @@ public class EmployeeResource {
 	private EmployeeConverter employeeConverter;
 
 	@RequestMapping(value = Constants.GET_EMPLOYEE, method = RequestMethod.GET)
-	@ApiOperation(value = "Fetch employees of specific location.", response = ResponseDTO.class)
+	@Operation(summary = "Fetch employees of specific location."/*, response = ResponseDTO.class*/)
 	public ResponseEntity<Map<String, Object>> get(@PathVariable @NotBlank String locId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.ok().body(new ResponseDTO(ZvisitorResource.EMPLOYEES.toLowerCase(), Collections.EMPTY_LIST).getResponse());
 		try {
