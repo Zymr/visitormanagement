@@ -10,6 +10,7 @@
 package com.zymr.zvisitor.service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
@@ -123,7 +124,7 @@ public class ConfigurationService {
 	}
 
 	private PropertyConfiguration getConfigurationFromDB() {
-		return configurationRepository.findOne(new Sort(Sort.Direction.DESC,CONFIGURATION_FIELDS.ID));
+		return configurationRepository.findOne(Sort.by(Sort.Direction.DESC, CONFIGURATION_FIELDS.ID));
 	}
 
 	public Slack getSlackConfiguration() {
