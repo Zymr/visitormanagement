@@ -15,6 +15,8 @@ pipeline {
               sh '''
                 rm -rf .env
                 cat >>.env <<EOL
+                MONGO_INITDB_ROOT_USERNAME:'$MONGO_INITDB_ROOT_USERNAME'
+                MONGO_INITDB_ROOT_PASSWORD:'$MONGO_INITDB_ROOT_PASSWORD'
                 ADMIN_MAIL:'$ADMIN_MAIL'
                 ADMIN_PASSWORD:'$ADMIN_PASSWORD'
                 SLACK_TOKEN:'$SLACK_TOKEN'
