@@ -23,7 +23,7 @@ services:
     volumes:
       - logs:/logs/zv
     environment:
-      FILE_UPLOAD: /home/akshay.h@ah.zymrinc.com/Desktop/zvisitor_data
+      FILE_UPLOAD: /home/zvisitor_data
       MONGODB_DATABASE: db_zvisitor
       MONGODB_HOST: mongodb
       AUTHENTICATION_DATABASE: admin
