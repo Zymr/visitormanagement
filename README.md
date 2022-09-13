@@ -34,6 +34,7 @@ Path are as follows:
   - data: /var/lib/docker/volumes/zvisitor_stagging_data
   - logs: /var/lib/docker/volumes/zvisitor_stagging_logs
   - mongologs: /var/lib/docker/volumes/zvisitor_stagging_mongologs
+  - files: /var/lib/docker/volumes/zvisitor_files
 
 #### Mail configuration
 
