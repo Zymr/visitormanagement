@@ -10,11 +10,11 @@ services:
       - data:/data/db
       - mongologs:/var/log/mongodb
     environment:
-      MONGO_INITDB_DATABASE=db_zvisitor
-      MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
-      MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
-      MONGO_DB_USERNAME=$MONGODB_USERNAME
-      MONGO_DB_PASSWORD=$MONGODB_PASSWORD
+      MONGO_INITDB_DATABASE: db_zvisitor
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+      MONGO_DB_USERNAME: $MONGODB_USERNAME
+      MONGO_DB_PASSWORD: $MONGODB_PASSWORD
     command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
   backend:
     build: .
@@ -26,22 +26,22 @@ services:
       - logs:/logs/zv
       - files:/home/zymr/zvisitor_files
     environment:
-      FILE_UPLOAD=/home/zymr/zvisitor_files
-      MONGODB_DATABASE=db_zvisitor
-      MONGODB_HOST=mongodb
-      AUTHENTICATION_DATABASE=admin
-      VALID_MAIL=zymr.com
-      ORG_DEPARTMENT_EMAIL=zymrtest@gmail.com
-      USER_APP_PORT=8080
-      MAIL_PERSONAL=z-visitor
-      ADMIN_MAIL=$ADMIN_MAIL
-      ADMIN_PASSWORD=$ADMIN_PASSWORD
-      SLACK_TOKEN=$SLACK_TOKEN
-      SLACK_USERNAME=$SLACK_USERNAME
-      MAIL_USERNAME=$MAIL_USERNAME
-      MAIL_PASSWORD=$MAIL_PASSWORD
-      MONGODB_USERNAME=$MONGODB_USERNAME
-      MONGODB_PASSWORD=$MONGODB_PASSWORD
+      FILE_UPLOAD: /home/zymr/zvisitor_files
+      MONGODB_DATABASE: db_zvisitor
+      MONGODB_HOST: mongodb
+      AUTHENTICATION_DATABASE: admin
+      VALID_MAIL: zymr.com
+      ORG_DEPARTMENT_EMAIL: zymrtest@gmail.com
+      USER_APP_PORT: 8080
+      MAIL_PERSONAL: z-visitor
+      ADMIN_MAIL: $ADMIN_MAIL
+      ADMIN_PASSWORD: $ADMIN_PASSWORD
+      SLACK_TOKEN: $SLACK_TOKEN
+      SLACK_USERNAME: $SLACK_USERNAME
+      MAIL_USERNAME: $MAIL_USERNAME
+      MAIL_PASSWORD: $MAIL_PASSWORD
+      MONGODB_USERNAME: $MONGODB_USERNAME
+      MONGODB_PASSWORD: $MONGODB_PASSWORD
       
     depends_on:
       - mongodb
