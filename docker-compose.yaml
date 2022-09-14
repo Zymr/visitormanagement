@@ -17,11 +17,10 @@ services:
       # MONGO_DB_PASSWORD: ${MONGODB_PASSWORD}
     command: 
       - /bin/bash
-      - c
+      - -c
       - |
         echo 'hello'
         mongo -u root -p zymr --authenticationDatabase admin
-        db.createUser({user: "z_admin",pwd: "zymr",roles: [{ role: "readWrite", db: "db_zvisitor" }]});
       # - '--logpath', '/var/log/mongodb/mongo_logs.log'
     # command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
   backend:
