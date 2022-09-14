@@ -17,7 +17,7 @@ services:
       # MONGO_DB_PASSWORD: ${MONGODB_PASSWORD}
     command: 
       - mongo --host mongodb --eval  "db.getSiblingDB('db_zvisitor').createUser({user:'z_admin', pwd:'zymr', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
-      - ['--logpath', '/var/log/mongodb/mongo_logs.log']
+      - --logpath', '/var/log/mongodb/mongo_logs.log
     # command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
   backend:
     build: .
