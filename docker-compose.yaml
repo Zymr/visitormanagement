@@ -10,7 +10,7 @@ services:
       - data:/data/db
       - mongologs:/var/log/mongodb
     environment:
-      MONGO_INITDB_DATABASE: db_zvisitor
+      MONGO_INITDB_DATABASE: db
       MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
       MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
     command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
