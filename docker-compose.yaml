@@ -15,7 +15,10 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       # MONGO_DB_USERNAME: ${MONGODB_USERNAME}
       # MONGO_DB_PASSWORD: ${MONGODB_PASSWORD}
-    # command: [mongo -u root -p zymr --authenticationDatabase admin --host mongodb --eval  "db.getSiblingDB('db_zvisitor').createUser({user:'z_admin', pwd:'zymr', roles:[{role:'readWrite',db:'db_zvisitor'}]});"]
+    command: 
+      - bash
+      - c
+      - mongo -u root -p zymr --authenticationDatabase admin --host mongodb --eval  "db.getSiblingDB('db_zvisitor').createUser({user:'z_admin', pwd:'zymr', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
       # - '--logpath', '/var/log/mongodb/mongo_logs.log'
     # command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
   backend:
