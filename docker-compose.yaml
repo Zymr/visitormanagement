@@ -17,6 +17,7 @@ services:
       # MONGO_DB_PASSWORD: ${MONGODB_PASSWORD}
     command: 
       - /bin/bash
+      - c
       - |
         echo 'hello'
         mongo -u root -p zymr --authenticationDatabase admin
