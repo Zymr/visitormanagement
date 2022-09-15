@@ -16,6 +16,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.commons.collections.CollectionUtils;
 
 import org.slf4j.Logger;
@@ -40,8 +43,6 @@ import com.zymr.zvisitor.service.LocationService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-//import io.swagger.annotations.ApiOperation;
-
 @RestController
 public class LocationResource {
 
@@ -54,7 +55,12 @@ public class LocationResource {
 	private LocationConverter locationConverter;
 
 	@RequestMapping(value = Constants.LOCATION_URL, method = RequestMethod.GET)
-	@Operation(summary = "Fetch locations"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch locations")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch locations",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> get() {
 	  ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -71,7 +77,12 @@ public class LocationResource {
 	}
 	
 	@RequestMapping(value = Constants.AUTH_LOCATION_URL, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "add location"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "add location")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "add location",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> addLocation(@RequestBody @Valid LocationDTO locationDTO) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -89,7 +100,12 @@ public class LocationResource {
 	}
 	
 	@RequestMapping(value = Constants.LOCATION_UPDATE_DELETE_URL, method = RequestMethod.PUT)
-	@Operation(summary = "update location"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "update location")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "update location",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> updateLocation(@RequestBody @Valid LocationDTO locationDTO, @PathVariable @NotBlank String locId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -109,7 +125,12 @@ public class LocationResource {
 	}
 
 	@RequestMapping(value = Constants.LOCATION_UPDATE_DELETE_URL, method = RequestMethod.DELETE)
-	@Operation(summary = "delete location"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "delete location")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "delete location",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> deleteLocation(@PathVariable("locId") @NotBlank String id) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
