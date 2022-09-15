@@ -29,8 +29,7 @@ services:
     - mongodb:mongodb
    command: mongo -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'${MONGODB_USERNAME}', pwd:'${MONGODB_PASSWORD}', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
    depends_on:
-    - mongodb:
-        condition: service_healthy
+    - mongodb
    healthcheck:
       test: mongod --version
       interval: 60s
@@ -66,9 +65,9 @@ services:
       MONGODB_PASSWORD: ${MONGODB_PASSWORD}
       
     depends_on:
-      - mongodb:
-      - mongoClientTemp:
-          condition: service_healthy
+      - mongodb
+      - mongoClientTemp
+          
     healthcheck:
       test: java -version
       interval: 60s
