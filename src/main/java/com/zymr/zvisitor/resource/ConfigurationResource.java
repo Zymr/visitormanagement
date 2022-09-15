@@ -15,6 +15,9 @@ import javax.mail.AuthenticationFailedException;
 import javax.validation.Valid;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +41,6 @@ import com.zymr.zvisitor.service.SlackService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-//import io.swagger.annotations.ApiOperation;
-
 @RestController
 public class ConfigurationResource {
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationResource.class);
@@ -57,7 +58,12 @@ public class ConfigurationResource {
 	private EmailConfigConverter eMailConfigConverter;
 
 	@RequestMapping(value = Constants.SLACK_CONFIG_URL, method = RequestMethod.GET)
-	@Operation(summary = "Fetch slack auth token"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch slack auth token")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch slack auth token",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> getSlackToken() {
 		ResponseEntity<Map<String, Object>>  result = ResponseEntity.notFound().build();
 		try {
@@ -72,6 +78,11 @@ public class ConfigurationResource {
 
 	@RequestMapping(value = Constants.SLACK_CONFIG_URL, method = RequestMethod.PUT)
 	@Operation(summary = "Update slack auth token")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Update slack auth token",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> updateSlackToken(@RequestBody @Valid SlackTokenDTO slackToken) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.status(HttpStatus.BAD_REQUEST).
 				body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_TOKEN_INVALID).getResponse());
@@ -89,7 +100,12 @@ public class ConfigurationResource {
 	}
 
 	@RequestMapping(value = Constants.EMAIL_CONFIG_URL, method = RequestMethod.GET)
-	@Operation(summary = "Fetch mail configuration"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch mail configuration")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch mail configuration",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> getMailConfiguration() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -104,6 +120,11 @@ public class ConfigurationResource {
 
 	@RequestMapping(value = Constants.EMAIL_CONFIG_URL, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Update mail configuration")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Update mail configuration",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> updateMailConfiguration(@RequestBody @Valid EmailConfigurationDTO mailConfigurationDTO) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
