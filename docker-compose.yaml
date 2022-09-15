@@ -23,6 +23,16 @@ services:
     #     mongo -u root -p zymr --authenticationDatabase admin
       # - '--logpath', '/var/log/mongodb/mongo_logs.log'
     # command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
+
+  mongoClientTemp:
+   image: 'mongo:3.4.9'
+   container_name: mongoClientTemp
+   links:
+    - mongodb:mongodb
+   command: mongo --host mongodb --eval "db.getSiblingDB('admin').createUser({user:'z_admin', pwd:'zymr', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
+   depends_on:
+    - mongodb
+
   backend:
     build: .
     container_name: backend
