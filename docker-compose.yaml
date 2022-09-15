@@ -14,6 +14,13 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
+    healthcheck:
+      test: mongod --version
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+
 
   mongoClientTemp:
    image: 'mongo:3.4.9'
@@ -23,6 +30,12 @@ services:
    command: mongo -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'${MONGODB_USERNAME}', pwd:'${MONGODB_PASSWORD}', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
    depends_on:
     - mongodb
+   healthcheck:
+      test: mongod --version
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
 
   backend:
     build: .
@@ -54,6 +67,12 @@ services:
     depends_on:
       - mongodb
       - mongoClientTemp
+    healthcheck:
+      test: java -version
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
 
 volumes:
   data:
