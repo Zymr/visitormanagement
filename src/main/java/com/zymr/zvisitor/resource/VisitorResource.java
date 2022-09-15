@@ -18,6 +18,9 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +63,12 @@ public class VisitorResource {
 	private VisitorConverter visitorConverter;
 
 	@RequestMapping(value = Constants.CATEGORIES_URL, method = RequestMethod.GET)
-	@Operation(summary = "Fetch visitor categories"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch visitor categories")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch visitor categories",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> getVisitorOrigin() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -79,6 +87,11 @@ public class VisitorResource {
 
 	@RequestMapping(value = Constants.CATEGORIES_ADD_URL, method = RequestMethod.POST)
 	@Operation(summary = "Add new origin")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Add new origin",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> addVisitorOrigin(@RequestBody @Valid VisitorOriginDTO visitorOriginDTO) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
