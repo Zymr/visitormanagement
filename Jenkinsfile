@@ -1,13 +1,7 @@
 pipeline {
-    parameters {
-        choice(name: 'BRANCH', choices: ['develop', 'master', 'config_env_changes', 'devops'], description: 'Select the branch')
-    }
     agent {
         label "'${AGENT}'"
     }
-    // environment {
-    //     SECRET_FILE_ID = credentials('zvisitor_config_file')
-    // }
     stages {
         stage('GENERATING ENV FILES') {
             steps {
