@@ -9,6 +9,7 @@
  *******************************************************/
 package com.zymr.zvisitor;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -18,11 +19,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.zymr.zvisitor.security.filter.CORSFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 @EnableMongoAuditing
 @EnableScheduling
 @EnableAsync
+@OpenAPIDefinition
 public class MainApplication 
 {
 	public static void main(String[] args) throws Exception {
@@ -37,5 +40,9 @@ public class MainApplication
         registration.setName("corsFilter");
         registration.setOrder(1);
         return registration;
+    }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
