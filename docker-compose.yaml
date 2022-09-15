@@ -13,23 +13,14 @@ services:
       MONGO_INITDB_DATABASE: db_zvisitor
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      # MONGO_DB_USERNAME: ${MONGODB_USERNAME}
-      # MONGO_DB_PASSWORD: ${MONGODB_PASSWORD}
-    # command: 
-    #   - /bin/bash
-    #   - -c
-    #   - |
-    #     echo 'hello'
-    #     mongo -u root -p zymr --authenticationDatabase admin
-      # - '--logpath', '/var/log/mongodb/mongo_logs.log'
-    # command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
+    command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
 
   mongoClientTemp:
    image: 'mongo:3.4.9'
    container_name: mongoClientTemp
    links:
     - mongodb:mongodb
-   command: mongo -u root -p zymr --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'z_admin', pwd:'zymr', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
+   command: mongo -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'${MONGODB_USERNAME}', pwd:'${MONGODB_PASSWORD}', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
    depends_on:
     - mongodb
 
