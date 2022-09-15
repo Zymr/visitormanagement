@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.commons.collections.CollectionUtils;
 
 import org.slf4j.Logger;
@@ -36,7 +39,6 @@ import com.zymr.zvisitor.service.EmployeeService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-//import io.swagger.annotations.ApiOperation;
 
 import javax.validation.constraints.NotBlank;
 
@@ -51,7 +53,12 @@ public class EmployeeResource {
 	private EmployeeConverter employeeConverter;
 
 	@RequestMapping(value = Constants.GET_EMPLOYEE, method = RequestMethod.GET)
-	@Operation(summary = "Fetch employees of specific location."/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch employees of specific location.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch employees of specific location",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> get(@PathVariable @NotBlank String locId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.ok().body(new ResponseDTO(ZvisitorResource.EMPLOYEES.toLowerCase(), Collections.EMPTY_LIST).getResponse());
 		try {
