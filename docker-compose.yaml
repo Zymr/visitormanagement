@@ -29,7 +29,7 @@ services:
    container_name: mongoClientTemp
    links:
     - mongodb:mongodb
-   command: mongo -u root -p zymr --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('db_zvisitor').createUser({user:'z_admin', pwd:'zymr', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
+   command: mongo -u root -p zymr --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'z_admin', pwd:'zymr', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
    depends_on:
     - mongodb
 
