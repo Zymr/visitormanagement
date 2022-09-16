@@ -17,10 +17,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -37,10 +36,10 @@ import com.zymr.zvisitor.exception.NoDataFoundException;
 import com.zymr.zvisitor.repository.EmployeeRepository;
 import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Constants;
-
+@Slf4j
 @Service
 public class EmployeeService {
-	protected static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
+
 
 	@Autowired 
 	private EmployeeRepository employeeRepository;
@@ -73,7 +72,7 @@ public class EmployeeService {
 	 * @throws Exception
 	 */  
 	public void upsertEmployeeFromSlack() throws Exception {
-		logger.info("Syncing of updating employees from slack started.");
+		log.info("Syncing of updating employees from slack started.");
 		List<SlackEmployee> slackEmployees = slackService.getEmployeeList();
 		List<String> dbSlackId = getDbEmployee();
 		long latestUpdatedTime = getLatestSlackUpdatedTime();

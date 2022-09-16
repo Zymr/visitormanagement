@@ -14,8 +14,7 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.data.domain.Sort;
@@ -29,10 +28,9 @@ import com.zymr.zvisitor.exception.ZException;
 import com.zymr.zvisitor.repository.ConfigurationRepository;
 import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.service.config.SlackAccountConfig;
-
+@Slf4j
 @Service
 public class ConfigurationService {
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
 
 	@Autowired
 	private ConfigurationRepository configurationRepository;
@@ -54,7 +52,7 @@ public class ConfigurationService {
 		} else {
 			loadAndUpdateDbConfiguration();
 		}
-		logger.info("Configuration Service", toString());
+		log.info("Configuration Service", toString());
 	}
 
 	/** To save properties configuration into database. 
@@ -72,7 +70,7 @@ public class ConfigurationService {
 		configurationRepository.save(propertyConfiguration);
 		
 		this.mailConfiguration.setPassword(appProps.getMailProperties().getPassword());
-		logger.info("Property configuration saved.",  propertyConfiguration.toString());
+		log.info("Property configuration saved.",  propertyConfiguration.toString());
 	}
 
 	/**
@@ -86,7 +84,7 @@ public class ConfigurationService {
 		slackConfiguration.setToken(slackToken);
 		propertyConfiguration.setSlackConfig(slackConfiguration);
 		configurationRepository.save(propertyConfiguration);
-		logger.info("Slack configuration updated.", slackConfiguration.toString());
+		log.info("Slack configuration updated.", slackConfiguration.toString());
 	}
 
 	/**
@@ -108,7 +106,7 @@ public class ConfigurationService {
 		//For In Memory
 		this.mailConfiguration = emailConfig;
 		this.mailConfiguration.setPassword(passwordString);
-		logger.info("Mail configuration updated.", emailConfig.toString());
+		log.info("Mail configuration updated.", emailConfig.toString());
 	}
 
 	public String getUpdatedToken() {

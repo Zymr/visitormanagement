@@ -15,11 +15,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -35,10 +34,9 @@ import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.service.config.SlackChannelConfig;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ImageType;
-
+@Slf4j
 @Service
 public class ChannelService {
-	private static final Logger logger = LoggerFactory.getLogger(ChannelService.class);
 
 	@Autowired 
 	private ChannelRepository channelRepository;
@@ -67,7 +65,7 @@ public class ChannelService {
 		long channelCount = channelRepository.count();
 		List<SlackChannelConfig> department = appProperties.getOrg().getDepartment();
 		if (channelCount == 0  && channelCount != department.size() && CollectionUtils.isNotEmpty(department)) {
-			logger.info("Syncing of channels from slack started. channels {}", department);
+			log.info("Syncing of channels from slack started. channels {}", department);
 			List<Channels> slackChannels = slackService.getChannelList(department); 
 			List<SlackChannel> channel =  slackChannels.stream().map(c -> convertToDTO(c))
 																.collect(Collectors.toList());

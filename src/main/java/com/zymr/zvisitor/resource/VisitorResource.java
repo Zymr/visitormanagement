@@ -18,9 +18,12 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,9 +49,9 @@ import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.JsonUtils;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
+@Slf4j
 @Controller
 public class VisitorResource {
-	private static final Logger logger = LoggerFactory.getLogger(VisitorResource.class);
 
 	@Autowired
 	private VisitorService visitorService;
@@ -60,7 +63,12 @@ public class VisitorResource {
 	private VisitorConverter visitorConverter;
 
 	@RequestMapping(value = Constants.CATEGORIES_URL, method = RequestMethod.GET)
-	@Operation(summary = "Fetch visitor categories"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch visitor categories")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch visitor categories",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> getVisitorOrigin() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -71,7 +79,7 @@ public class VisitorResource {
 				result = ResponseEntity.ok(responseDTO.getResponse());
 			}
 		} catch (Exception e) {
-			logger.error("Exception while fetching all categories.", e);
+			log.error("Exception while fetching all categories.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -79,6 +87,11 @@ public class VisitorResource {
 
 	@RequestMapping(value = Constants.CATEGORIES_ADD_URL, method = RequestMethod.POST)
 	@Operation(summary = "Add new origin")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Add new origin",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> addVisitorOrigin(@RequestBody @Valid VisitorOriginDTO visitorOriginDTO) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -88,7 +101,7 @@ public class VisitorResource {
 				result = ResponseEntity.status(HttpStatus.CREATED).build();
 			} 
 		} catch (Exception e) {
-			logger.error("Exception while adding new category.", e);
+			log.error("Exception while adding new category.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -107,9 +120,9 @@ public class VisitorResource {
 				result = ResponseEntity.status(HttpStatus.CREATED).build();
 			}
 		} catch (JsonProcessingException e) {
-			logger.error("Json Parsing exception.", e);
+			log.error("Json Parsing exception.", e);
 		}  catch (Exception e) {
-			logger.error("Exception while adding visitor.", e);
+			log.error("Exception while adding visitor.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -133,7 +146,7 @@ public class VisitorResource {
 				result = ResponseEntity.status(HttpStatus.OK).body(response);		
 			}
 		} catch(Exception e) {
-			logger.error("Exception in filtering visitors. ", e);
+			log.error("Exception in filtering visitors. ", e);
 		}
 		return result;
 	}

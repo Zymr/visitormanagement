@@ -14,7 +14,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,11 +25,10 @@ import com.zymr.zvisitor.security.filter.JWTAuthenticationFilter;
 import com.zymr.zvisitor.security.filter.JWTAuthorizationFilter;
 import com.zymr.zvisitor.util.Constants;
 
-@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -41,12 +39,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests()
-		.antMatchers(HttpMethod.POST, Constants.LOGIN_URL).permitAll()
-		.and()
-		.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-		.addFilter(new JWTAuthorizationFilter(authenticationManager(), userRepository))
-		.addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class)
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.antMatchers(HttpMethod.POST, Constants.LOGIN_URL).permitAll()
+				.and()
+				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+				.addFilter(new JWTAuthorizationFilter(authenticationManager(), userRepository))
+				.addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class)
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	@Override
@@ -57,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				Constants.SWAGGER_URL+Constants.FORWARD_SLASH_AND_ANY,
 				Constants.SWAGGER_VERSION_URL,
 				Constants.SWAGGER_UI,
-				Constants.SWAGGER_RESOURCES, 
+				Constants.SWAGGER_RESOURCES,
 				Constants.SWAGGER_SECURITY, Constants.SWAGGER_SECURITY_URL);
 		web.ignoring().regexMatchers("NDA\\**");
 	}

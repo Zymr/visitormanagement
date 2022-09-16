@@ -9,8 +9,7 @@
  *******************************************************/
 package com.zymr.zvisitor.startup;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -25,9 +24,9 @@ import com.zymr.zvisitor.service.VisitorService;
 /**
  * @author chirag.b
  */
+@Slf4j
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
-	protected static final Logger logger = LoggerFactory.getLogger(ApplicationStartup.class);
 
 	@Autowired	
 	private EmployeeService employeeService;
@@ -53,7 +52,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 //			employeeService.syncEmployeeFromSlack();
 			visitorService.syncVisitorOrigin();
 		} catch(Exception e) {
-			logger.error("Exception while syncing on startup {}.", e);
+			log.error("Exception while syncing on startup {}.", e);
 			throw new RuntimeException(e);
 		}
 	}

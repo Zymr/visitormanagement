@@ -15,12 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import io.swagger.annotations.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -43,12 +44,9 @@ import com.zymr.zvisitor.service.ChannelService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.JsonUtils;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
-
-//import io.swagger.annotations.ApiOperation;
-
+@Slf4j
 @RestController
 public class ChannelResource {
-	private static final Logger logger = LoggerFactory.getLogger(ChannelResource.class);
 
 	@Autowired
 	private ChannelService channelService;
@@ -57,7 +55,12 @@ public class ChannelResource {
 	private SlackChannelConverter slackChannelConverter;
 
 	@RequestMapping(value=Constants.CHANNEL_URL, method=RequestMethod.GET)
-	@Operation(summary = "Fetch all channels"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch all channels")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch all channels",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> get() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -68,7 +71,7 @@ public class ChannelResource {
 				result = ResponseEntity.ok(responseDTO.getResponse());
 			} 
 		} catch(Exception e) {
-			logger.error("Exception while fetching all channels.", e);
+			log.error("Exception while fetching all channels.", e);
 			result =  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -81,14 +84,19 @@ public class ChannelResource {
 			channelService.syncChannelsFromSlack();
 			result = ResponseEntity.ok().build(); 
 		} catch (Exception e) {
-			logger.error("Exception while syncing channel.", e);
+			log.error("Exception while syncing channel.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result; 
 	}
 
 	@RequestMapping(value = Constants.AUTH_CHANNEL_URL, method=RequestMethod.POST)
-	@Operation(summary = "add channel"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "add channel")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "add channel",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> addChannel(@RequestPart("icon") MultipartFile file, @RequestParam(value="channel", required=true) String channelJson)  {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -99,19 +107,24 @@ public class ChannelResource {
 			}
 			result = ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_CHANNEL_ADDED_SUCCESSFLLY).getResponse());
 		}  catch(DuplicateKeyException e) {
-			logger.error("Exception while adding channel.", e);
+			log.error("Exception while adding channel.", e);
 			result = ResponseEntity.badRequest().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_DUPLICATE_ID_RESPONSE).getResponse());
 		}  catch(IOException | InvalidDataException e) {
-			logger.error("Exception while adding channel.", e);
+			log.error("Exception while adding channel.", e);
 		}  catch (Exception e) {
-			logger.error("Exception while adding channel.", e);
+			log.error("Exception while adding channel.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
 	}
 
 	@RequestMapping(value = Constants.CHANNEL_UPDATE_DELETE_URL, method=RequestMethod.PUT)
-	@Operation(summary = "update channel"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "update channel")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "update channel",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> updateChannel(@RequestPart(value="icon",  required=false) MultipartFile file, @RequestParam(value="channel", required=true) String channelJson, @PathVariable String chId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -122,32 +135,37 @@ public class ChannelResource {
 				result = ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_CHANNEL_CONFIGURATION_CONFIGURATION_UPDATED).getResponse());
 			}
 		}  catch(DuplicateKeyException e) {
-			logger.error("Exception while adding channel.", e);
+			log.error("Exception while adding channel.", e);
 			result = ResponseEntity.badRequest().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_DUPLICATE_ID_RESPONSE).getResponse());
 		}  catch(IOException e) {
-			logger.error("Exception while Json parsing", e);
+			log.error("Exception while Json parsing", e);
 		}  catch(NoDataFoundException e) {
-			logger.error("Exception while updating channel", e);
+			log.error("Exception while updating channel", e);
 			result = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}  catch(Exception e) {
-			logger.error("Exception while updating channel.", e);
+			log.error("Exception while updating channel.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
 	}
 
 	@RequestMapping(value =Constants.CHANNEL_UPDATE_DELETE_URL, method=RequestMethod.DELETE)
-	@Operation(summary = "delete channel"/*, response = ResponseDTO.class*/)
+	@Operation(summary = "delete channel")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "delete channel",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> deleteChannel(@PathVariable("chId") String id) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
 				channelService.delete(id);
 			result = ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_CHANNEL_CONFIGURATION_CONFIGURATION_DELETED).getResponse());
 		}  catch (NoDataFoundException e) {
-			logger.error("Exception while deleting channel.", e);
+			log.error("Exception while deleting channel.", e);
 			result = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}  catch (Exception e) {
-			logger.error("Exception while deleting channel.", e);
+			log.error("Exception while deleting channel.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;

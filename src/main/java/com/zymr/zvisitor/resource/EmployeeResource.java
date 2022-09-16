@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +38,13 @@ import com.zymr.zvisitor.service.EmployeeService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-//import io.swagger.annotations.ApiOperation;
 
 import javax.validation.constraints.NotBlank;
 
+@Slf4j
 @RestController
 public class EmployeeResource {
-	private static final Logger logger = LoggerFactory.getLogger(EmployeeResource.class);
+
 
 	@Autowired
 	private EmployeeService employeeService;
@@ -51,7 +53,12 @@ public class EmployeeResource {
 	private EmployeeConverter employeeConverter;
 
 	@RequestMapping(value = Constants.GET_EMPLOYEE, method = RequestMethod.GET)
-	@Operation(summary = "Fetch employees of specific location."/*, response = ResponseDTO.class*/)
+	@Operation(summary = "Fetch employees of specific location.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Fetch employees of specific location",
+					content = {@Content(mediaType = "application/json")})
+	})
 	public ResponseEntity<Map<String, Object>> get(@PathVariable @NotBlank String locId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.ok().body(new ResponseDTO(ZvisitorResource.EMPLOYEES.toLowerCase(), Collections.EMPTY_LIST).getResponse());
 		try {
@@ -62,7 +69,7 @@ public class EmployeeResource {
 				result = ResponseEntity.ok().body(responseDTO.getResponse());
 			} 
 		}  catch (Exception e) {
-			logger.error("Exception while fetching employees.", e);
+			log.error("Exception while fetching employees.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -75,9 +82,9 @@ public class EmployeeResource {
 			employeeService.deleteBySlackId(slackId);
 			result = ResponseEntity.ok().build();
 		} catch (NoDataFoundException e) {
-			logger.error("Exception while deleting employee.", e);			
+			log.error("Exception while deleting employee.", e);
 		}  catch (Exception e) {
-			logger.error("Exception while deleting employee.", e);
+			log.error("Exception while deleting employee.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -90,7 +97,7 @@ public class EmployeeResource {
 			employeeService.upsertEmployeeFromSlack();
 			result = ResponseEntity.ok().build(); 
 		}  catch (Exception e) {
-			logger.error("Exception while syncing channel.", e);
+			log.error("Exception while syncing channel.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result; 

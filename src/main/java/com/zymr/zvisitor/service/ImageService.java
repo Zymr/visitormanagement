@@ -18,8 +18,7 @@ import java.nio.file.Path;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -30,10 +29,10 @@ import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.Util;
 import com.zymr.zvisitor.util.enums.ImageType;
-
+@Slf4j
 @Service
 public class ImageService {
-	private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
+
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -46,7 +45,7 @@ public class ImageService {
 
 	@PostConstruct
 	public void init() throws IOException {
-		logger.info("Image Service", toString());
+		log.info("Image Service", toString());
 
 		AppConfig configProps = appProperties.getConfig();
 

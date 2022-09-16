@@ -22,12 +22,11 @@ import javax.annotation.PostConstruct;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +37,9 @@ import com.zymr.zvisitor.dto.EmailDTO;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.Util;
 import com.zymr.zvisitor.util.enums.NotificationKey;
-
+@Slf4j
 @Service
 public class NotificationService {
-	protected static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
 	@Autowired
 	private EmployeeService employeeService;
@@ -69,7 +67,7 @@ public class NotificationService {
 
 	@PostConstruct
 	public void init() throws IOException {
-		logger.info("Notification Service {} ", toString());
+		log.info("Notification Service {} ", toString());
 		emailTemplate = IOUtils.toString(EmailService.class.getClassLoader()
 				.getResourceAsStream(Constants.EMAIL_TEMPLATE), Charset.defaultCharset());
 		ndaEmailTemplate = IOUtils.toString(EmailService.class.getClassLoader()
