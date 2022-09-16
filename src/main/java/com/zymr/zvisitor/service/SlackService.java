@@ -19,16 +19,14 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.entity.mime.content.ContentBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
-
 import com.zymr.zvisitor.connectors.HttpConnector;
 import com.zymr.zvisitor.connectors.HttpConnectorHelper;
 import com.zymr.zvisitor.dto.slack.Channels;
@@ -41,8 +39,8 @@ import com.zymr.zvisitor.util.enums.NotificationKey;
 
 @Service
 @Configuration
+@Slf4j
 public class SlackService {
-	private static final Logger logger = LoggerFactory.getLogger(SlackService.class);
 
 	@Autowired
 	private HttpConnector httpConnector;
@@ -55,7 +53,7 @@ public class SlackService {
 
 	@PostConstruct
 	public void init() {
-		logger.info("Slack Service {}" , toString());
+		log.info("Slack Service {}" , toString());
 	}
 
 	/**
@@ -144,9 +142,9 @@ public class SlackService {
 	public void sendMessage(Map<String, String> param, Map<String, ContentBody> attachment) {
 		try {
 			CloseableHttpResponse res = httpConnector.postRequest(HttpConnectorHelper.buildMultiPartEntity(param, attachment), Constants.SLACK_FILE_SEND_API);
-			logger.info(res.toString());
+			log.info(res.toString());
 		} catch(Exception e) {
-			logger.error("Exception while sending slack notifaction.",e);
+			log.error("Exception while sending slack notifaction.",e);
 		}
 	}
 
