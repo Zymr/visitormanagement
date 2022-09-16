@@ -19,22 +19,20 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import com.zymr.zvisitor.dbo.config.Email;
 import com.zymr.zvisitor.dto.EmailDTO;
 import com.zymr.zvisitor.util.Constants;
 
+@Slf4j
 @Service
 public class EmailService {
-	protected static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -48,7 +46,7 @@ public class EmailService {
 		updateMailSenderDefaultProps();
 		Email mail = configurationService.getMailConfiguration();
 		updateMailSenderConfig(mail);
-		logger.info("Email Service {} ", toString());
+		log.info("Email Service {} ", toString());
 	}
 
 	/**
@@ -71,7 +69,7 @@ public class EmailService {
 				javaMailSenderImpl.send(mail);
 			}
 		} catch (MessagingException | MailException | UnsupportedEncodingException e) {
-			logger.error("Exception while sending mail notification.", e);
+			log.error("Exception while sending mail notification.", e);
 		}
 	}
 
@@ -90,7 +88,7 @@ public class EmailService {
 			transport.close();
 		}
 		updateMailSenderConfig(emailDTO);
-		logger.debug("Updated JavaMailSenderImplementation  {}",javaMailSenderImpl);
+		log.debug("Updated JavaMailSenderImplementation  {}",javaMailSenderImpl);
 	}
 
 	private Session getSession() {
