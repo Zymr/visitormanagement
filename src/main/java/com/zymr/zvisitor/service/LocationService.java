@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +26,9 @@ import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.service.config.SlackChannelConfig;
 import com.zymr.zvisitor.util.Constants;
 
+@Slf4j
 @Service
 public class LocationService {
-	protected static final Logger logger = LoggerFactory.getLogger(LocationService.class);
 
 	@Autowired
 	protected LocationRepository locationRepository;
@@ -48,7 +47,7 @@ public class LocationService {
 				location.add(new Location(slackConfig.getAbbr(), slackConfig.getSlackid(), slackConfig.getName()));
 			}
 			locationRepository.insert(location);
-			logger.info("Syncing of location is done.");
+			log.info("Syncing of location is done.");
 		} 
 	}
 	/**
@@ -92,7 +91,7 @@ public class LocationService {
 		try {
 			employeeService.upsertEmployeeFromSlack();
 		} catch (Exception e) {
-			logger.error("Exception while saving location",e);
+			log.error("Exception while saving location",e);
 		}
 	}
 
