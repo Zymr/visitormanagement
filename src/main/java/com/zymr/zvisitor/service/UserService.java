@@ -9,20 +9,16 @@
  *******************************************************/
 package com.zymr.zvisitor.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.zymr.zvisitor.dbo.Users;
 import com.zymr.zvisitor.exception.ZException;
 import com.zymr.zvisitor.repository.UserRepository;
 import com.zymr.zvisitor.service.config.AppProperties;
-
+@Slf4j
 @Service
 public class UserService {
-
-	protected static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private UserRepository userRepository;
@@ -39,7 +35,7 @@ public class UserService {
 		} 
 		Users users = new Users(appProperties.getAdminEmail(), encryptPassword(appProperties.getAdminPassword()));
 		userRepository.save(users);
-		logger.info("Default user added.");
+		log.info("Default user added.");
 	}
 	
 	public String encryptPassword(String password) throws ZException {
