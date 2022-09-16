@@ -18,8 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,10 +39,9 @@ import com.zymr.zvisitor.service.EmailService;
 import com.zymr.zvisitor.service.SlackService;
 import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
-
+@Slf4j
 @RestController
 public class ConfigurationResource {
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationResource.class);
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -70,7 +68,7 @@ public class ConfigurationResource {
 			ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.TOKEN.toLowerCase(), configurationService.getUpdatedToken());
 			result = ResponseEntity.ok(responseDTO.getResponse());
 		} catch(Exception e) {
-			logger.error("Exception while fetching slack token", e);
+			log.error("Exception while fetching slack token", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -93,7 +91,7 @@ public class ConfigurationResource {
 				result = ResponseEntity.ok().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_TOKEN_CONFIGURATION_UPDATED).getResponse());
 			}
 		} catch(Exception e) {
-			logger.error("Exception while updating slack token.", e);
+			log.error("Exception while updating slack token.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -112,7 +110,7 @@ public class ConfigurationResource {
 			ResponseDTO responseDTO = new ResponseDTO(ZvisitorResource.EMAIL.toLowerCase(), eMailConfigConverter.convertToDTO(configurationService.getMailConfiguration()));
 			result = ResponseEntity.ok(responseDTO.getResponse());
 		} catch(Exception e) {
-			logger.error("Exception while fetching mail configuration.", e);
+			log.error("Exception while fetching mail configuration.", e);
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return result;
@@ -134,13 +132,13 @@ public class ConfigurationResource {
 			result = ResponseEntity.ok().body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.EMAIL_CONFIGURATION_CONFIGURATION_UPDATED).getResponse());
 		} catch(AuthenticationFailedException | MailConnectException e) {
 			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.EMAIl_CONFIG_INVALID).getResponse());
-			logger.error("Exception while updating email configuration.", e);
+			log.error("Exception while updating email configuration.", e);
 		} catch(IllegalArgumentException e) {
 			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.EMAIl_CONFIG_INVALID).getResponse());
-			logger.error("Exception while updating email configuration.", e);
+			log.error("Exception while updating email configuration.", e);
 		} catch(Exception e) {
 			result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-			logger.error("Exception while updating email configuration.", e);
+			log.error("Exception while updating email configuration.", e);
 		}
 		return result;
 	}
