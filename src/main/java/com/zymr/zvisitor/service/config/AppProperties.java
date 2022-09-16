@@ -10,14 +10,8 @@
 
 package com.zymr.zvisitor.service.config;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.PostConstruct;
-import javax.validation.constraints.NotBlank;
-
+import com.zymr.zvisitor.exception.InvalidDataException;
+import com.zymr.zvisitor.util.Constants;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +24,12 @@ import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import com.zymr.zvisitor.exception.InvalidDataException;
-import com.zymr.zvisitor.util.Constants;
+import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotBlank;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author chirag.b
