@@ -20,8 +20,7 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +37,8 @@ import com.zymr.zvisitor.service.ImageService;
  * A class to create NDF file with pdf format and some content manipulation with in pdf.
  */
 @Service
+@Slf4j
 public class NdaBuilder {
-	protected static final Logger logger = LoggerFactory.getLogger(NdaBuilder.class);
 
 	public static File defaultNDAFile;
 	
@@ -51,7 +50,7 @@ public class NdaBuilder {
 	@PostConstruct
 	public void init() throws MalformedURLException {
 		ndaUrl = imageService.buildUrl("//files//NDA.pdf");
-		logger.info("NDA Generator {} ", toString());
+		log.info("NDA Generator {} ", toString());
 	}
 
 	/**
@@ -97,7 +96,7 @@ public class NdaBuilder {
 			pdfStamper.close();
 			return destFile.toFile();
 		} catch (IOException | DocumentException | NumberFormatException e) {
-			logger.error("Exception while generating NDA file. ",e);
+			log.error("Exception while generating NDA file. ",e);
 			return null;
 		}
 	}
@@ -121,7 +120,7 @@ public class NdaBuilder {
 			} image.setAbsolutePosition(100, 183);
 			return image;
 		} catch (BadElementException | IOException e) {
-			logger.error("Exception while creating image for NDA file. ",e);
+			log.error("Exception while creating image for NDA file. ",e);
 			return null;
 		}
 	}
