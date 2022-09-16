@@ -12,26 +12,17 @@ package com.zymr.zvisitor.service;
 import static org.apache.commons.codec.binary.Hex.decodeHex;
 
 import javax.annotation.PostConstruct;
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.zymr.zvisitor.exception.ZException;
 import com.zymr.zvisitor.service.config.AppProperties;
 import com.zymr.zvisitor.util.Constants;
-
+@Slf4j
 @Service
 public class CryptoManager {
-
-	private static final Logger logger = LoggerFactory.getLogger(CryptoManager.class);
 
 	@Autowired
 	private AppProperties appProperties;
@@ -58,7 +49,7 @@ public class CryptoManager {
 //			byte[] cipherText = cipher.doFinal(text.getBytes(Constants.CHARSET));
 //			return Base64.encodeBase64String(cipherText);
 //		} catch(Exception e) {
-//			logger.error("error while encrypting string, returning null",e);
+//			log.error("error while encrypting string, returning null",e);
 //			throw new ZException(e);
 //		}
 	}
@@ -79,7 +70,7 @@ public class CryptoManager {
 //			byte[] cipherText = Base64.decodeBase64(encryptedText.trim());
 //			return new String(cipher.doFinal(cipherText), Constants.CHARSET);
 //		} catch(Exception e) {
-//			logger.error("error while decrypting string, returning null",e);
+//			log.error("error while decrypting string, returning null",e);
 //			throw new ZException(e);
 //		}
 	}
@@ -91,7 +82,7 @@ public class CryptoManager {
 		try {
 			encoded = decodeHex(hex);
 		} catch(DecoderException e) {
-			logger.error("DecoderException in loadKey method " ,e);
+			log.error("DecoderException in loadKey method " ,e);
 			throw new ZException(e);
 		}
 		return new SecretKeySpec(encoded, Constants.ENCRYPT_ALGORITHM_AES);
