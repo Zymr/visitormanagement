@@ -18,9 +18,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,10 +32,10 @@ import com.zymr.zvisitor.util.JwtUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
+@Slf4j
 public class JWTAuthorizationFilter  extends BasicAuthenticationFilter {
 
-	private static final Logger logger = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
-	
+
 	private UserRepository userRepository;
 
 	public JWTAuthorizationFilter(AuthenticationManager authManager, UserRepository userRepository) {
@@ -59,10 +58,10 @@ public class JWTAuthorizationFilter  extends BasicAuthenticationFilter {
 				chain.doFilter(request, response);
 			}
 		} catch (ExpiredJwtException e) {
-			logger.error("ExpiredJwtException while parsing JWT token " ,e);
+			log.error("ExpiredJwtException while parsing JWT token " ,e);
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Constants.UNAUTHORIASED_MESSAGE);
 		} catch(Exception e) {
-			logger.error("Exception while parsing JWT token " ,e);
+			log.error("Exception while parsing JWT token " ,e);
 			throw new InternalAuthenticationServiceException(Constants.USER_AUTHENTICATON_ERROR_MSG);
 		}
 	}
