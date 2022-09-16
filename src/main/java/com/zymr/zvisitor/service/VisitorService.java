@@ -27,9 +27,8 @@ import java.util.concurrent.CompletableFuture;
 import javax.annotation.PostConstruct;
 import javax.mail.internet.AddressException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,9 +52,9 @@ import com.zymr.zvisitor.util.NdaBuilder;
 import com.zymr.zvisitor.util.Util;
 import com.zymr.zvisitor.util.enums.ImageType;
 
+@Slf4j
 @Service
 public class VisitorService {
-	private static final Logger logger = LoggerFactory.getLogger(VisitorService.class);
 
 	@Autowired
 	private VisitorOriginRepository visitorOriginRepository; 
@@ -85,12 +84,12 @@ public class VisitorService {
 
 	@PostConstruct
 	public void init() {
-		logger.info("Service {} ", toString());
+		log.info("Service {} ", toString());
 	}
 
 	/** To add visitor categories from property file. */
 	public void syncVisitorOrigin() {
-		logger.info("Syncing of visitor category is started.");
+		log.info("Syncing of visitor category is started.");
 		if (visitorOriginRepository.count() == 0) {
 			List<Origin> listOrigin = new ArrayList<>();
 			int index = 0;
@@ -100,7 +99,7 @@ public class VisitorService {
 				index++;
 			}
 			visitorOriginRepository.saveAll(listOrigin);
-			logger.info("Syncing of visitor category is done.");
+			log.info("Syncing of visitor category is done.");
 		}
 	}
 
@@ -125,7 +124,7 @@ public class VisitorService {
 	 * @param channelId
 	 */
 	public void add(MultipartFile visitorImage, MultipartFile visitorSignature, Visitor visitor, String slackId, String channelId) {
-		logger.info("Started adding visitor with image.");
+		log.info("Started adding visitor with image.");
 		try {
 			Employee employee = employeeService.getBySlackId(slackId);
 			if (Objects.nonNull(employee)) {
@@ -151,13 +150,13 @@ public class VisitorService {
 						return notificationService.notify(employee, channel, 
 								dbVisitor, ndaFile.getAbsolutePath());
 					} catch (AddressException | IOException e) {
-						logger.error("Exception while sending notification", e);					
+						log.error("Exception while sending notification", e);
 					}
 					return null;
-				}).exceptionally(e -> { logger.error("Exception while sending notification", e); return null; }); 
+				}).exceptionally(e -> { log.error("Exception while sending notification", e); return null; });
 			}
 		} catch(Exception e) {
-			logger.error("Exception while adding visitor. {}", visitor, e);
+			log.error("Exception while adding visitor. {}", visitor, e);
 		}
 	}
 
@@ -171,7 +170,7 @@ public class VisitorService {
 	 * @throws IOException 
 	 */
 	private void saveVisitorImages(MultipartFile visitorImage, MultipartFile visitorSignature, Path saveDir) throws IOException {
-		logger.info("Uploading visitor images.");
+		log.info("Uploading visitor images.");
 		if (Objects.nonNull(visitorImage)) {
 			String profilePicPath = Util.getImagePath(visitorImage.getOriginalFilename(), imageService.getBaseDirPathAsStr(), saveDir.toString()).toString();
 			if (StringUtils.isNotBlank(profilePicPath)) {
@@ -182,7 +181,7 @@ public class VisitorService {
 		if (StringUtils.isNotBlank(signaturePicPath)) {
 			visitorSignature.transferTo(new File(signaturePicPath));
 		}
-		logger.info("Images uploaded.");
+		log.info("Images uploaded.");
 	}
 
 
