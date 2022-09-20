@@ -70,7 +70,6 @@ services:
       test: java -version
       interval: 60s
       retries: 5
-      start_period: 20s
       timeout: 10s
 
 volumes:
