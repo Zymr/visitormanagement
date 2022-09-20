@@ -31,9 +31,10 @@ Configure database connection in `application.yml` file.You need to set the foll
 
 #### Mounted Volume Path
 Path are as follows: 
-  - data: /var/lib/docker/volumes/zvisitor_stagging_data
-  - logs: /var/lib/docker/volumes/zvisitor_stagging_logs
-  - mongologs: /var/lib/docker/volumes/zvisitor_stagging_mongologs
+  - data: /var/lib/docker/volumes/zymrvisitor_data
+  - logs: /var/lib/docker/volumes/zymrvisitor_logs
+  - mongologs: /var/lib/docker/volumes/zymrvisitor_mongologs
+  - files: /var/lib/docker/volumes/zymrvisitor_files
 
 #### Mail configuration
 
