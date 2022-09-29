@@ -83,7 +83,9 @@ public class SlackService {
 		Map<String, String> map = new HashMap<>();
 		map.put(NotificationKey.TOKEN.toLowerCase(), configurationService.getUpdatedToken());
 		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map), Constants.USER_LIST_API);
-		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(httpResponse)), Response.class);
+		String slackResponse = HttpConnectorHelper.fromResponseToString(httpResponse);
+		logger.info("Slack Employee List {}" , slackResponse);
+		Response responseMembers = JsonUtils.fromJson(slackResponse, Response.class);
 		if (Objects.nonNull(responseMembers.getMembers())) {
 			return responseMembers.getMembers();
 		}
