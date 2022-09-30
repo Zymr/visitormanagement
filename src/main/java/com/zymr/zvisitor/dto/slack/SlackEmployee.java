@@ -12,6 +12,7 @@ package com.zymr.zvisitor.dto.slack;
 import java.util.List;
 
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -136,7 +137,7 @@ public class SlackEmployee {
 	}
 
 	public boolean hasValidDomain(List<String> validEmailList) {
-		if (isDeleted() || this.profile == null || StringUtils.isEmpty(this.profile.getEmail()) || CollectionUtils.isEmpty(validEmailList)) {
+		if (isDeleted() || this.profile == null || ObjectUtils.isEmpty(this.profile.getEmail()) || CollectionUtils.isEmpty(validEmailList)) {
 			return false;
 		} 
 		return validEmailList.stream().anyMatch(s -> this.profile.getEmail().toLowerCase().contains(s));

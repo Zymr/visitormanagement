@@ -1,7 +1,8 @@
 package com.zymr.zvisitor.repository;
 
-import java.util.List;
-
+import com.zymr.zvisitor.dbo.Visitor;
+import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
+import com.zymr.zvisitor.dto.VisitorQueryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,9 +11,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 
-import com.zymr.zvisitor.dbo.Visitor;
-import com.zymr.zvisitor.dbo.Visitor.VISITOR_FIELDS;
-import com.zymr.zvisitor.dto.VisitorQueryDTO;
+
+import java.util.List;
 
 public class VisitorRepositoryImpl implements VisitorRepositoryCustom {
 

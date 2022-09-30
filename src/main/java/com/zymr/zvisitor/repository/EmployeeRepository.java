@@ -10,6 +10,7 @@
 package com.zymr.zvisitor.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -24,7 +25,7 @@ public interface EmployeeRepository extends MongoRepository<Employee, String>, E
 	Employee findByslackId(String slackId);
 	
 	@Query("{ '"+EMPLOYEE_FIELDS.ID+"': ?0}")
-	Employee findById(String id);
+	Optional<Employee> findById(String id);
 		
 	@Query(value = "{}", fields = "{ '"+EMPLOYEE_FIELDS.SLACK_ID+"' : 1 }")
     List<EmployeeSlackId> findEmployeeSlackIdsAll(Sort sort);

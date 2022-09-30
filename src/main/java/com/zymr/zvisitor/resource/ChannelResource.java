@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -42,7 +44,7 @@ import com.zymr.zvisitor.util.Constants;
 import com.zymr.zvisitor.util.JsonUtils;
 import com.zymr.zvisitor.util.enums.ZvisitorResource;
 
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class ChannelResource {
@@ -55,7 +57,7 @@ public class ChannelResource {
 	private SlackChannelConverter slackChannelConverter;
 
 	@RequestMapping(value=Constants.CHANNEL_URL, method=RequestMethod.GET)
-	@ApiOperation(value = "Fetch all channels", response = ResponseDTO.class)
+	@Operation(summary = "Fetch all channels"/*, response = ResponseDTO.class*/)
 	public ResponseEntity<Map<String, Object>> get() {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.notFound().build();
 		try {
@@ -86,7 +88,7 @@ public class ChannelResource {
 	}
 
 	@RequestMapping(value = Constants.AUTH_CHANNEL_URL, method=RequestMethod.POST)
-	@ApiOperation(value = "add channel", response = ResponseDTO.class)
+	@Operation(summary = "add channel"/*, response = ResponseDTO.class*/)
 	public ResponseEntity<Map<String, Object>> addChannel(@RequestPart("icon") MultipartFile file, @RequestParam(value="channel", required=true) String channelJson)  {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -109,7 +111,7 @@ public class ChannelResource {
 	}
 
 	@RequestMapping(value = Constants.CHANNEL_UPDATE_DELETE_URL, method=RequestMethod.PUT)
-	@ApiOperation(value = "update channel", response = ResponseDTO.class)
+	@Operation(summary = "update channel"/*, response = ResponseDTO.class*/)
 	public ResponseEntity<Map<String, Object>> updateChannel(@RequestPart(value="icon",  required=false) MultipartFile file, @RequestParam(value="channel", required=true) String channelJson, @PathVariable String chId) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
@@ -135,11 +137,11 @@ public class ChannelResource {
 	}
 
 	@RequestMapping(value =Constants.CHANNEL_UPDATE_DELETE_URL, method=RequestMethod.DELETE)
-	@ApiOperation(value = "delete channel", response = ResponseDTO.class)
+	@Operation(summary = "delete channel"/*, response = ResponseDTO.class*/)
 	public ResponseEntity<Map<String, Object>> deleteChannel(@PathVariable("chId") String id) {
 		ResponseEntity<Map<String, Object>> result = ResponseEntity.badRequest().build();
 		try {
-			channelService.delete(id);
+				channelService.delete(id);
 			result = ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(Constants.RESPONSE_MESSAGE_KEY, Constants.SLACK_CHANNEL_CONFIGURATION_CONFIGURATION_DELETED).getResponse());
 		}  catch (NoDataFoundException e) {
 			logger.error("Exception while deleting channel.", e);

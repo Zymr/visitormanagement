@@ -56,14 +56,15 @@ app:
           #abbr: z3
           #slackid: C1LAWEMDKR
           #name: Pune
+
 spring:
   data:
     mongodb:
-      database: ${MONGODB_DATABASE:VisitorManagement}
+      database: ${MONGODB_DATABASE:ZVisitorManagement}
       host: ${MONGODB_HOST:localhost}
       port: ${MONGODB_PORT:27017}
-      username: ${MONGODB_USERNAME:admin}
-      password: ${MONGODB_PASSWORD:password}
+      username: ${MONGODB_USERNAME:z_admin}
+      password: ${MONGODB_PASSWORD:z_password}
       authentication-database: ${AUTHENTICATION_DATABASE:admin}
   http:
     multipart:
@@ -78,6 +79,13 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-#server configuration
+
+  main:
+    allow-circular-references: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 server:
   port: ${USER_APP_PORT:8080}

@@ -72,7 +72,7 @@ public class ChannelService {
 			List<SlackChannel> channel =  slackChannels.stream().map(c -> convertToDTO(c))
 																.collect(Collectors.toList());
 			if (CollectionUtils.isNotEmpty(channel)) {
-				channelRepository.save(channel);
+				channelRepository.saveAll(channel);
 			}
 		}
 	}
@@ -140,7 +140,7 @@ public class ChannelService {
 		if (count <= 0) {
 			throw new NoDataFoundException(Constants.NO_DATA_FOUND);
 		}
-		channelRepository.delete(id);
+		channelRepository.delete(channelRepository.findById(id).get());
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class ChannelService {
 		if (StringUtils.isBlank(id)) {
 			return null;
 		}
-		return channelRepository.findById(id);
+		return channelRepository.findById(id).get();
 	}
 
 	/**

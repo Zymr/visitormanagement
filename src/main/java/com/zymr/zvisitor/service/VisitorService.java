@@ -99,7 +99,7 @@ public class VisitorService {
 				listOrigin.add(new Origin(index, value.getKey(), imageService.getImageUrl(ImageType.CATEGORIES, value.getValue())+Constants.IMAGE_EXT));
 				index++;
 			}
-			visitorOriginRepository.save(listOrigin);
+			visitorOriginRepository.saveAll(listOrigin);
 			logger.info("Syncing of visitor category is done.");
 		}
 	}
@@ -221,7 +221,7 @@ public class VisitorService {
 		if (to.isPresent()) {
 			visitorQueryDTO.setFindByLte(new Date(to.get()));
 		}
-		PageRequest pageRequest = new PageRequest(page-1, size, Direction.DESC, VISITOR_FIELDS.CREATED_TIME);
+		PageRequest pageRequest = PageRequest.of(page - 1, size, Direction.DESC, VISITOR_FIELDS.CREATED_TIME);
 		Page<Visitor> ticketPage = visitorRepository.get(visitorQueryDTO, pageRequest);
 		return pageService.fillPageDetails(ticketPage);
 	}
@@ -235,7 +235,7 @@ public class VisitorService {
 	}
 
 	public List<Visitor> findAllWithEmployeeId() {
-		return visitorRepository.findAll(new Sort(Sort.Direction.ASC, VISITOR_FIELDS.ID));
+		return visitorRepository.findAll(Sort.by(Sort.Direction.ASC, VISITOR_FIELDS.ID));
 	}
 
 	@Override

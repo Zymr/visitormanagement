@@ -15,10 +15,12 @@ import org.springframework.data.mongodb.repository.Query;
 import com.zymr.zvisitor.dbo.Location;
 import com.zymr.zvisitor.dbo.Location.LOCATION_FIELDS;
 
+import java.util.Optional;
+
 public interface LocationRepository extends MongoRepository<Location, String> {
 
 	@Query("{ '"+LOCATION_FIELDS.ID+"': ?0}")
-	Location findById(String id);
+	Optional<Location> findById(String id);
 	
 	Location findByLocation(String locationId);
 	
