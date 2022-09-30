@@ -9,16 +9,16 @@ pipeline {
               sh '''
                 rm -rf .env
                 cat >>.env <<EOL
-                MONGO_INITDB_ROOT_USERNAME:'$MONGO_INITDB_ROOT_USERNAME'
-                MONGO_INITDB_ROOT_PASSWORD:'$MONGO_INITDB_ROOT_PASSWORD'
-                ADMIN_MAIL:'$ADMIN_MAIL'
-                ADMIN_PASSWORD:'$ADMIN_PASSWORD'
-                SLACK_TOKEN:'$SLACK_TOKEN'
-                SLACK_USERNAME:'$SLACK_USERNAME'
-                MAIL_USERNAME:'$MAIL_USERNAME'
-                MAIL_PASSWORD:'$MAIL_PASSWORD'
-                MONGODB_USERNAME:'$MONGODB_USERNAME'
-                MONGODB_PASSWORD:'$MONGODB_PASSWORD'
+                MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+                MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+                ADMIN_MAIL=$ADMIN_MAIL
+                ADMIN_PASSWORD=$ADMIN_PASSWORD
+                SLACK_TOKEN=$SLACK_TOKEN
+                SLACK_USERNAME=$SLACK_USERNAME
+                MAIL_USERNAME=$MAIL_USERNAME
+                MAIL_PASSWORD=$MAIL_PASSWORD
+                MONGODB_USERNAME=$MONGODB_USERNAME
+                MONGODB_PASSWORD=$MONGODB_PASSWORD
                 '''              
             }
         }
