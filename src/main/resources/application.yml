@@ -12,7 +12,7 @@ app:
       # username should start with @ EX: @Virtual Receptionist
       user-name: ${SLACK_USERNAME:slack-user-account-username}
     config:
-      file-uploads-path: ${FILE_UPLOAD:files}
+      file-uploads-path: ${FILE_UPLOAD:C:\VisitorManagement\Repo}
     #visitor origin categories
     visitor-category:
         Bank Finance Support: bank-finance
