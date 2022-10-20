@@ -107,10 +107,11 @@ public class SlackService {
 		
 		for (SlackChannelConfig slackChannelConfig : department) {
 			Map<String, String> param = buildRequestForChannelInfo(slackChannelConfig.getSlackid(), configurationService.getUpdatedToken());
-			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param), Constants.GROUP_INFO_API);
+			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param), Constants.CONVERSATIONS_INFO_API);
+			logger.info("HTTP Response getChannelList: ", response);
 			Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Response.class);
 			if (Objects.nonNull(responseMembers.getGroup())) {
-				Channels slackChannel = responseMembers.getGroup();
+				Channels slackChannel = responseMembers.getChannel();
 				slackChannel.setEmail(slackChannelConfig.getEmail());
 				slackChannels.add(slackChannel);
 			}
