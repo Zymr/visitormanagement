@@ -19,12 +19,19 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.zymr.zvisitor.service.SlackService;
 
 /** A http connector class to execute http requests. */
 
 @Service
 public class HttpConnector {
+
+	private static final Logger logger = LoggerFactory.getLogger(HttpConnector.class);
+
 	/**
 	 * Method to send post request.
 	 * 
@@ -44,6 +51,8 @@ public class HttpConnector {
 
 	public CloseableHttpResponse postRequest(final HttpEntity httpEntity, final Map<String, String> headers, final String url)
 			throws ClientProtocolException, IOException {
+		logger.info(headers.toString());
+
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setEntity(httpEntity);
