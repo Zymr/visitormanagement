@@ -45,7 +45,7 @@ app:
         locations:
         - 
            abbr: ${ORG_LOCATION_ABBR:z2}
-           slackid: ${ORG_LOCATION_SLACK_ID:CDKRHYRHB9}
+           slackid: ${ORG_LOCATION_SLACK_ID:C1LFAPHB9}
            name: ${ORG_LOCATION_SLACK_NAME:Ahmedabad}
         #EX:   
         #-

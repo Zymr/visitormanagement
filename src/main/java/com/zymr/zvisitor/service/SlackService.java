@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import com.zymr.zvisitor.connectors.HttpConnector;
 import com.zymr.zvisitor.connectors.HttpConnectorHelper;
 import com.zymr.zvisitor.dto.slack.Channels;
+import com.zymr.zvisitor.dto.slack.Conversation;
 import com.zymr.zvisitor.dto.slack.Response;
 import com.zymr.zvisitor.dto.slack.SlackEmployee;
 import com.zymr.zvisitor.service.config.SlackChannelConfig;
@@ -81,8 +82,10 @@ public class SlackService {
 	 */
 	public List<SlackEmployee> getEmployeeList() throws IOException {
 		Map<String, String> map = new HashMap<>();
-		map.put(NotificationKey.TOKEN.toLowerCase(), configurationService.getUpdatedToken());
-		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map), Constants.USER_LIST_API);
+//		map.put(NotificationKey.TOKEN.toLowerCase(), configurationService.getUpdatedToken());
+		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map),
+				getAuthHeader(configurationService.getUpdatedToken()),
+				Constants.USER_LIST_API);
 		String slackResponse = HttpConnectorHelper.fromResponseToString(httpResponse);
 		logger.info("Slack Employee List {}" , slackResponse);
 		Response responseMembers = JsonUtils.fromJson(slackResponse, Response.class);
@@ -95,8 +98,6 @@ public class SlackService {
 	/**
 	 * This method is used to get channel details from slack.
 	 * 
-	 * @param channelIds List of channelId for which channel details is needed.
-	 * 
 	 * @return List of slack channels.
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
@@ -106,8 +107,10 @@ public class SlackService {
 		List<Channels> slackChannels = new ArrayList<>();
 		
 		for (SlackChannelConfig slackChannelConfig : department) {
-			Map<String, String> param = buildRequestForChannelInfo(slackChannelConfig.getSlackid(), configurationService.getUpdatedToken());
-			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param), Constants.CONVERSATIONS_INFO_API);
+			Map<String, String> param = buildRequestForChannelInfo(slackChannelConfig.getSlackid());
+			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param),
+					getAuthHeader(configurationService.getUpdatedToken()),
+					Constants.CONVERSATIONS_INFO_API);
 			logger.info("HTTP Response getChannelList: ", response);
 			Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Response.class);
 			if (Objects.nonNull(responseMembers.getGroup())) {
@@ -128,14 +131,15 @@ public class SlackService {
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 */
-	public Set<String> getEmployeesOfChannel(String channelId) throws ClientProtocolException, IOException {
-		Map<String, String> param = buildRequestForChannelInfo(channelId, configurationService.getUpdatedToken());	
-		HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param), Constants.CHANNEL_INFO_API);
-		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Response.class);
-		if (Objects.nonNull(responseMembers.getChannel())) {
-			return responseMembers.getChannel().getMembers();
-		}
-		return null;
+	public Set<String> getEmployeesOfChannel(final String channelId) throws ClientProtocolException, IOException {
+		final Map<String, String> param = buildRequestForChannelInfo(channelId);
+		final HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param),
+				getAuthHeader(configurationService.getUpdatedToken()),
+				Constants.CONVERSATIONS_MEMBERS_API);
+		logger.info("Slack: get conversation members APII response", response);
+		final Conversation conversation = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Conversation.class);
+		logger.info("Slack: get conversation member list", response);
+		return conversation.getMembers();
 	}
 
 
@@ -155,14 +159,16 @@ public class SlackService {
 
 	/** To create body for slack channel info.
 	 * @param channelId
-	 * @param token
 	 * @return
 	 */
-	public Map<String, String> buildRequestForChannelInfo(String channelId, String token) {
-		Map<String, String> parameters = new HashMap<>();
-		parameters.put(NotificationKey.TOKEN.toLowerCase(), token);
+	public Map<String, String> buildRequestForChannelInfo(String channelId) {
+		final Map<String, String> parameters = new HashMap<>();
 		parameters.put(NotificationKey.CHANNEL.toLowerCase(), channelId);
 		return parameters;
+	}
+
+	public Map<String, String> getAuthHeader(final String token) {
+		return Map.of("Authorization", "Bearer "+token);
 	}
 
 	@Override

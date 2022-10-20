@@ -180,9 +180,9 @@ public class EmployeeService {
 		List<Location> locationList = locationService.get();
 		Map<Set, String> employees = new HashMap<>();
 		for (Location location:locationList) {
-			Set<String> channel= slackService.getEmployeesOfChannel(location.getGroupId());
-			if (!CollectionUtils.isEmpty(channel)) {
-				employees.put(channel, location.getLocation());
+			Set<String> channelMembers = slackService.getEmployeesOfChannel(location.getGroupId());
+			if (!CollectionUtils.isEmpty(channelMembers)) {
+				employees.put(channelMembers, location.getLocation());
 			}
 		}
 		return employees;

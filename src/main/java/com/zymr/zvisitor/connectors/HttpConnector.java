@@ -10,6 +10,8 @@
 package com.zymr.zvisitor.connectors;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -37,6 +39,17 @@ public class HttpConnector {
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setEntity(httpEntity);
+		return client.execute(httpPost);
+	}
+
+	public CloseableHttpResponse postRequest(final HttpEntity httpEntity, final Map<String, String> headers, final String url)
+			throws ClientProtocolException, IOException {
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.setEntity(httpEntity);
+		if (Objects.nonNull(headers)) {
+			headers.forEach((k, v) -> httpPost.addHeader(k, v));
+		}
 		return client.execute(httpPost);
 	}
 }
