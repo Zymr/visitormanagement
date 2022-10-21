@@ -52,6 +52,9 @@ public class SlackEmployee {
 	@JsonProperty("updated")
 	private int updatedTime;
 
+	@JsonProperty("is_invited_user")
+	private boolean isInvitedUser;
+
 	public SlackEmployee() {
 	}
 
@@ -151,7 +154,7 @@ public class SlackEmployee {
 	}
 	
 	public boolean isNewEmployee(long uT, List<String> dbEmployeeList, List<String> validEmailList) {
- 		if ((hasUpdatedUt(uT) || isDBEmployee(dbEmployeeList)) && hasValidDomain(validEmailList)) {
+ 		if ((hasUpdatedUt(uT) || isDBEmployee(dbEmployeeList)) && !this.isInvitedUser && !this.deleted) {
  			return true;
  		}
  		return false;
@@ -164,7 +167,18 @@ public class SlackEmployee {
 	public void setUpdatedTime(int updatedTime) {
 		this.updatedTime = updatedTime;
 	}
-	
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public boolean isInvitedUser() {
+		return isInvitedUser;
+	}
+
+	public void setInvitedUser(boolean invitedUser) {
+		isInvitedUser = invitedUser;
+	}
 
 	@Override
 	public String toString() {

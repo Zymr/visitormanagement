@@ -30,8 +30,6 @@ import com.zymr.zvisitor.service.SlackService;
 @Service
 public class HttpConnector {
 
-	private static final Logger logger = LoggerFactory.getLogger(HttpConnector.class);
-
 	/**
 	 * Method to send post request.
 	 * 
@@ -51,8 +49,6 @@ public class HttpConnector {
 
 	public CloseableHttpResponse postRequest(final HttpEntity httpEntity, final Map<String, String> headers, final String url)
 			throws ClientProtocolException, IOException {
-		logger.info(headers.toString());
-
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setEntity(httpEntity);

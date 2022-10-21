@@ -18,6 +18,9 @@ public class Conversation {
     @JsonProperty("error")
     private String error;
 
+    @JsonProperty("response_metadata")
+    private ResponseMeta responseMeta;
+
     public Set<String> getMembers() {
         return members;
     }
@@ -42,8 +45,20 @@ public class Conversation {
         this.error = error;
     }
 
+    public ResponseMeta getResponseMeta() {
+        return responseMeta;
+    }
+
+    public void setResponseMeta(ResponseMeta responseMeta) {
+        this.responseMeta = responseMeta;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    public String toResponse() {
+        return "Conversation [ok=" + ok + ", error=" + error + "]";
     }
 }

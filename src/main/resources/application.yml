@@ -8,7 +8,7 @@ app:
     secretKey: ${SECRET_KEY:31323334353637383930313233343536}
     slack:
       #This slack token will be used for send slack notification.
-      token: ${SLACK_TOKEN:slack-user-account-token}
+      token: ${SLACK_TOKEN:token}
       # username should start with @ EX: @Virtual Receptionist
       user-name: ${SLACK_USERNAME:slack-user-account-username}
     config:
@@ -30,7 +30,7 @@ app:
         #app departments/slack group. Sholud be in below format.
         department:
         - 
-           slackid: ${ORG_DEPARTMENT_SLACK_ID:slack-group1-email}
+           slackid: ${ORG_DEPARTMENT_SLACK_ID:C1LFAPHB9}
            email: ${ORG_DEPARTMENT_EMAIL:org_department_email}
         #EX:   
         #-
