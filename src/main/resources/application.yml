@@ -30,7 +30,7 @@ app:
         #app departments/slack group. Sholud be in below format.
         department:
         - 
-           slackid: ${ORG_DEPARTMENT_SLACK_ID:C1LFAPHB9}
+           slackid: ${ORG_DEPARTMENT_SLACK_ID:D19EQKDQE}
            email: ${ORG_DEPARTMENT_EMAIL:org_department_email}
         #EX:   
         #-
