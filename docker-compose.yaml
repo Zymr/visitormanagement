@@ -86,7 +86,7 @@ services:
       - /etc/ssl/:/etc/ssl/
       - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log:/var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
       - /var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log:/var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log
-      - /filebeat.yml:/etc/filebeat/filebeat.yml
+      - /filebeat.yml:/usr/share/filebeat/filebeat.yml
     # command: ["filebeat setup -e"]
 
 volumes:
