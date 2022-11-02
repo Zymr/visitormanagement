@@ -87,7 +87,7 @@ services:
       - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log:/var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
       - /var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log:/var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log
       - /filebeat.yml:/etc/filebeat/filebeat.yml
-    command: ["service filebeat start"]
+    command: ["filebeat setup -e"]
 
 volumes:
   data:
