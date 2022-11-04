@@ -11,7 +11,7 @@
 # configuration file.
 
 # ============================== Filebeat inputs ===============================
-beat.hostname: "zvisitor"
+name: "zvisitor"
 filebeat.inputs:
 
 # Each - is an input. Most options can be set at the input level, so
