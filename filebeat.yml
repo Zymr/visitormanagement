@@ -11,7 +11,7 @@
 # configuration file.
 
 # ============================== Filebeat inputs ===============================
-
+beat.hostname: "zvisitor"
 filebeat.inputs:
 
 # Each - is an input. Most options can be set at the input level, so
@@ -34,7 +34,7 @@ filebeat.inputs:
     - /var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log
     #- c:\programdata\elasticsearch\logs\*
 
-  name: "zvisitor"
+  # name: "zvisitor"
   tags: ["zvisitor"]
 
 
