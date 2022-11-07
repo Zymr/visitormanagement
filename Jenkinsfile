@@ -20,6 +20,8 @@ pipeline {
                 MAIL_PASSWORD=$MAIL_PASSWORD
                 MONGODB_USERNAME=$MONGODB_USERNAME
                 MONGODB_PASSWORD=$MONGODB_PASSWORD
+    	        ES_PASSWORD=zymr@123
+	            KIBANA_PASSWORD=zymr@123
                 '''              
             }
         }
