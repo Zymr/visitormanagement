@@ -43,6 +43,18 @@ services:
     depends_on:
       - mongodb
 
+  filebeat:
+    user: root
+    container_name: zvisitor_filebeat
+    image: 'docker.elastic.co/beats/filebeat:7.17.7'
+    depends_on:
+      - backend
+    volumes:
+      - /etc/ssl/:/etc/ssl/
+      - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log:/var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
+      - /var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log:/var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+
 volumes:
   data:
   logs:
