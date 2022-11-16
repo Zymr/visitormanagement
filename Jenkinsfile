@@ -1,20 +1,25 @@
 pipeline {
-    parameters {
-        choice(name: 'AGENT', choices: ['Zvisitor-stagging', 'zvisitor'], description: 'Select the agent')
-        choice(name: 'BRANCH', choices: ['develop', 'master', 'config_env_changes'], description: 'Select the branch')
-    }
     agent {
         label "'${AGENT}'"
     }
-    environment {
-        SECRET_FILE_ID = credentials('zvisitor_config_file')
-    }
     stages {
-        stage('Checkout') {
+        stage('GENERATING ENV FILES') {
             steps {
-                git branch: '${BRANCH}',
-                credentialsId:'zvisitor_stagging_git',
-                url:'git@github.com:Zymr/visitormanagement.git'
+                
+              sh '''
+                rm -rf .env
+                cat >>.env <<EOL
+                MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+                MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+                ADMIN_MAIL=$ADMIN_MAIL
+                ADMIN_PASSWORD=$ADMIN_PASSWORD
+                SLACK_TOKEN=$SLACK_TOKEN
+                SLACK_USERNAME=$SLACK_USERNAME
+                MAIL_USERNAME=$MAIL_USERNAME
+                MAIL_PASSWORD=$MAIL_PASSWORD
+                MONGODB_USERNAME=$MONGODB_USERNAME
+                MONGODB_PASSWORD=$MONGODB_PASSWORD
+                '''              
             }
         }
         stage('Docker Compose Down') {
@@ -23,14 +28,6 @@ pipeline {
                 sh 'docker-compose down'
                 sh 'docker-compose ps'
                 echo 'Application down Successfully !!!'
-            }
-        }
-        stage('GENERATING ENV FILES') {
-            steps {
-                sh '''
-               rm -rf .env
-               mv $SECRET_FILE_ID /home/zvisitor-build/workspace/Zvisitor_stagging/.env
-               '''
             }
         }
         stage('DEPLOY') {

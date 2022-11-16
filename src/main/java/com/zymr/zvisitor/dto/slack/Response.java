@@ -29,7 +29,10 @@ public class Response {
 	private Channels channel;
 	
 	@JsonProperty("error")
-	private String error;	
+	private String error;
+
+	@JsonProperty("response_metadata")
+	private ResponseMeta responseMeta;
 
 	public Response() {
 	}
@@ -74,9 +77,21 @@ public class Response {
 		this.error = error;
 	}
 
+	public ResponseMeta getResponseMeta() {
+		return responseMeta;
+	}
+
+	public void setResponseMeta(ResponseMeta responseMeta) {
+		this.responseMeta = responseMeta;
+	}
+
 	@Override
 	public String toString() {
 		return "ResponseMembers [ok=" + ok + ", group=" + group + ", members=" + members + ", channel=" + channel
 				+ ", error=" + error + "]";
+	}
+
+	public String toResponse() {
+		return "ResponseMembers [ok=" + ok + ", error=" + error + "]";
 	}
 }

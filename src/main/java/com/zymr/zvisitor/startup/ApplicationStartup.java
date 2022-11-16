@@ -49,8 +49,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		try {
 			userService.addDefaultUser();
 			locationService.syncLocation();
-			channelService.syncChannelsFromSlack();
-//			employeeService.syncEmployeeFromSlack();
+			channelService.syncChannelsFromSlack(); //department slack id wise
+			employeeService.syncEmployeeFromSlack();
 			visitorService.syncVisitorOrigin();
 		} catch(Exception e) {
 			logger.error("Exception while syncing on startup {}.", e);

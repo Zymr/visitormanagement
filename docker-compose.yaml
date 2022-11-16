@@ -11,9 +11,32 @@ services:
       - mongologs:/var/log/mongodb
     environment:
       MONGO_INITDB_DATABASE: db_zvisitor
-      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
-      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     command: ['--logpath', '/var/log/mongodb/mongo_logs.log']
+    healthcheck:
+      test: mongod --version
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+
+
+  mongoClientTemp:
+   image: 'mongo:3.4.9'
+   container_name: mongoClientTemp
+   links:
+    - mongodb:mongodb
+   command: mongo -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'${MONGODB_USERNAME}', pwd:'${MONGODB_PASSWORD}', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
+   depends_on:
+    - mongodb
+   healthcheck:
+      test: mongod --version
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+
   backend:
     build: .
     container_name: backend
@@ -22,8 +45,9 @@ services:
       - '8080:8080'
     volumes:
       - logs:/logs/zv
+      - files:/home/zymr/zvisitor_files
     environment:
-      FILE_UPLOAD: /home/akshay.h@ah.zymrinc.com/Desktop/zvisitor_data
+      FILE_UPLOAD: /home/zymr/zvisitor_files
       MONGODB_DATABASE: db_zvisitor
       MONGODB_HOST: mongodb
       AUTHENTICATION_DATABASE: admin
@@ -31,17 +55,25 @@ services:
       ORG_DEPARTMENT_EMAIL: zymrtest@gmail.com
       USER_APP_PORT: 8080
       MAIL_PERSONAL: z-visitor
-      ADMIN_MAIL: $ADMIN_MAIL
-      ADMIN_PASSWORD: $ADMIN_PASSWORD
-      SLACK_TOKEN: $SLACK_TOKEN
-      SLACK_USERNAME: $SLACK_USERNAME
-      MAIL_USERNAM: $MAIL_USERNAM
-      MAIL_PASSWORD: $MAIL_PASSWORD
-      MONGODB_USERNAME: $MONGODB_USERNAME
-      MONGODB_PASSWORD: $MONGODB_PASSWORD
+      ADMIN_MAIL: ${ADMIN_MAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      SLACK_TOKEN: ${SLACK_TOKEN}
+      SLACK_USERNAME: ${SLACK_USERNAME}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
       
     depends_on:
       - mongodb
+      - mongoClientTemp
+          
+    healthcheck:
+      test: java -version
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
 
   filebeat:
     user: root
@@ -59,3 +91,7 @@ volumes:
   data:
   logs:
   mongologs:
+  files:
+
+
+

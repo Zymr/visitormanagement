@@ -66,6 +66,8 @@ public class ChannelService {
 	public void syncChannelsFromSlack() throws ClientProtocolException, IOException {
 		long channelCount = channelRepository.count();
 		List<SlackChannelConfig> department = appProperties.getOrg().getDepartment();
+		logger.info("Department list", department, department.size());
+
 		if (channelCount == 0  && channelCount != department.size() && CollectionUtils.isNotEmpty(department)) {
 			logger.info("Syncing of channels from slack started. channels {}", department);
 			List<Channels> slackChannels = slackService.getChannelList(department); 

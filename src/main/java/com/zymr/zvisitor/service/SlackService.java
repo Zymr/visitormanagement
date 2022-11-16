@@ -12,6 +12,7 @@ package com.zymr.zvisitor.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Service;
 import com.zymr.zvisitor.connectors.HttpConnector;
 import com.zymr.zvisitor.connectors.HttpConnectorHelper;
 import com.zymr.zvisitor.dto.slack.Channels;
+import com.zymr.zvisitor.dto.slack.Conversation;
 import com.zymr.zvisitor.dto.slack.Response;
 import com.zymr.zvisitor.dto.slack.SlackEmployee;
 import com.zymr.zvisitor.service.config.SlackChannelConfig;
@@ -80,20 +83,34 @@ public class SlackService {
 	 * @return List of slackEmployees. 
 	 */
 	public List<SlackEmployee> getEmployeeList() throws IOException {
+		List<SlackEmployee> result = new ArrayList<>();
 		Map<String, String> map = new HashMap<>();
-		map.put(NotificationKey.TOKEN.toLowerCase(), configurationService.getUpdatedToken());
-		HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map), Constants.USER_LIST_API);
-		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(httpResponse)), Response.class);
-		if (Objects.nonNull(responseMembers.getMembers())) {
-			return responseMembers.getMembers();
+		String cursor = null;
+		boolean done = false;
+		while (!done) {
+			if (!StringUtils.isEmpty(cursor)) {
+				map.put("cursor", cursor);
+			}
+			HttpResponse httpResponse = httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(map),
+					getAuthHeader(configurationService.getUpdatedToken()),
+					Constants.USER_LIST_API);
+			String slackResponse = HttpConnectorHelper.fromResponseToString(httpResponse);
+			Response responseMembers = JsonUtils.fromJson(slackResponse, Response.class);
+			logger.info("Slack user list API response {}", responseMembers.toResponse());
+			if (Objects.nonNull(responseMembers.getMembers())) {
+				result.addAll(responseMembers.getMembers());
+			}
+			if (Objects.nonNull(responseMembers.getResponseMeta())) {
+				cursor = responseMembers.getResponseMeta().getNextCursor();
+			}
+			done = StringUtils.isEmpty(cursor);
 		}
-		return null;
+		return result;
+
 	}
 
 	/**
 	 * This method is used to get channel details from slack.
-	 * 
-	 * @param channelIds List of channelId for which channel details is needed.
 	 * 
 	 * @return List of slack channels.
 	 * @throws IOException 
@@ -104,11 +121,15 @@ public class SlackService {
 		List<Channels> slackChannels = new ArrayList<>();
 		
 		for (SlackChannelConfig slackChannelConfig : department) {
-			Map<String, String> param = buildRequestForChannelInfo(slackChannelConfig.getSlackid(), configurationService.getUpdatedToken());
-			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param), Constants.GROUP_INFO_API);
+			Map<String, String> param = buildRequestForChannelInfo(slackChannelConfig.getSlackid());
+			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param),
+					getAuthHeader(configurationService.getUpdatedToken()),
+					Constants.CONVERSATIONS_INFO_API);
+
 			Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Response.class);
-			if (Objects.nonNull(responseMembers.getGroup())) {
-				Channels slackChannel = responseMembers.getGroup();
+			logger.info("Slack conversation info API response {}", responseMembers.toResponse());
+			if (Objects.nonNull(responseMembers.getChannel())) {
+				Channels slackChannel = responseMembers.getChannel();
 				slackChannel.setEmail(slackChannelConfig.getEmail());
 				slackChannels.add(slackChannel);
 			}
@@ -125,14 +146,32 @@ public class SlackService {
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 */
-	public Set<String> getEmployeesOfChannel(String channelId) throws ClientProtocolException, IOException {
-		Map<String, String> param = buildRequestForChannelInfo(channelId, configurationService.getUpdatedToken());	
-		HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param), Constants.CHANNEL_INFO_API);
-		Response responseMembers = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Response.class);
-		if (Objects.nonNull(responseMembers.getChannel())) {
-			return responseMembers.getChannel().getMembers();
+	public Set<String> getEmployeesOfChannel(final String channelId) throws ClientProtocolException, IOException {
+		final Set<String> members = new HashSet<>();
+		final Map<String, String> param = buildRequestForChannelInfo(channelId);
+
+		String cursor = "";
+		boolean done = false;
+		while (!done) {
+			if (!StringUtils.isBlank(cursor)) {
+				param.put("cursor", cursor);
+			}
+			final HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param),
+					getAuthHeader(configurationService.getUpdatedToken()),
+					Constants.CONVERSATIONS_MEMBERS_API);
+
+			final Conversation conversation = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Conversation.class);
+			logger.info("Slack: get conversation members API response {}", conversation.toResponse());
+
+			members.addAll(conversation.getMembers());
+
+			if (Objects.nonNull(conversation.getResponseMeta())) {
+				cursor = conversation.getResponseMeta().getNextCursor();
+			}
+
+			done = StringUtils.isEmpty(cursor);
 		}
-		return null;
+		return members;
 	}
 
 
@@ -152,14 +191,17 @@ public class SlackService {
 
 	/** To create body for slack channel info.
 	 * @param channelId
-	 * @param token
 	 * @return
 	 */
-	public Map<String, String> buildRequestForChannelInfo(String channelId, String token) {
-		Map<String, String> parameters = new HashMap<>();
-		parameters.put(NotificationKey.TOKEN.toLowerCase(), token);
+	public Map<String, String> buildRequestForChannelInfo(String channelId) {
+		final Map<String, String> parameters = new HashMap<>();
 		parameters.put(NotificationKey.CHANNEL.toLowerCase(), channelId);
+		parameters.put("limit", "2000");
 		return parameters;
+	}
+
+	public Map<String, String> getAuthHeader(final String token) {
+		return Map.of("Authorization", "Bearer "+token);
 	}
 
 	@Override

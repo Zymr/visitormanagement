@@ -14,7 +14,15 @@ public class Constants {
 	
 	/** Slack APIs. */
 	public static final String USER_LIST_API = "https://slack.com/api/users.list";
+
+	@Deprecated
 	public static final String GROUP_INFO_API = "https://slack.com/api/groups.info";
+
+	public static final String CONVERSATIONS_INFO_API = "https://slack.com/api/conversations.info";
+
+	public static final String CONVERSATIONS_MEMBERS_API = "https://slack.com/api/conversations.members";
+
+	@Deprecated
 	public static final String CHANNEL_INFO_API = "https://slack.com/api/channels.info";
 	public static final String SLACK_SEND_NOTIFICATION_API = "https://slack.com/api/chat.postMessage";
 	public static final String SLACK_FILE_SEND_API = "https://slack.com/api/files.upload";
