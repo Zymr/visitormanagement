@@ -155,3 +155,11 @@ server:
 ### Run
 
     java -jar <jar-file-name-with-extension>
+
+
+### Filebeat configuration
+
+* configure Filebeat via the filebeat.yml file.
+    - Define Logstash hosts.
+    - Set Certificate for SSL client authentication.
+    - Set the absolute path for the log file. 
