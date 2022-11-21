@@ -27,6 +27,7 @@ pipeline {
                 MAIL_PASSWORD=$MAIL_PASSWORD
                 MONGODB_USERNAME=$MONGODB_USERNAME
                 MONGODB_PASSWORD=$MONGODB_PASSWORD
+                LOGSTASH_HOSTS=$LOGSTASH_HOSTS
                 '''              
             }
         }
