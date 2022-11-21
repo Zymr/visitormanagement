@@ -5,9 +5,7 @@ pipeline {
     stages {
         stage('Login into Nexus'){
           steps {
-            withCredentials([usernamePassword(credentialsId: 'zymr-nexus-cred')]) {
-                sh 'docker login nexus.zymrinc.com:8083 -u --password-stdin'
-            }
+                sh 'docker login nexus.zymrinc.com:8083 -u zymr --password-stdin zymr'  
           }
         }
         stage('GENERATING ENV FILES') {
