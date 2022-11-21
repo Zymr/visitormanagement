@@ -81,6 +81,8 @@ services:
     image: 'nexus.zymrinc.com:8083/filebeat/filebeat:7.17.7'
     depends_on:
       - backend
+    environment:
+      LOGSTASH_HOSTS = ${LOGSTASH_HOSTS}
     volumes:
       # - /var/run/docker.sock:/host_docker/docker.sock
       - /etc/ssl/:/etc/ssl/
