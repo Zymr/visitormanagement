@@ -82,7 +82,7 @@ services:
     depends_on:
       - backend
     environment:
-      LOGSTASH_HOSTS = ${LOGSTASH_HOSTS}
+      LOGSTASH_HOSTS: ${LOGSTASH_HOSTS}
     volumes:
       # - /var/run/docker.sock:/host_docker/docker.sock
       - /etc/ssl/:/etc/ssl/
