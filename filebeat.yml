@@ -18,7 +18,7 @@ setup.template.settings:
   index.number_of_shards: 1
 # ------------------------------ Logstash Output -------------------------------
 output.logstash:
-  hosts: ['http://${LOGSTASH_HOSTS}:5044']
+  hosts: ['{LOGSTASH_HOSTS}:5044']
   ssl.certificate_authorities: ["/etc/ssl/logstash.crt"]
 # ================================= Processors =================================
 processors:
