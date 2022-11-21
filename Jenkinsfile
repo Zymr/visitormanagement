@@ -3,6 +3,13 @@ pipeline {
         label "'${AGENT}'"
     }
     stages {
+        stage('Login into Nexus'){
+          steps {
+            withCredentials([usernamePassword(credentialsId: 'zymr-nexus-cred', passwordVariable: 'password', usernameVariable: 'username')]) {
+                sh 'docker login nexus.zymrinc.com:8083'
+            }
+          }
+        }
         stage('GENERATING ENV FILES') {
             steps {
                 
