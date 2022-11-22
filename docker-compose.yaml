@@ -81,6 +81,8 @@ services:
     image: 'nexus.zymrinc.com:8083/filebeat/filebeat:7.17.7'
     depends_on:
       - backend
+    environment:
+      LOGSTASH_HOSTS: ${LOGSTASH_HOSTS}
     volumes:
       - /etc/ssl/:/etc/ssl/
       - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log:/var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
