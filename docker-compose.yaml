@@ -75,6 +75,20 @@ services:
       start_period: 20s
       timeout: 10s
 
+  filebeat:
+    user: root
+    container_name: zvisitor_filebeat
+    image: 'nexus.zymrinc.com:8083/filebeat/filebeat:7.17.7'
+    depends_on:
+      - backend
+    environment:
+      LOGSTASH_HOSTS: ${LOGSTASH_HOSTS}
+    volumes:
+      - /etc/ssl/:/etc/ssl/
+      - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log:/var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
+      - /var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log:/var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+
 volumes:
   data:
   logs:

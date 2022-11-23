@@ -19,8 +19,16 @@ pipeline {
                 MAIL_PASSWORD=$MAIL_PASSWORD
                 MONGODB_USERNAME=$MONGODB_USERNAME
                 MONGODB_PASSWORD=$MONGODB_PASSWORD
+                LOGSTASH_HOSTS=$LOGSTASH_HOSTS
                 '''              
             }
+        }
+        stage('Login into Nexus'){
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'zymr-nexus-cred', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh 'docker login nexus.zymrinc.com:8083'
+            }
+          }
         }
         stage('Docker Compose Down') {
             steps {

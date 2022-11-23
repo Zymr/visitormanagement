@@ -1,0 +1,29 @@
+# ============================== Filebeat inputs ===============================
+name: "zvisitor"
+filebeat.inputs:
+- type: log
+  id: my-filestream-id
+  enabled: true
+  paths:
+    - /var/log/*.log
+    - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
+    - /var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log
+  tags: ["zvisitor"]
+# ============================== Filebeat modules ==============================
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+# ======================= Elasticsearch template setting =======================
+setup.template.settings:
+  index.number_of_shards: 1
+# ------------------------------ Logstash Output -------------------------------
+output.logstash:
+  hosts: ['${LOGSTASH_HOSTS}:5044']
+  ssl.certificate_authorities: ["/etc/ssl/logstash.crt"]
+# ================================= Processors =================================
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
