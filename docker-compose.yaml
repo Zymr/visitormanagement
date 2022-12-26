@@ -78,11 +78,12 @@ services:
   filebeat:
     user: root
     container_name: zvisitor_filebeat
-    image: 'nexus.zymrinc.com:8083/filebeat/filebeat:7.17.7'
+    image: 'docker.elastic.co/beats/filebeat:7.17.7'
     depends_on:
       - backend
     environment:
       LOGSTASH_HOSTS: ${LOGSTASH_HOSTS}
+    command: ["-environment", "container", "-strict.perms=false"]
     volumes:
       - /etc/ssl/:/etc/ssl/
       - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log:/var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
