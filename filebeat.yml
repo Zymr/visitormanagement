@@ -22,7 +22,7 @@ output.logstash:
   # ssl.certificate_authorities: ["/etc/ssl/logstash.crt"]
   # ssl.certificate_authorities: ["/etc/ssl/certs/ca-certificates.crt"]
   ssl.certificate: "/etc/ssl/logstash.crt"
-  # ssl.key: "/etc/ssl/logstash.key"
+  ssl.key: "/etc/ssl/logstash.key"
   ssl.verification_mode: "none"
 
 # ================================= Processors =================================
