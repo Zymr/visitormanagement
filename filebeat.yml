@@ -19,7 +19,9 @@ setup.template.settings:
 # ------------------------------ Logstash Output -------------------------------
 output.logstash:
   hosts: ['${LOGSTASH_HOSTS}:5044']
-  ssl.certificate_authorities: ["/etc/ssl/logstash.crt"]
+  # ssl.certificate_authorities: ["/etc/ssl/logstash.crt"]
+  ssl.certificate_authorities: ["/etc/ssl/certs/certSIGN_ROOT_CA.pem"]
+  ssl.certificate: "/etc/ssl/logstash.crt"
 # ================================= Processors =================================
 processors:
   - add_host_metadata:
