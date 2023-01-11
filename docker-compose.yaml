@@ -21,20 +21,26 @@ services:
       start_period: 20s
       timeout: 10s
 
-
   mongoClientTemp:
    image: 'mongo:3.4.9'
    container_name: mongoClientTemp
    links:
     - mongodb:mongodb
-   command: mongo -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'${MONGODB_USERNAME}', pwd:'${MONGODB_PASSWORD}', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
+   command:
+     - /bin/bash
+     - -c
+     - |
+       sleep 30
+       mongo -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --host mongodb --authenticationDatabase admin --eval "db.getSiblingDB('admin').createUser({user:'${MONGODB_USERNAME}', pwd:'${MONGODB_PASSWORD}', roles:[{role:'readWrite',db:'db_zvisitor'}]});"
    depends_on:
     - mongodb
+   env_file:
+     - .env
    healthcheck:
       test: mongod --version
       interval: 60s
       retries: 5
-      start_period: 20s
+      start_period: 30s
       timeout: 10s
 
   backend:
@@ -62,17 +68,15 @@ services:
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       MONGODB_USERNAME: ${MONGODB_USERNAME}
-      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
-      
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}    
     depends_on:
       - mongodb
-      - mongoClientTemp
-          
+      - mongoClientTemp     
     healthcheck:
       test: java -version
       interval: 60s
       retries: 5
-      start_period: 20s
+      start_period: 40s
       timeout: 10s
 
   filebeat:
@@ -86,8 +90,7 @@ services:
     command: ["-environment", "container", "-strict.perms=false"]
     volumes:
       - /etc/ssl/:/etc/ssl/
-      - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log:/var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
-      - /var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log:/var/lib/docker/volumes/zvisitor_stagging_mongologs/_data/mongo_logs.log
+      - /var/lib/docker/volumes/zvisitor_stagging_logs/_data:/var/lib/docker/volumes/zvisitor_stagging_logs/_data
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
 
 volumes:
@@ -95,6 +98,5 @@ volumes:
   logs:
   mongologs:
   files:
-
 
 
