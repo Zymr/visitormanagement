@@ -5,7 +5,7 @@
  * ZVisitor can not be copied and/or distributed without the express
  * permission of ZYMR Inc.
  *
- *  * 
+ *  *
  *******************************************************/
 package com.zymr.zvisitor.service;
 
@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import io.jsonwebtoken.lang.Collections;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -62,9 +63,9 @@ public class SlackService {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param token
-	 * 
+	 *
 	 * @return
 	 * @throws ClientProtocolException
 	 * @throws IOException
@@ -79,8 +80,8 @@ public class SlackService {
 
 	/**
 	 * This method is used to get list of employees from slack.
-	 * 
-	 * @return List of slackEmployees. 
+	 *
+	 * @return List of slackEmployees.
 	 */
 	public List<SlackEmployee> getEmployeeList() throws IOException {
 		List<SlackEmployee> result = new ArrayList<>();
@@ -111,15 +112,15 @@ public class SlackService {
 
 	/**
 	 * This method is used to get channel details from slack.
-	 * 
+	 *
 	 * @return List of slack channels.
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws ClientProtocolException
 	 */
 	public List<Channels> getChannelList(List<SlackChannelConfig> department) throws ClientProtocolException, IOException {
-		
+
 		List<Channels> slackChannels = new ArrayList<>();
-		
+
 		for (SlackChannelConfig slackChannelConfig : department) {
 			Map<String, String> param = buildRequestForChannelInfo(slackChannelConfig.getSlackid());
 			HttpResponse response =  httpConnector.postRequest(HttpConnectorHelper.buildEntityWithBodyParam(param),
@@ -139,12 +140,12 @@ public class SlackService {
 
 	/**
 	 * This method is used to get employees of specific channel.
-	 * 
+	 *
 	 * @param channelId channelId to get member list.
-	 * 
+	 *
 	 * @return List of members.d
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws ClientProtocolException
 	 */
 	public Set<String> getEmployeesOfChannel(final String channelId) throws ClientProtocolException, IOException {
 		final Set<String> members = new HashSet<>();
@@ -163,20 +164,23 @@ public class SlackService {
 			final Conversation conversation = JsonUtils.fromJson((HttpConnectorHelper.fromResponseToString(response)), Conversation.class);
 			logger.info("Slack: get conversation members API response {}", conversation.toResponse());
 
-			members.addAll(conversation.getMembers());
+			if (Objects.nonNull(conversation)) {
+				if (!Collections.isEmpty(conversation.getMembers())) {
+					members.addAll(conversation.getMembers());
+				}
 
-			if (Objects.nonNull(conversation.getResponseMeta())) {
-				cursor = conversation.getResponseMeta().getNextCursor();
+				if (Objects.nonNull(conversation.getResponseMeta())) {
+					cursor = conversation.getResponseMeta().getNextCursor();
+				}
+				done = StringUtils.isEmpty(cursor);
 			}
-
-			done = StringUtils.isEmpty(cursor);
 		}
 		return members;
 	}
 
 
 	/**used to send slack notification.
-	 * 
+	 *
 	 * @param param
 	 * @param attachment
 	 */
@@ -206,7 +210,7 @@ public class SlackService {
 
 	@Override
 	public String toString() {
-		return "SlackService [httpConnector=" + httpConnector 
+		return "SlackService [httpConnector=" + httpConnector
 				+ ", configurationService=" + configurationService + ", imageService=" + imageService + "]";
 	}
 }
