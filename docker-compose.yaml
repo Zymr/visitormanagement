@@ -87,10 +87,11 @@ services:
       - backend
     environment:
       LOGSTASH_HOSTS: ${LOGSTASH_HOSTS}
+      LOGS_FILE: ${LOGS_FILE}
     command: ["-environment", "container", "-strict.perms=false"]
     volumes:
       - /etc/ssl/:/etc/ssl/
-      - /var/lib/docker/volumes/zvisitor_stagging_logs/_data:/var/lib/docker/volumes/zvisitor_stagging_logs/_data
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
 
 volumes:

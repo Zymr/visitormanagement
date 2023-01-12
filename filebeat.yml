@@ -5,7 +5,7 @@ filebeat.inputs:
   id: my-filestream-id
   enabled: true
   paths:
-    - /var/lib/docker/volumes/zvisitor_stagging_logs/_data/app.log
+    - '${LOGS_FILE}'
   tags: ["zvisitor"]
 # ============================== Filebeat modules ==============================
 filebeat.config.modules:
